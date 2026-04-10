@@ -30,15 +30,21 @@ const router = createRouter({
       path: '/',
       name: 'funnel',
       component: FunnelView,
+      beforeEnter: () => {
+        if (window.location.hostname !== 'localhost') {
+          window.location.replace('https://mkt.bakano.ec/registro-vsl-tr')
+          return false
+        }
+      },
       meta: {
         title: 'Bakano | Aumenta tu facturación entre 10% y 20% — Asesoría Gratuita',
         description:
           'Ayudamos a dueños de negocios establecidos a aumentar su facturación entre un 10% y 20% de forma predecible con la metodología Data Growth Business. Agenda tu asesoría gratuita.',
-        canonical: 'https://bakano.ec/',
+        canonical: 'https://mkt.bakano.ec/registro-vsl-tr',
         ogTitle: 'Bakano | Aumenta tu facturación entre 10% y 20%',
         ogDescription:
           'Metodología Data Growth Business: profesionaliza tu marketing y ventas sin depender de la suerte ni de agencias de viralidad. Asesoría gratuita — cupos limitados.',
-        ogUrl: 'https://bakano.ec/',
+        ogUrl: 'https://mkt.bakano.ec/registro-vsl-tr',
       } satisfies RouteMeta,
     },
     {

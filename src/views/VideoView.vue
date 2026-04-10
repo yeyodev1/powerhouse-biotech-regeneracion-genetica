@@ -2,14 +2,17 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import CalendarModal from '@/components/CalendarModal.vue'
-import { trackStage } from '@/utils/ghl'
+import { trackStage, generateEventId } from '@/utils/ghl'
+import { useContactStore } from '@/stores/contact'
+
+const contactStore = useContactStore()
 
 // ── Calendar modal ────────────────────────────────────────────────────────────
 const calendarOpen = ref(false)
 
 // ── Contact capture guard ─────────────────────────────────────────────────────
 const captureOpen = ref(false)
-const captureForm = ref({ nombre: '', email: '', phone: '' })
+const captureForm = ref({ nombre: '', apellido: '', negocio: '', email: '', telefono: '' })
 const captureErrors = ref<Record<string, string>>({})
 const captureTouched = ref<Record<string, boolean>>({})
 const captureSubmitting = ref(false)
@@ -17,24 +20,38 @@ const captureSubmitting = ref(false)
 const validateCapture = () => {
   const e: Record<string, string> = {}
   if (captureForm.value.nombre.trim().length < 2) e.nombre = 'Ingresa tu nombre'
+  if (captureForm.value.apellido.trim().length < 2) e.apellido = 'Ingresa tu apellido'
+  if (captureForm.value.negocio.trim().length < 2) e.negocio = 'Ingresa el nombre de tu negocio'
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(captureForm.value.email.trim())) e.email = 'Email inválido'
-  if (captureForm.value.phone.trim().length < 7) e.phone = 'Teléfono inválido'
+  if (captureForm.value.telefono.trim().length < 7) e.telefono = 'Teléfono inválido'
   captureErrors.value = e
   return Object.keys(e).length === 0
 }
 
 const submitCapture = async () => {
-  captureTouched.value = { nombre: true, email: true, phone: true }
+  captureTouched.value = { nombre: true, apellido: true, negocio: true, email: true, telefono: true }
   if (!validateCapture()) return
   captureSubmitting.value = true
-  const contact = {
+
+  contactStore.save({
     nombre: captureForm.value.nombre.trim(),
+    apellido: captureForm.value.apellido.trim(),
+    negocio: captureForm.value.negocio.trim(),
     email: captureForm.value.email.trim().toLowerCase(),
-    phone: captureForm.value.phone.trim(),
-    timestamp: Date.now(),
-  }
-  localStorage.setItem('bk_contact', JSON.stringify(contact))
-  trackStage('lead_capturado', { nombre: contact.nombre, email: contact.email, phone: contact.phone })
+    telefono: captureForm.value.telefono.trim(),
+  })
+
+  const c = contactStore.get()
+  const leadEventId = generateEventId('lead_video')
+  trackStage('lead_capturado', {
+    nombre: c.nombre,
+    apellido: c.apellido,
+    negocio: c.negocio,
+    email: c.email,
+    telefono: c.telefono,
+    event_id: leadEventId,
+  })
+  ;(window as any).fbq?.('track', 'Lead', { content_name: 'video-gate' }, { eventID: leadEventId })
   await new Promise(r => setTimeout(r, 600))
   captureSubmitting.value = false
   captureOpen.value = false
@@ -66,10 +83,12 @@ const startTimer = () => {
 }
 
 onMounted(() => {
-  const stored = localStorage.getItem('bk_contact')
-  if (!IS_DEV && !stored) {
+  const c = contactStore.get()
+  const hasContact = !!c.email && !!c.nombre
+  if (!IS_DEV && !hasContact) {
     captureOpen.value = true
   } else {
+    ;(window as any).fbq?.('track', 'ViewContent', { content_name: 'video-vsl' })
     startTimer()
   }
 })
@@ -207,20 +226,48 @@ onUnmounted(() => {
 
         <form class="cap-form" @submit.prevent="submitCapture" novalidate>
 
-          <div class="cap-field" :class="{ 'cap-field--error': captureTouched.nombre && captureErrors.nombre }">
-            <label class="cap-label" for="cap-nombre">Nombre</label>
+          <div class="cap-row">
+            <div class="cap-field" :class="{ 'cap-field--error': captureTouched.nombre && captureErrors.nombre }">
+              <label class="cap-label" for="cap-nombre">Nombre</label>
+              <input
+                id="cap-nombre"
+                v-model="captureForm.nombre"
+                type="text"
+                class="cap-input"
+                placeholder="Tu nombre"
+                autocomplete="given-name"
+                @blur="captureTouched.nombre = true; validateCapture()"
+              />
+              <span v-if="captureTouched.nombre && captureErrors.nombre" class="cap-error">{{ captureErrors.nombre }}</span>
+            </div>
+
+            <div class="cap-field" :class="{ 'cap-field--error': captureTouched.apellido && captureErrors.apellido }">
+              <label class="cap-label" for="cap-apellido">Apellido</label>
+              <input
+                id="cap-apellido"
+                v-model="captureForm.apellido"
+                type="text"
+                class="cap-input"
+                placeholder="Tu apellido"
+                autocomplete="family-name"
+                @blur="captureTouched.apellido = true; validateCapture()"
+              />
+              <span v-if="captureTouched.apellido && captureErrors.apellido" class="cap-error">{{ captureErrors.apellido }}</span>
+            </div>
+          </div>
+
+          <div class="cap-field" :class="{ 'cap-field--error': captureTouched.negocio && captureErrors.negocio }">
+            <label class="cap-label" for="cap-negocio">Nombre de tu negocio</label>
             <input
-              id="cap-nombre"
-              v-model="captureForm.nombre"
+              id="cap-negocio"
+              v-model="captureForm.negocio"
               type="text"
               class="cap-input"
-              placeholder="Tu nombre"
-              autocomplete="given-name"
-              @blur="captureTouched.nombre = true; validateCapture()"
+              placeholder="Ej: Pastelería Nicole"
+              autocomplete="organization"
+              @blur="captureTouched.negocio = true; validateCapture()"
             />
-            <span v-if="captureTouched.nombre && captureErrors.nombre" class="cap-error">
-              {{ captureErrors.nombre }}
-            </span>
+            <span v-if="captureTouched.negocio && captureErrors.negocio" class="cap-error">{{ captureErrors.negocio }}</span>
           </div>
 
           <div class="cap-field" :class="{ 'cap-field--error': captureTouched.email && captureErrors.email }">
@@ -234,25 +281,21 @@ onUnmounted(() => {
               autocomplete="email"
               @blur="captureTouched.email = true; validateCapture()"
             />
-            <span v-if="captureTouched.email && captureErrors.email" class="cap-error">
-              {{ captureErrors.email }}
-            </span>
+            <span v-if="captureTouched.email && captureErrors.email" class="cap-error">{{ captureErrors.email }}</span>
           </div>
 
-          <div class="cap-field" :class="{ 'cap-field--error': captureTouched.phone && captureErrors.phone }">
-            <label class="cap-label" for="cap-phone">Teléfono</label>
+          <div class="cap-field" :class="{ 'cap-field--error': captureTouched.telefono && captureErrors.telefono }">
+            <label class="cap-label" for="cap-telefono">Teléfono / WhatsApp</label>
             <input
-              id="cap-phone"
-              v-model="captureForm.phone"
+              id="cap-telefono"
+              v-model="captureForm.telefono"
               type="tel"
               class="cap-input"
               placeholder="+593 99 999 9999"
               autocomplete="tel"
-              @blur="captureTouched.phone = true; validateCapture()"
+              @blur="captureTouched.telefono = true; validateCapture()"
             />
-            <span v-if="captureTouched.phone && captureErrors.phone" class="cap-error">
-              {{ captureErrors.phone }}
-            </span>
+            <span v-if="captureTouched.telefono && captureErrors.telefono" class="cap-error">{{ captureErrors.telefono }}</span>
           </div>
 
           <button type="submit" class="cap-submit" :disabled="captureSubmitting">
@@ -681,6 +724,16 @@ $text-body:   rgba(255, 255, 255, 0.68);
   display: flex;
   flex-direction: column;
   gap: 14px;
+}
+
+.cap-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  @media (max-width: 420px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .cap-field {

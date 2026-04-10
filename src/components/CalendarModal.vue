@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useContactStore } from '@/stores/contact'
+
+const contactStore = useContactStore()
 
 const props = defineProps<{ open: boolean; nombre: string }>()
 const emit = defineEmits<{ (e: 'close'): void; (e: 'done'): void }>()
@@ -35,7 +38,7 @@ const handleSubmit = async () => {
   if (!isValid()) return
   submitting.value = true
 
-  const contact = (() => { try { return JSON.parse(localStorage.getItem('bk_contact') ?? '{}') } catch { return {} } })()
+  const contact = contactStore.get()
   const califica = qualifies()
 
   const etiquetas = [
@@ -47,27 +50,69 @@ const handleSubmit = async () => {
     `objetivo-${form.value.objetivo}`,
   ]
 
+  const facturacionLabel: Record<string, string> = {
+    '<10k':    'Menos de $10,000 USD',
+    '10k-25k': 'Entre $10,000 y $25,000 USD',
+    '>25k':    'Más de $25,000 USD',
+  }
+  const ubicacionLabel: Record<string, string> = {
+    guayaquil: 'Guayaquil / Samborondón',
+    otra:      'Otra ciudad / extranjero',
+  }
+  const objetivoLabel: Record<string, string> = {
+    viral:       'Aumentar seguidores y hacerse viral',
+    facturacion: 'Abrir mercado y aumentar facturación con datos',
+    ventas:      'Profesionalizar ventas y captación',
+  }
+
+  const nota = `${califica ? '✅ LEAD CALIFICADO' : '❌ NO CALIFICA'} — Bakano Funnel
+━━━━━━━━━━━━━━━━━━━━━━━━
+👤 ${contact.nombre} ${contact.apellido}
+🏢 Negocio: ${contact.negocio}
+📧 ${contact.email}
+📱 ${contact.telefono}
+━━━━━━━━━━━━━━━━━━━━━━━━
+💰 Facturación: ${facturacionLabel[form.value.facturacion] ?? form.value.facturacion}
+📍 Ubicación: ${ubicacionLabel[form.value.ubicacion] ?? form.value.ubicacion}
+🎯 Objetivo: ${objetivoLabel[form.value.objetivo] ?? form.value.objetivo}
+━━━━━━━━━━━━━━━━━━━━━━━━
+📊 Resultado: ${califica ? '🟢 AGENDA CITA' : '🔴 RECHAZADO'}
+🕐 ${new Date().toLocaleString('es-EC', { timeZone: 'America/Guayaquil' })}
+🔑 event_id: ${`schedule_${Date.now()}_bk`}`
+
   const payload = {
-    nombre: props.nombre,
-    email: contact.email ?? '',
-    telefono: contact.phone ?? '',
+    nombre: contact.nombre || props.nombre,
+    apellido: contact.apellido,
+    negocio: contact.negocio,
+    email: contact.email,
+    telefono: contact.telefono,
     facturacion: form.value.facturacion,
     ubicacion: form.value.ubicacion,
     objetivo: form.value.objetivo,
     califica,
     resultado: califica ? 'AGENDA' : 'RECHAZADO',
     etiquetas,
+    nota,
     timestamp: new Date().toISOString(),
   }
   console.info('[Bakano Agenda]', payload)
 
   const scheduleEventId = `schedule_${Date.now()}_${Math.random().toString(36).slice(2)}`
 
+  // Reemplazar el event_id temporal de la nota con el real
+  const finalPayload = { ...payload, nota: payload.nota.replace(/schedule_\d+_bk/, scheduleEventId), event_id: scheduleEventId }
+
   await fetch('https://services.leadconnectorhq.com/hooks/pEFChujwCCaMWBNbZYD1/webhook-trigger/69dc0e5f-e2c0-4e9f-9625-10a708787d59', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...payload, event_id: scheduleEventId }),
+    body: JSON.stringify(finalPayload),
   }).catch(() => {})
+
+  // Meta Pixel — step 2 completado (todos los envíos)
+  ;(window as any).fbq?.('track', 'CompleteRegistration',
+    { content_name: 'cualificacion-step2', status: califica ? 'califica' : 'no-califica' },
+    { eventID: scheduleEventId }
+  )
 
   if (califica) {
     // Meta Pixel — evento Schedule (deduplicado con CAPI via event_id)
