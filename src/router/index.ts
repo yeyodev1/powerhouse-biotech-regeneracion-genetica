@@ -31,12 +31,6 @@ const router = createRouter({
       alias: '/registro-vsl-tr',
       name: 'funnel',
       component: FunnelView,
-      beforeEnter: () => {
-        if (window.location.hostname !== 'localhost') {
-          window.location.replace('https://mkt.bakano.ec/registro-vsl-tr')
-          return false
-        }
-      },
       meta: {
         title: 'Bakano | Aumenta tu facturación entre 10% y 20% — Asesoría Gratuita',
         description:
