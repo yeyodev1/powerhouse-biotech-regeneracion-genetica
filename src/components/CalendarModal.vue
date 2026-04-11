@@ -16,13 +16,17 @@ const form = ref({
   facturacion: '',
   ubicacion: '',
   objetivo: '',
+  mejora: '',
   consent: false,
 })
+
+const wordCount = (text: string) => text.trim().split(/\s+/).filter(Boolean).length
 
 const isValid = () =>
   !!form.value.facturacion &&
   !!form.value.ubicacion &&
   !!form.value.objetivo &&
+  wordCount(form.value.mejora) >= 15 &&
   form.value.consent
 
 const IS_DEV = window.location.hostname === 'localhost'
@@ -75,6 +79,7 @@ const handleSubmit = async () => {
 💰 Facturación: ${facturacionLabel[form.value.facturacion] ?? form.value.facturacion}
 📍 Ubicación: ${ubicacionLabel[form.value.ubicacion] ?? form.value.ubicacion}
 🎯 Objetivo: ${objetivoLabel[form.value.objetivo] ?? form.value.objetivo}
+💡 Mejora: ${form.value.mejora}
 ━━━━━━━━━━━━━━━━━━━━━━━━
 📊 Resultado: ${califica ? '🟢 AGENDA CITA' : '🔴 RECHAZADO'}
 🕐 ${new Date().toLocaleString('es-EC', { timeZone: 'America/Guayaquil' })}
@@ -89,6 +94,7 @@ const handleSubmit = async () => {
     facturacion: form.value.facturacion,
     ubicacion: form.value.ubicacion,
     objetivo: form.value.objetivo,
+    mejora: form.value.mejora,
     califica,
     resultado: califica ? 'AGENDA' : 'RECHAZADO',
     etiquetas,
@@ -137,7 +143,7 @@ const onKeydown = (e: KeyboardEvent) => { if (e.key === 'Escape') emit('close') 
 onMounted(() => document.addEventListener('keydown', onKeydown))
 onUnmounted(() => document.removeEventListener('keydown', onKeydown))
 
-watch(() => props.open, (v) => { if (v) { touched.value = false; form.value = { facturacion: '', ubicacion: '', objetivo: '', consent: false } } })
+watch(() => props.open, (v) => { if (v) { touched.value = false; form.value = { facturacion: '', ubicacion: '', objetivo: '', mejora: '', consent: false } } })
 </script>
 
 <template>
@@ -158,7 +164,7 @@ watch(() => props.open, (v) => { if (v) { touched.value = false; form.value = { 
               Cuéntanos sobre<br>
               <span class="cal-accent">tu negocio</span>
             </h2>
-            <p class="cal-subtitle">3 preguntas rápidas para asignarte al miembro del equipo ideal — 60 segundos.</p>
+            <p class="cal-subtitle">4 preguntas rápidas para asignarte al miembro del equipo ideal — 60 segundos.</p>
 
             <form class="cal-form" @submit.prevent="handleSubmit" novalidate>
 
@@ -219,6 +225,35 @@ watch(() => props.open, (v) => { if (v) { touched.value = false; form.value = { 
                   </label>
                 </div>
                 <span v-if="touched && !form.objetivo" class="cal-error">Selecciona una opción</span>
+              </fieldset>
+
+              <!-- Q4 -->
+              <fieldset class="cal-fieldset" :class="{ 'has-error': touched && wordCount(form.mejora) < 15 }">
+                <legend class="cal-legend">
+                  <span class="cal-q-num">04</span>
+                  ¿Qué quisieras mejorar en tu negocio?
+                </legend>
+                <div class="cal-textarea-wrap">
+                  <textarea
+                    v-model="form.mejora"
+                    class="cal-textarea"
+                    :class="{ error: touched && wordCount(form.mejora) < 15 }"
+                    placeholder="Explícanos con tus propias palabras qué aspecto de tu negocio quieres mejorar y por qué es importante para ti..."
+                    rows="4"
+                    maxlength="1000"
+                  />
+                  <div class="cal-textarea-footer">
+                    <span v-if="touched && wordCount(form.mejora) < 15" class="cal-error">
+                      Escribe al menos 15 palabras (llevas {{ wordCount(form.mejora) }})
+                    </span>
+                    <span v-else class="cal-word-hint">
+                      {{ wordCount(form.mejora) }} palabra{{ wordCount(form.mejora) !== 1 ? 's' : '' }}
+                      <span v-if="wordCount(form.mejora) >= 15" class="cal-word-ok">
+                        <i class="fa-solid fa-circle-check" />
+                      </span>
+                    </span>
+                  </div>
+                </div>
               </fieldset>
 
               <!-- Consent -->
@@ -568,6 +603,63 @@ $text-body: rgba(255, 255, 255, 0.7);
       box-shadow: none;
     }
   }
+}
+
+// ── Textarea Q4 ───────────────────────────────────────────────────────────────
+.cal-textarea-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cal-textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 100px;
+  padding: 12px 14px;
+  font-family: fonts.$font-secondary;
+  font-size: 0.86rem;
+  color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid $border;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.18s, background 0.18s;
+  line-height: 1.55;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: rgba(255,255,255,0.22);
+  }
+
+  &:focus {
+    border-color: rgba(colors.$BAKANO-PURPLE, 0.45);
+    background: rgba(colors.$BAKANO-PURPLE, 0.04);
+  }
+
+  &.error {
+    border-color: rgba(255, 80, 100, 0.3);
+  }
+}
+
+.cal-textarea-footer {
+  display: flex;
+  justify-content: flex-end;
+  min-height: 16px;
+}
+
+.cal-word-hint {
+  font-family: fonts.$font-interface;
+  font-size: 0.7rem;
+  color: $text-muted;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cal-word-ok {
+  color: colors.$BAKANO-GREEN;
+  font-size: 0.75rem;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
