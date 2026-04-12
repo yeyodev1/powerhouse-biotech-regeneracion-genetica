@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useContactStore } from '@/stores/contact'
+import { getStoredFbParams } from '@/utils/fbclid'
 
 const contactStore = useContactStore()
 
@@ -100,6 +101,7 @@ const handleSubmit = async () => {
     etiquetas,
     nota,
     timestamp: new Date().toISOString(),
+    ...getStoredFbParams(),
   }
   console.info('[Bakano Agenda]', payload)
 

@@ -2,6 +2,7 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { parsePhoneNumberFromString, getCountries, getCountryCallingCode, AsYouType } from 'libphonenumber-js'
 import { useRouter } from 'vue-router'
+import { getStoredFbParams } from '@/utils/fbclid'
 const router = useRouter()
 
 const props = defineProps<{ open: boolean }>()
@@ -153,6 +154,7 @@ const handleSubmit = async () => {
     pais: selectedCountry.value.name,
     timestamp: new Date().toISOString(),
     event_id: leadEventId,
+    ...getStoredFbParams(),
   }
 
   console.info('[Bakano Registro]', payload)

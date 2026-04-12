@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import RegistrationModal from '@/components/RegistrationModal.vue'
+import { captureFbParams } from '@/utils/fbclid'
 
 const bakanoLogo = 'https://res.cloudinary.com/dpuody0df/image/upload/v1775587085/bakano/logos/bakano-light.png'
 const luisPhoto = 'https://res.cloudinary.com/dpuody0df/image/upload/v1775587087/bakano/team/luis.webp'
@@ -55,6 +56,9 @@ const seconds = ref('12')
 let interval: ReturnType<typeof setInterval>
 
 onMounted(() => {
+  // Captura fbclid de la URL (llega cuando usuario hace click en anuncio Meta)
+  captureFbParams()
+
   let total = 23 * 3600 + 47 * 60 + 12
   interval = setInterval(() => {
     total--
