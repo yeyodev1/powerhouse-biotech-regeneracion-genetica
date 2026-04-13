@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { getStoredFbParams } from '@/utils/fbclid'
 
 // ── Webhooks ─────────────────────────────────────────────────────────────────
 const WH_CONTACT = 'https://services.leadconnectorhq.com/hooks/pEFChujwCCaMWBNbZYD1/webhook-trigger/6c18375e-289b-4dc8-95c8-84d55b65d513'
@@ -138,6 +139,7 @@ async function submitS1() {
         source: 'bakano-web',
         tags: ['web-lead'],
         event_id: regEventId,
+        ...getStoredFbParams(),
       }),
     })
     // Meta Pixel — CompleteRegistration: señal de volumen para el algoritmo
