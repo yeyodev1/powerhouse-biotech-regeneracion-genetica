@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import RegistrationModal from '@/components/RegistrationModal.vue'
 import { captureFbParams } from '@/utils/fbclid'
 import osLogo from '@/assets/logos/logo-small.png'
+import videoPlaceholder from '@/assets/stock/video.png'
 
 const router = useRouter()
 const modalOpen = ref(false)
@@ -142,6 +143,8 @@ onUnmounted(() => clearInterval(interval))
             @keydown.space.prevent="openModal()"
           >
             <div class="funnel__vsl-bg" aria-hidden="true">
+              <img :src="videoPlaceholder" alt="" class="funnel__vsl-thumb" />
+              <div class="funnel__vsl-blur-overlay"></div>
               <img :src="osLogo" alt="" class="funnel__vsl-watermark" />
             </div>
             <div class="funnel__vsl-overlay" aria-hidden="true">
@@ -497,17 +500,42 @@ onUnmounted(() => clearInterval(interval))
 .funnel__vsl-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, colors.$OS-NAVY 0%, #0055A5 60%, colors.$OS-BLUE 100%);
+  background: colors.$OS-NAVY;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.funnel__vsl-thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(8px) brightness(0.6);
+  transform: scale(1.1); // Avoid white edges from blur
+  transition: filter 0.4s ease, transform 0.4s ease, brightness 0.4s ease;
+
+  .funnel__vsl:hover & {
+    filter: blur(4px) brightness(0.75);
+    transform: scale(1.05);
+  }
+}
+
+.funnel__vsl-blur-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(colors.$OS-NAVY, 0.2) 0%, rgba(colors.$OS-NAVY, 0.6) 100%);
+  z-index: 1;
+}
+
 .funnel__vsl-watermark {
-  height: 72px;
+  position: relative;
+  z-index: 2;
+  height: 60px;
   width: auto;
-  opacity: 0.1;
-  filter: brightness(100);
+  opacity: 0.15;
+  filter: brightness(0) invert(1);
 }
 
 .funnel__vsl-overlay {

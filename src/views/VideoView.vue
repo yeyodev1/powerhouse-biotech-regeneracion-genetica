@@ -83,6 +83,23 @@ const startTimer = () => {
 }
 
 onMounted(() => {
+  // Load Wistia Scripts
+  if (!document.getElementById('wistia-player-js')) {
+    const s1 = document.createElement('script')
+    s1.id = 'wistia-player-js'
+    s1.src = 'https://fast.wistia.com/player.js'
+    s1.async = true
+    document.head.appendChild(s1)
+  }
+  if (!document.getElementById('wistia-embed-js')) {
+    const s2 = document.createElement('script')
+    s2.id = 'wistia-embed-js'
+    s2.src = 'https://fast.wistia.com/embed/0elz43iiiw.js'
+    s2.async = true
+    s2.type = 'module'
+    document.head.appendChild(s2)
+  }
+
   const c = contactStore.get()
   const hasContact = !!c.email && !!c.nombre
   if (!IS_DEV && !hasContact) {
@@ -134,14 +151,7 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
       <!-- Wistia video embed -->
       <div class="vv-video-wrapper">
         <div class="vv-video-ratio">
-          <!-- TODO: Reemplazar VIDEO_ID con el ID de Wistia de Ocean Safety -->
-          <iframe
-            src="https://fast.wistia.net/embed/iframe/u9yljeo589?videoFoam=true"
-            title="Video Ocean Safety — Honda Marine Ecuador"
-            allow="autoplay; fullscreen"
-            allowfullscreen
-            class="vv-video-iframe"
-          ></iframe>
+          <wistia-player media-id="0elz43iiiw" aspect="1.7777777777777777"></wistia-player>
         </div>
       </div>
 
@@ -360,14 +370,19 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
   box-shadow: 0 8px 32px rgba(0, 63, 125, 0.12);
   border: 1px solid #E4EDF7;
   background: colors.$OS-NAVY;
-}
 
-.vv-video-iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
+  wistia-player {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    &:not(:defined) {
+      background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/0elz43iiiw/swatch');
+      display: block;
+      filter: blur(5px);
+      padding-top: 56.25%;
+    }
+  }
 }
 
 // ── CTA section ──────────────────────────────────────────────────────────────

@@ -18,6 +18,7 @@ const form = ref({
   sector: '',
   embarcaciones: '',
   hp: '',
+  presupuesto: '',
   reto: '',
   consent: false,
 })
@@ -28,12 +29,14 @@ const isValid = () =>
   !!form.value.sector &&
   !!form.value.embarcaciones &&
   !!form.value.hp &&
+  !!form.value.presupuesto &&
   wordCount(form.value.reto) >= 10 &&
   form.value.consent
 
 const qualifies = () => {
   if (form.value.sector === 'otro') return false
   if (form.value.embarcaciones === '1-2') return false
+  if (form.value.presupuesto === 'menos1200') return false
   return true
 }
 
@@ -63,6 +66,11 @@ const handleSubmit = async () => {
     alto:  'Alta potencia (150 – 350 HP)',
     ambos: 'Ambos rangos',
   }
+  const presupuestoLabel: Record<string, string> = {
+    menos1200: 'Menos de $1,200 USD',
+    mas1200:   'Al menos $1,200 USD',
+    mas2000:   'Más de $2,000 USD',
+  }
 
   const etiquetas = [
     'funnel-oceansafety',
@@ -71,6 +79,7 @@ const handleSubmit = async () => {
     `sector-${form.value.sector}`,
     `flota-${form.value.embarcaciones}`,
     `hp-${form.value.hp}`,
+    `budget-${form.value.presupuesto}`,
   ]
 
   const notas = `
@@ -84,6 +93,7 @@ const handleSubmit = async () => {
 🏭 Sector: ${sectorLabel[form.value.sector] ?? form.value.sector}
 ⚓ Flota: ${embarcacionesLabel[form.value.embarcaciones] ?? form.value.embarcaciones}
 ⚙️ HP: ${hpLabel[form.value.hp] ?? form.value.hp}
+💰 Presupuesto: ${presupuestoLabel[form.value.presupuesto] ?? form.value.presupuesto}
 💡 Reto: ${form.value.reto}
 ━━━━━━━━━━━━━━━━━━━━━━━━
 ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
@@ -97,6 +107,7 @@ ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
     sector: form.value.sector,
     embarcaciones: form.value.embarcaciones,
     hp: form.value.hp,
+    presupuesto: form.value.presupuesto,
     reto: form.value.reto,
     califica: String(califica),
     etiquetas: etiquetas.join(','),
@@ -137,7 +148,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
 watch(() => props.open, (v) => {
   if (v) {
     touched.value = false
-    form.value = { sector: '', embarcaciones: '', hp: '', reto: '', consent: false }
+    form.value = { sector: '', embarcaciones: '', hp: '', presupuesto: '', reto: '', consent: false }
   }
   document.body.style.overflow = v ? 'hidden' : ''
 })
@@ -162,7 +173,7 @@ watch(() => props.open, (v) => {
               Antes de agendar, cuéntanos sobre
               <span class="cal-accent">tu flota</span>
             </h2>
-            <p class="cal-subtitle">4 preguntas rápidas para asignarte la solución ideal — 60 segundos.</p>
+            <p class="cal-subtitle">5 preguntas rápidas para asignarte la solución ideal — 60 segundos.</p>
           </div>
 
           <form class="cal-form" @submit.prevent="handleSubmit" novalidate>
@@ -229,10 +240,30 @@ watch(() => props.open, (v) => {
               <span v-if="touched && !form.hp" class="cal-error">Selecciona una opción</span>
             </fieldset>
 
-            <!-- Q4 — Reto principal -->
-            <fieldset class="cal-fieldset" :class="{ 'has-error': touched && wordCount(form.reto) < 10 }">
+            <!-- Q4 — Presupuesto -->
+            <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.presupuesto }">
               <legend class="cal-legend">
                 <span class="cal-q-num">04</span>
+                ¿Cuenta con presupuesto para invertir en su flota?
+              </legend>
+              <div class="cal-options">
+                <label v-for="opt in [
+                  { value: 'mas2000',   label: 'Sí, cuento con más de $2,000 USD' },
+                  { value: 'mas1200',   label: 'Sí, cuento con al menos $1,200 USD' },
+                  { value: 'menos1200', label: 'Cuento con menos de $1,200 USD' },
+                ]" :key="opt.value" class="cal-option" :class="{ selected: form.presupuesto === opt.value }">
+                  <input type="radio" :value="opt.value" v-model="form.presupuesto" hidden />
+                  <span class="cal-option__radio" aria-hidden="true" />
+                  <span class="cal-option__label">{{ opt.label }}</span>
+                </label>
+              </div>
+              <span v-if="touched && !form.presupuesto" class="cal-error">Selecciona una opción</span>
+            </fieldset>
+
+            <!-- Q5 — Reto principal -->
+            <fieldset class="cal-fieldset" :class="{ 'has-error': touched && wordCount(form.reto) < 10 }">
+              <legend class="cal-legend">
+                <span class="cal-q-num">05</span>
                 ¿Cuál es el principal reto con sus motores actuales?
               </legend>
               <textarea
