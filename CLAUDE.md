@@ -1,13 +1,14 @@
-# Bakano Web — VSL Funnel Landing
+# Ocean Safety — VSL Funnel Landing
 
 ## Proyecto
-Este repositorio es la landing page / funnel de **Bakano** (bakano.ec).
-Ya **no es un sitio multi-sección**: es un **funnel de una sola página** (VSL Funnel) orientado a conversión.
+Este repositorio es la landing page / funnel de **Ocean Safety** (oceansafety.ec).
+Representantes oficiales Honda Marine en Ecuador — motores fuera de borda para flotas camaroneras, transporte y seguridad.
+Es un **funnel de una sola página** (VSL Funnel) orientado a captación de consultas técnicas.
 
 ## Stack
 - **Vue 3** + Vite 7 + TypeScript
 - **SCSS** con variables en `src/styles/colorVariables.module.scss`
-- **GSAP** para animaciones (usado solo en el loader global)
+- **GSAP** instalado (sin uso activo — loader global eliminado)
 - **pnpm** como package manager
 - **vue-router** (rutas del funnel + legales)
 - **FontAwesome 6** (CDN en index.html) — usar `<i class="fa-solid fa-...">`, NO emojis
@@ -28,18 +29,18 @@ Ya **no es un sitio multi-sección**: es un **funnel de una sola página** (VSL 
 ## LocalStorage — claves en uso
 | Clave | Contenido | Quién lo escribe |
 |---|---|---|
-| `bk_contact` | `{ nombre, email, phone, timestamp }` | RegistrationModal + VideoView guard |
-| `bk_disq_at` | timestamp (ms) | CalendarModal al disqualificar |
-| `bk_booked_at` | timestamp (ms) | BookingView al confirmar cita |
+| `os_contact` | `{ nombre, email, phone, timestamp }` | RegistrationModal + VideoView guard |
+| `os_disq_at` | timestamp (ms) | CalendarModal al disqualificar |
+| `os_booked_at` | timestamp (ms) | BookingView al confirmar cita |
 
 ## Guards de seguridad
-- **FunnelView**: si `bk_disq_at` < 24h → redirige a `/sin-espacio` (desactivado en `localhost`)
-- **VideoView**: si no hay `bk_contact` → overlay bloqueante para capturar contacto (desactivado en `localhost`)
-- **CalendarModal**: `facturación < $10k` OR `objetivo = viral` → `/sin-espacio` + guarda `bk_disq_at`
+- **FunnelView**: si `os_disq_at` < 24h → redirige a `/sin-espacio` (desactivado en `localhost`)
+- **VideoView**: si no hay `os_contact` → overlay bloqueante para capturar contacto (desactivado en `localhost`)
+- **CalendarModal**: `sector = otro` OR `embarcaciones = 1-2` → `/sin-espacio` + guarda `os_disq_at`
 
 ## GHL Calendar
-- URL: `https://api.leadconnectorhq.com/widget/booking/dtpY2GCQjoOkpm8JUtYz`
-- Pre-fill params: `?firstName=...&email=...&phone=...` (leídos de `bk_contact`)
+- URL: `https://api.leadconnectorhq.com/widget/booking/dtpY2GCQjoOkpm8JUtYz` ← **TODO: actualizar para Ocean Safety**
+- Pre-fill params: `?firstName=...&email=...&phone=...` (leídos de `os_contact`)
 - Evento de confirmación: `postMessage(['msgsndr-booking-complete', {...}])`
 - Altura dinámica: `postMessage({ type: 'booking-app', height: N })`
 
@@ -64,11 +65,11 @@ src/
       BookedTeam.vue        ← Recibe prop :team
       BookedFooter.vue
   components/globals/
-    TheGlobalLoader.vue     ← Loader inicial (se mantiene)
+    TheGlobalLoader.vue     ← Loader eliminado (no se usa — no importar)
   assets/
-    logos/                  ← bakano-light.png, bakano-dark.png, bakano-b.png
-    team/                   ← luis.webp, denisse.webp, diego.webp
-    testimonios/            ← johanna.png, mariaisabel.webp, mauro.webp, nicole.webp
+    logos/                  ← Logo-large.png, logo-small.png (Ocean Safety)
+    team/                   ← (pendiente: foto Roberto Allú)
+    testimonios/            ← (pendiente: testimonios Ocean Safety)
 ```
 
 ## Padding mobile — patrón de BookedView
@@ -76,29 +77,33 @@ src/
 Los subcomponentes (`BookedHero`, `BookedSteps`, `BookedTeam`) usan `padding: 0` horizontal — heredan del contenedor.
 
 ## Videos
-- **Wistia media-id `u9yljeo589`** → video principal del funnel (usado en `/ver-video`)
+- **Wistia media-id `u9yljeo589`** → **TODO: reemplazar con el video ID de Ocean Safety**
 - Script Wistia no se agrega al HTML global; se usa iframe responsive 16:9
 
-## Funnel — Contenido
-Basado en https://mkt.bakano.ec/registro-vsl-tr
-
-- **Headline**: "Ayudamos a dueños de negocios establecidos a abrir su mercado y aumentar su facturación entre un 10% y 20% de forma predecible"
-- **Metodología**: Data Growth Business™
-- **CTA principal**: "REGISTRARME A LA ASESORÍA ¡AHORA!" → abre `RegistrationModal`
-- **Luis Reyes**: CEO & Co-fundador, foto local `src/assets/team/luis.webp`
-- **Entidad legal**: NEGOCIOS DEL PACIFICO
+## Funnel — Contenido Ocean Safety
+- **Headline**: "Profesionaliza tu flota y elimina las paradas no programadas con ingeniería náutica japonesa"
+- **Especialista**: Roberto Allú — Especialista en Soluciones Náuticas Industriales
+- **Marca**: Honda Marine (representantes oficiales Ecuador)
+- **Segmentos**: flotas camaroneras, transporte fluvial/marítimo, seguridad naval
+- **Motores clave**: BF2.3 (enfriado por aire), BF150 VTEC BLAST, 250HP, 350HP
+- **CTA principal**: "AGENDAR CONSULTA TÉCNICA GRATIS" → abre `RegistrationModal`
+- **Entidad legal**: OCEAN SAFETY (pendiente nombre legal exacto)
 
 ## Imágenes CDN
 Las imágenes del funnel se suben a Cloudinary:
 - Cloud: `dpuody0df`
 - Las URLs se almacenan en `/tmp/cloudinary-urls.json` después de ejecutar el script de upload
 
-## Colores de marca
+## Colores de marca (Ocean Safety — light theme)
 ```scss
-$BAKANO-PINK:   #e6285c
-$BAKANO-DARK:   #191423
-$BAKANO-PURPLE: #85529c
-$BAKANO-GREEN:  #3bb77e
+// Variables en colorVariables.module.scss
+// Alias BAKANO mantiene compatibilidad; aliases OS recomendados para código nuevo
+$OS-RED:     #CC0000   // Honda red — CTAs
+$OS-NAVY:    #003F7D   // Ocean navy — brand principal
+$OS-BLUE:    #0066CC   // Ocean blue — secundario
+$OS-DARK:    #0D1B2A   // Texto oscuro
+$OS-LIGHT:   #F0F6FF   // Fondo claro
+$OS-SURFACE: #F5F8FF   // Superficies/cards
 ```
 
 ## Fuentes

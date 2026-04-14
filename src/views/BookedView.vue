@@ -1,255 +1,340 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
-import BookedHeader from '@/components/booked/BookedHeader.vue';
-import BookedHero from '@/components/booked/BookedHero.vue';
-import BookedSteps from '@/components/booked/BookedSteps.vue';
-import BookedTeam from '@/components/booked/BookedTeam.vue';
-import BookedFooter from '@/components/booked/BookedFooter.vue';
+import { ref, computed, onMounted } from 'vue'
+import osLogo from '@/assets/logos/logo-small.png'
 
-/**
- * BookedView.vue
- * Main orchestrator for the booking confirmation page.
- * Implements premium atmospheric effects and manages data flow.
- */
-
-onMounted(() => {
-  // Meta Pixel — cita confirmada
-  ;(window as any).fbq?.('track', 'CompleteRegistration', { content_name: 'cita-confirmada' })
-})
-
-const LUIS_PHOTO = 'https://res.cloudinary.com/dpuody0df/image/upload/v1775587087/bakano/team/luis.webp';
-const DENISSE_PHOTO = 'https://res.cloudinary.com/dpuody0df/image/upload/v1775587088/bakano/team/denisse.webp';
-
-/**
- * Recuperar el nombre del contacto desde localStorage para una experiencia personalizada.
- */
+// ── Contact name from localStorage ───────────────────────────────────────────
 const contactName = computed(() => {
   try {
-    const stored = localStorage.getItem('bk_contact');
-    if (!stored) return '';
-    return JSON.parse(stored).nombre ?? '';
-  } catch {
-    return '';
-  }
-});
+    const stored = localStorage.getItem('os_contact')
+    if (!stored) return ''
+    return JSON.parse(stored).nombre ?? ''
+  } catch { return '' }
+})
 
-/**
- * Pasos definidos para la sección de post-agendamiento.
- */
+// ── Fire fbq CompleteRegistration once ───────────────────────────────────────
+onMounted(() => {
+  const alreadyFired = sessionStorage.getItem('os_complete_fired')
+  if (!alreadyFired) {
+    ;(window as any).fbq?.('track', 'CompleteRegistration', {
+      content_name: 'consulta-agendada',
+    })
+    sessionStorage.setItem('os_complete_fired', '1')
+  }
+})
+
 const nextSteps = [
   {
-    icon: 'envelope',
-    title: 'Revisa tu correo',
-    body: 'Encontrarás los detalles de la sesión: enlace de reunión, fecha y hora confirmada.',
+    icon: 'fa-solid fa-envelope',
+    title: 'Revisa tu email',
+    body: 'Te enviamos la confirmación con todos los detalles de tu consulta técnica.',
   },
   {
-    icon: 'whatsapp',
-    title: 'Un asesor te contactará por WhatsApp',
-    body: 'Un miembro del equipo Bakano te escribirá para confirmar la cita y resolver cualquier duda.',
+    icon: 'fa-brands fa-whatsapp',
+    title: 'Te contactamos por WhatsApp',
+    body: 'Roberto Allú te escribirá para confirmar la cita y resolver cualquier duda previa.',
   },
   {
-    icon: 'chart-line',
-    title: 'Prepara tus métricas',
-    body: 'Ten a mano las cifras actuales de tu negocio: facturación, canales de venta y crecimiento reciente.',
+    icon: 'fa-solid fa-anchor',
+    title: 'Prepara la info de tu flota',
+    body: 'Ten a mano el número de embarcaciones, HP actuales y los principales problemas operativos.',
   },
-];
-
-/**
- * Equipo de fundadores que lideran las asesorías.
- */
-const team = [
-  {
-    name: 'Luis Reyes',
-    role: 'Co-fundador & CEO',
-    photo: LUIS_PHOTO,
-  },
-  {
-    name: 'Denisse Quimi',
-    role: 'Co-fundadora & CMO',
-    photo: DENISSE_PHOTO,
-  },
-];
+]
 </script>
 
 <template>
-  <main class="booked-view">
-    <!-- CAPA ATMOSFÉRICA (Fondo Premium) -->
-    <div class="booked-view__bg" aria-hidden="true">
-      <div class="glow-orb glow-orb--1"></div>
-      <div class="glow-orb glow-orb--2"></div>
-      <div class="glow-orb glow-orb--3"></div>
-      <div class="grain-overlay"></div>
-    </div>
+  <div class="booked">
 
-    <!-- ESTRUCTURA DE COMPONENTES -->
-    <BookedHeader />
-    
-    <div class="booked-view__content">
-      <!-- CONTENEDOR CENTRAL: Gestiona el ancho máximo y el padding lateral -->
-      <div class="booked-view__container">
-        <!-- Sección Hero: Confirmación Visual -->
-        <BookedHero :contact-name="contactName" />
-        
-        <!-- Sección Pasos: Guía de Usuario -->
-        <BookedSteps :steps="nextSteps" />
-        
-        <!-- Sección Equipo: Social Proof Humano -->
-        <BookedTeam :team="team" />
+    <!-- TOP BAR -->
+    <header class="booked__topbar">
+      <img :src="osLogo" alt="Ocean Safety" class="booked__logo" />
+    </header>
 
-        <!-- DISCLAIMER (Nota de responsabilidad) -->
-        <section class="booked-view__disclaimer">
-          <div class="disclaimer-icon">
-            <i class="fa-solid fa-circle-info"></i>
+    <main class="booked__main">
+
+      <!-- Success hero -->
+      <section class="booked__hero">
+        <div class="booked__hero-icon" aria-hidden="true">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h1 class="booked__hero-title">
+          <template v-if="contactName">
+            ¡Listo, {{ contactName }}!
+          </template>
+          <template v-else>
+            ¡Tu consulta está confirmada!
+          </template>
+        </h1>
+        <p class="booked__hero-subtitle">
+          Tu consulta técnica con Roberto Allú ha sido agendada correctamente.
+          En breve recibirás todos los detalles.
+        </p>
+      </section>
+
+      <!-- What to expect -->
+      <section class="booked__steps" aria-labelledby="steps-heading">
+        <p id="steps-heading" class="booked__steps-label">Próximos pasos</p>
+        <div class="booked__steps-grid">
+          <div v-for="(step, i) in nextSteps" :key="i" class="booked__step">
+            <div class="booked__step-num" aria-hidden="true">{{ String(i + 1).padStart(2, '0') }}</div>
+            <div class="booked__step-icon" aria-hidden="true">
+              <i :class="step.icon"></i>
+            </div>
+            <h3 class="booked__step-title">{{ step.title }}</h3>
+            <p class="booked__step-body">{{ step.body }}</p>
           </div>
-          <p>
-            Los resultados no son típicos ni garantizados. La metodología Data Growth Business
-            depende de la madurez operativa y disposición de cada negocio.
-          </p>
-        </section>
-      </div>
-    </div>
+        </div>
+      </section>
 
-    <!-- PIE DE PÁGINA -->
-    <BookedFooter />
-  </main>
+      <!-- Team card — Roberto Allú -->
+      <section class="booked__team" aria-labelledby="team-heading">
+        <p id="team-heading" class="booked__team-label">Tu especialista</p>
+        <div class="booked__team-card">
+          <div class="booked__team-avatar" aria-hidden="true">
+            <i class="fa-solid fa-user-tie"></i>
+          </div>
+          <div class="booked__team-info">
+            <strong class="booked__team-name">Roberto Allú</strong>
+            <span class="booked__team-role">Especialista en Soluciones Náuticas Industriales</span>
+            <p class="booked__team-note">
+              "No es solo vender un motor — es garantizar que tu operación no se detenga."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Disclaimer -->
+      <p class="booked__disclaimer">
+        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+        Los resultados mencionados en el video corresponden a casos reales de clientes. Los resultados individuales
+        dependen del tipo de operación, flota y condiciones de uso.
+      </p>
+
+    </main>
+
+    <footer class="booked__footer">
+      <nav class="booked__footer-links" aria-label="Legal">
+        <RouterLink to="/politicas-privacidad">Política de Privacidad</RouterLink>
+        <RouterLink to="/aviso-legal">Aviso Legal</RouterLink>
+      </nav>
+      <p class="booked__footer-copy">© {{ new Date().getFullYear() }} OCEAN SAFETY. Todos los derechos reservados.</p>
+    </footer>
+
+  </div>
 </template>
 
 <style lang="scss" scoped>
-@use '@/styles/colorVariables.module.scss' as colors;
 @use '@/styles/fonts.modules.scss' as fonts;
+@use '@/styles/colorVariables.module.scss' as colors;
 
-.booked-view {
-  position: relative;
+.booked {
   min-height: 100vh;
-  background-color: #050308; // Color negro profundo para mayor contraste
-  color: colors.$white;
+  background: #ffffff;
+  color: colors.$OS-DARK;
+  display: flex;
+  flex-direction: column;
+}
+
+.booked__topbar {
+  background: #ffffff;
+  border-bottom: 1px solid #E8EDF5;
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+}
+
+.booked__logo { height: 36px; width: auto; object-fit: contain; }
+
+.booked__main {
+  flex: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 3.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+// ── Hero ─────────────────────────────────────────────────────────────────────
+.booked__hero {
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #EEF4FF 0%, #F9FBFF 100%);
+  border: 1px solid #E4EDF7;
+  border-radius: 20px;
+}
+
+.booked__hero-icon {
+  font-size: 3.5rem;
+  color: colors.$OS-BLUE;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+.booked__hero-title {
+  @include fonts.heading-font(800);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  color: colors.$OS-DARK;
+  margin: 0 0 0.75rem;
+  letter-spacing: -0.025em;
+}
+
+.booked__hero-subtitle {
+  font-size: 0.95rem;
+  color: #4A5F7A;
+  line-height: 1.65;
+  margin: 0 auto;
+  max-width: 460px;
+}
+
+// ── Steps ────────────────────────────────────────────────────────────────────
+.booked__steps-label,
+.booked__team-label {
+  font-family: fonts.$font-interface;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: colors.$OS-NAVY;
+  margin: 0 0 1.25rem;
+}
+
+.booked__steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  @media (max-width: 620px) { grid-template-columns: 1fr; }
+}
+
+.booked__step {
+  background: #F9FBFF;
+  border: 1px solid #E4EDF7;
+  border-radius: 14px;
+  padding: 1.5rem 1.25rem;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0, 63, 125, 0.04);
+}
+
+.booked__step-num {
+  position: absolute;
+  top: 0.9rem;
+  right: 1rem;
+  @include fonts.heading-font(800);
+  font-size: 2rem;
+  color: rgba(colors.$OS-NAVY, 0.07);
+  line-height: 1;
+  user-select: none;
+}
+
+.booked__step-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: colors.$OS-NAVY;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+  i { color: #ffffff; font-size: 1rem; }
+}
+
+.booked__step-title {
+  @include fonts.heading-font(700);
+  font-size: 0.93rem;
+  color: colors.$OS-DARK;
+  margin: 0 0 0.4rem;
+}
+
+.booked__step-body {
+  font-size: 0.83rem;
+  color: #4A5F7A;
+  line-height: 1.5;
+  margin: 0;
+}
+
+// ── Team ─────────────────────────────────────────────────────────────────────
+.booked__team-card {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  background: #F5F8FF;
+  border: 1px solid rgba(colors.$OS-NAVY, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  @media (max-width: 480px) { flex-direction: column; align-items: center; text-align: center; }
+}
+
+.booked__team-avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: colors.$OS-NAVY;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 3px solid #ffffff;
+  box-shadow: 0 3px 12px rgba(0, 63, 125, 0.15);
+  i { color: rgba(#ffffff, 0.85); font-size: 2rem; }
+}
+
+.booked__team-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.booked__team-name {
+  @include fonts.heading-font(700);
+  font-size: 1.05rem;
+  color: colors.$OS-DARK;
+}
+
+.booked__team-role {
+  font-size: 0.8rem;
+  color: #8A9BB5;
+}
+
+.booked__team-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.86rem;
+  color: #3A4F6A;
+  font-style: italic;
+  line-height: 1.55;
+}
+
+// ── Disclaimer ───────────────────────────────────────────────────────────────
+.booked__disclaimer {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  font-size: 0.76rem;
+  color: #A0B0C5;
+  line-height: 1.55;
+  margin: 0;
+  i { font-size: 0.8rem; flex-shrink: 0; margin-top: 1px; color: #C0D0E0; }
+}
+
+// ── Footer ───────────────────────────────────────────────────────────────────
+.booked__footer {
+  padding: 1.5rem;
+  border-top: 1px solid #F0F4FB;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-x: hidden;
+  gap: 0.5rem;
+  text-align: center;
 
-  // Fondo atmosférico con orbes y gradientes
-  &__bg {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background: 
-      radial-gradient(circle at 10% 20%, rgba(colors.$BAKANO-PURPLE, 0.04) 0%, transparent 50%),
-      radial-gradient(circle at 90% 80%, rgba(colors.$BAKANO-PINK, 0.04) 0%, transparent 50%);
-    
-    .grain-overlay {
-      position: absolute;
-      inset: 0;
-      background-image: url('https://res.cloudinary.com/dpuody0df/image/upload/v1775587085/bakano/utils/grain.png');
-      opacity: 0.03;
-      pointer-events: none;
-    }
-  }
-
-  &__content {
-    position: relative;
-    z-index: 1;
-    width: 100%;
+  &-links {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
+    gap: 1.5rem;
+    a { font-size: 0.76rem; color: #B0C0D5; text-decoration: none; &:hover { color: colors.$OS-NAVY; } }
   }
-
-  &__container {
-    width: 100%;
-    max-width: 720px;
-    padding: 0 1.5rem; // Gutter lateral uniforme en mobile
-    box-sizing: border-box; // Garantiza que el padding se reste del 100% de la pantalla
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    @media (min-width: 768px) {
-      padding: 0 2rem; // Mayor respiro en tablets/desktop
-    }
-  }
-
-  &__disclaimer {
-    width: 100%; // Toma el 100% del container (que ya tiene padding)
-    padding: 1.25rem 1.5rem;
-    margin: 1.5rem 0 3.5rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-    backdrop-filter: blur(4px);
-
-    .disclaimer-icon {
-      flex-shrink: 0;
-      color: rgba(colors.$BAKANO-PURPLE, 0.6);
-      font-size: 1.1rem;
-      margin-top: 0.1rem;
-    }
-
-    p {
-      @include fonts.body-font(400);
-      font-size: 0.82rem;
-      color: rgba(colors.$white, 0.35);
-      margin: 0;
-      line-height: 1.7;
-    }
-
-    @media (min-width: 768px) {
-      margin-bottom: 6rem;
-      padding: 1.75rem 2.25rem;
-      gap: 1.25rem;
-      
-      p { font-size: 0.9rem; }
-    }
-  }
-}
-
-// Estilado de Orbes (Glow Atmospheric Effects)
-.glow-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.25;
-  will-change: transform;
-  animation: float-ambient 25s infinite alternate ease-in-out;
-
-  &--1 {
-    width: 450px;
-    height: 450px;
-    background: colors.$BAKANO-PURPLE;
-    top: -150px;
-    left: -200px;
-  }
-
-  &--2 {
-    width: 550px;
-    height: 550px;
-    background: colors.$BAKANO-PINK;
-    bottom: -150px;
-    right: -250px;
-    animation-delay: -7s;
-  }
-
-  &--3 {
-    width: 320px;
-    height: 320px;
-    background: colors.$BAKANO-GREEN;
-    top: 30%;
-    right: 15%;
-    opacity: 0.08;
-    animation-duration: 18s;
-    animation-delay: -3s;
-  }
-}
-
-@keyframes float-ambient {
-  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-  33% { transform: translate(60px, 40px) scale(1.1) rotate(5deg); }
-  66% { transform: translate(-40px, 80px) scale(0.9) rotate(-3deg); }
-  100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  &-copy { font-size: 0.72rem; color: #C8D8ED; margin: 0; }
 }
 </style>

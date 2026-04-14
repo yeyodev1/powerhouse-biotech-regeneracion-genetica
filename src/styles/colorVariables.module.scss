@@ -1,11 +1,20 @@
-// Colores principales de Bakano
-$BAKANO-PINK: #e6285c;
-$BAKANO-DARK: #191423;
-$BAKANO-LIGHT: #f5f3ef;
-$BAKANO-PURPLE: #85529c;
-$BAKANO-GREEN: #3bb77e;
+// Ocean Safety — Honda Marine Ecuador
+$BAKANO-PINK:   #CC0000;   // Honda red   → CTAs / urgencia
+$BAKANO-DARK:   #0D1B2A;   // Dark navy   → textos
+$BAKANO-LIGHT:  #F0F6FF;   // Light blue  → fondos
+$BAKANO-PURPLE: #003F7D;   // Ocean navy  → brand principal
+$BAKANO-GREEN:  #0066CC;   // Ocean blue  → secundario
 
-// Color primario principal (usando el rosa como principal)
+// Aliases semánticos
+$OS-RED:     #CC0000;
+$OS-NAVY:    #003F7D;
+$OS-BLUE:    #0066CC;
+$OS-DARK:    #0D1B2A;
+$OS-LIGHT:   #F0F6FF;
+$OS-SURFACE: #F5F8FF;
+$OS-WHITE:   #ffffff;
+
+// Color primario
 $BAKANO-PRIMARY: $BAKANO-PINK;
 
 // Colores base

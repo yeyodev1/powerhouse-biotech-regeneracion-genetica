@@ -10,7 +10,7 @@ export interface BkContact {
   timestamp?: number
 }
 
-const STORAGE_KEY = 'bk_contact'
+const STORAGE_KEY = 'os_contact'
 
 export const useContactStore = defineStore('contact', () => {
   const contact = ref<BkContact>({

@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import osLogo from '@/assets/logos/logo-small.png'
 
 const router = useRouter()
-const iframeEl = ref<HTMLIFrameElement | null>(null)
 const iframeHeight = ref(1100)
 
-const LOGO = 'https://res.cloudinary.com/dpuody0df/image/upload/v1775587085/bakano/logos/bakano-light.png'
+// TODO: Actualizar URL del calendario Ocean Safety en GHL
 const BASE_URL = 'https://api.leadconnectorhq.com/widget/booking/dtpY2GCQjoOkpm8JUtYz'
 
-// Pre-fill calendar with stored contact data
 const calendarUrl = computed(() => {
   try {
-    const stored = localStorage.getItem('bk_contact')
+    const stored = localStorage.getItem('os_contact')
     if (!stored) return BASE_URL
     const { nombre, email, phone } = JSON.parse(stored)
     const params = new URLSearchParams()
     if (nombre) params.set('firstName', nombre)
-    if (email)  params.set('email', email)
-    if (phone)  params.set('phone', phone)
+    if (email) params.set('email', email)
+    if (phone) params.set('phone', phone)
     const qs = params.toString()
     return qs ? `${BASE_URL}?${qs}` : BASE_URL
   } catch {
@@ -26,24 +25,13 @@ const calendarUrl = computed(() => {
   }
 })
 
-function onMessage(event: MessageEvent) {
-  if (!event.data) return
-
-  // GHL dynamic height resize
-  if (
-    typeof event.data === 'object' &&
-    !Array.isArray(event.data) &&
-    event.data.type === 'booking-app' &&
-    event.data.height
-  ) {
-    iframeHeight.value = Math.max(900, event.data.height + 120)
-    return
-  }
-
-  // GHL booking confirmed — exact event: ['msgsndr-booking-complete', {...}]
+const onMessage = (event: MessageEvent) => {
   if (Array.isArray(event.data) && event.data[0] === 'msgsndr-booking-complete') {
-    localStorage.setItem('bk_booked_at', String(Date.now()))
+    localStorage.setItem('os_booked_at', String(Date.now()))
     router.push('/cita-confirmada')
+  }
+  if (event.data?.type === 'booking-app' && typeof event.data.height === 'number') {
+    iframeHeight.value = event.data.height + 40
   }
 }
 
@@ -56,161 +44,117 @@ onUnmounted(() => window.removeEventListener('message', onMessage))
 
     <!-- TOP BAR -->
     <header class="booking__topbar">
-      <img :src="LOGO" alt="Bakano" class="booking__logo" />
+      <img :src="osLogo" alt="Ocean Safety" class="booking__logo" />
     </header>
 
-    <!-- STEPPER -->
-    <div class="booking__stepper">
-      <div class="stepper__track">
-        <div class="stepper__step stepper__step--done">
-          <span class="stepper__num"><i class="fa-solid fa-check"></i></span>
-          <span class="stepper__label">Registro</span>
-        </div>
-        <div class="stepper__line stepper__line--done"></div>
-        <div class="stepper__step stepper__step--active">
-          <span class="stepper__num">2</span>
-          <span class="stepper__label">Agenda tu cita</span>
+    <main class="booking__main">
+
+      <!-- Stepper -->
+      <div class="stepper" aria-label="Paso 2 de 2">
+        <div class="stepper__track">
+          <div class="stepper__step stepper__step--done">
+            <div class="stepper__circle">
+              <i class="fa-solid fa-check" aria-hidden="true"></i>
+            </div>
+            <span class="stepper__label">Video</span>
+          </div>
+          <div class="stepper__line stepper__line--done"></div>
+          <div class="stepper__step stepper__step--active">
+            <div class="stepper__circle">2</div>
+            <span class="stepper__label">Agenda</span>
+          </div>
         </div>
       </div>
-      <p class="stepper__caption">Paso 2 de 2</p>
-    </div>
 
-    <!-- HEADING -->
-    <section class="booking__hero">
-      <h1 class="booking__title">Selecciona tu horario</h1>
-      <p class="booking__subtitle">
-        Elige el día y la hora que mejor se adapte a tu agenda
-      </p>
-    </section>
+      <!-- Heading -->
+      <section class="booking__heading">
+        <p class="booking__eyebrow">
+          <i class="fa-solid fa-anchor" aria-hidden="true"></i>
+          Casi listo
+        </p>
+        <h1 class="booking__title">
+          Elige el horario de tu
+          <span class="booking__title-accent">consulta técnica</span>
+        </h1>
+        <p class="booking__subtitle">
+          Una sesión de 15 minutos con Roberto Allú para analizar tu flota y recomendarte los equipos exactos.
+        </p>
+      </section>
 
-    <!-- CALENDAR EMBED -->
-    <section class="booking__calendar">
-      <div class="calendar__wrapper">
+      <!-- Calendar iframe -->
+      <div class="calendar__wrap">
         <iframe
-          ref="iframeEl"
           :src="calendarUrl"
           :style="{ height: iframeHeight + 'px' }"
-          title="Agenda tu asesoría con Bakano"
+          title="Agenda tu consulta técnica con Ocean Safety"
           class="calendar__iframe"
           frameborder="0"
-          scrolling="yes"
+          scrolling="no"
         ></iframe>
       </div>
 
-      <div class="calendar__fallback">
-        <button class="btn btn--ghost" @click="router.push('/cita-confirmada')">
-          Ya agendé mi cita
-          <i class="fa-solid fa-arrow-right"></i>
-        </button>
-      </div>
-    </section>
+    </main>
 
-    <!-- FOOTER -->
+    <!-- Footer -->
     <footer class="booking__footer">
-      <div class="footer__links">
+      <nav class="booking__footer-links" aria-label="Legal">
         <RouterLink to="/politicas-privacidad">Política de Privacidad</RouterLink>
-        <span class="footer__sep">·</span>
         <RouterLink to="/aviso-legal">Aviso Legal</RouterLink>
-      </div>
-      <p class="footer__copy">© {{ new Date().getFullYear() }} NEGOCIOS DEL PACIFICO. Todos los derechos reservados.</p>
+      </nav>
+      <p class="booking__footer-copy">© {{ new Date().getFullYear() }} OCEAN SAFETY. Todos los derechos reservados.</p>
     </footer>
 
   </div>
 </template>
 
 <style lang="scss" scoped>
-@use '@/styles/colorVariables.module.scss' as colors;
 @use '@/styles/fonts.modules.scss' as fonts;
+@use '@/styles/colorVariables.module.scss' as colors;
 
 .booking {
   min-height: 100vh;
-  background-color: #0a0712;
-  color: colors.$white;
+  background: #ffffff;
+  color: colors.$OS-DARK;
   display: flex;
   flex-direction: column;
-  align-items: center;
-
-  // ── TOP BAR ──────────────────────────────────────────
-  &__topbar {
-    width: 100%;
-    padding: 1.25rem 2rem;
-    display: flex;
-    justify-content: center;
-    background: rgba(#0a0712, 0.95);
-    border-bottom: 1px solid rgba(colors.$BAKANO-PURPLE, 0.2);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  &__logo {
-    height: 36px;
-    width: auto;
-  }
-
-  // ── STEPPER ──────────────────────────────────────────
-  &__stepper {
-    padding: 2rem 1rem 0.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  // ── HERO ─────────────────────────────────────────────
-  &__hero {
-    text-align: center;
-    padding: 1.5rem 1.5rem 0.5rem;
-    max-width: 600px;
-  }
-
-  &__title {
-    font-family: fonts.$font-principal;
-    font-weight: 800;
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    line-height: 1.15;
-    margin: 0 0 0.75rem;
-    background: linear-gradient(135deg, colors.$white 40%, colors.$BAKANO-PURPLE);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  &__subtitle {
-    font-family: fonts.$font-secondary;
-    font-size: 1.05rem;
-    color: rgba(colors.$white, 0.65);
-    margin: 0;
-    line-height: 1.6;
-  }
-
-  // ── CALENDAR ─────────────────────────────────────────
-  &__calendar {
-    width: 100%;
-    max-width: 860px;
-    padding: 2rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  // ── FOOTER ───────────────────────────────────────────
-  &__footer {
-    margin-top: auto;
-    width: 100%;
-    padding: 2rem 1.5rem;
-    text-align: center;
-    border-top: 1px solid rgba(colors.$BAKANO-PURPLE, 0.15);
-  }
 }
 
-// ── STEPPER INTERNALS ─────────────────────────────────
+.booking__topbar {
+  background: #ffffff;
+  border-bottom: 1px solid #E8EDF5;
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+}
+
+.booking__logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+}
+
+.booking__main {
+  flex: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  width: 100%;
+}
+
+// ── Stepper ──────────────────────────────────────────────────────────────────
 .stepper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+
   &__track {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0;
   }
 
   &__step {
@@ -220,30 +164,30 @@ onUnmounted(() => window.removeEventListener('message', onMessage))
     gap: 0.35rem;
   }
 
-  &__num {
+  &__circle {
     width: 36px;
     height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: fonts.$font-accent;
-    font-weight: 700;
-    font-size: 0.9rem;
-    border: 2px solid rgba(colors.$BAKANO-PURPLE, 0.4);
-    color: rgba(colors.$white, 0.4);
+    font-family: fonts.$font-interface;
+    font-size: 0.85rem;
+    font-weight: 800;
+    border: 2px solid #D0DBE8;
+    color: #D0DBE8;
     transition: all 0.3s ease;
 
     .stepper__step--done & {
-      background: colors.$BAKANO-GREEN;
-      border-color: colors.$BAKANO-GREEN;
-      color: colors.$white;
+      background: colors.$OS-BLUE;
+      border-color: colors.$OS-BLUE;
+      color: #ffffff;
     }
 
     .stepper__step--active & {
-      background: colors.$BAKANO-PINK;
-      border-color: colors.$BAKANO-PINK;
-      color: colors.$white;
+      background: colors.$OS-RED;
+      border-color: colors.$OS-RED;
+      color: #ffffff;
     }
   }
 
@@ -251,112 +195,98 @@ onUnmounted(() => window.removeEventListener('message', onMessage))
     font-family: fonts.$font-interface;
     font-size: 0.72rem;
     font-weight: 600;
-    color: rgba(colors.$white, 0.4);
-    text-transform: uppercase;
     letter-spacing: 0.04em;
+    color: #B0C0D5;
 
-    .stepper__step--done & { color: colors.$BAKANO-GREEN; }
-    .stepper__step--active & { color: colors.$white; }
+    .stepper__step--done & { color: colors.$OS-BLUE; }
+    .stepper__step--active & { color: colors.$OS-DARK; }
   }
 
   &__line {
-    width: 48px;
+    width: 60px;
     height: 2px;
-    background: rgba(colors.$BAKANO-PURPLE, 0.25);
+    background: #E0EAF5;
     border-radius: 2px;
+    margin: 0 0.5rem;
+    margin-bottom: 1.1rem;
 
-    &--done { background: colors.$BAKANO-GREEN; }
-  }
-
-  &__caption {
-    font-family: fonts.$font-interface;
-    font-size: 0.8rem;
-    color: rgba(colors.$white, 0.4);
-    margin: 0;
+    &--done { background: colors.$OS-BLUE; }
   }
 }
 
-// ── CALENDAR INTERNALS ────────────────────────────────
-.calendar {
-  &__wrapper {
-    width: 100%;
-    border-radius: 16px;
-    overflow: visible;
-    border: 1px solid rgba(colors.$BAKANO-PURPLE, 0.25);
-    background: rgba(colors.$BAKANO-PURPLE, 0.05);
-  }
-
-  &__iframe {
-    width: 100%;
-    border: none;
-    display: block;
-    border-radius: 16px;
-    transition: height 0.3s ease;
-    background: #fff;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  &__fallback {
-    display: flex;
-    justify-content: center;
-  }
-}
-
-// ── BUTTONS ───────────────────────────────────────────
-.btn {
+// ── Heading ──────────────────────────────────────────────────────────────────
+.booking__eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.75rem;
-  border-radius: 8px;
-  font-family: fonts.$font-accent;
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  text-decoration: none;
-
-  &--ghost {
-    background: transparent;
-    border: 1.5px solid rgba(colors.$white, 0.25);
-    color: rgba(colors.$white, 0.6);
-
-    &:hover {
-      border-color: colors.$BAKANO-PURPLE;
-      color: colors.$white;
-      background: rgba(colors.$BAKANO-PURPLE, 0.1);
-    }
-  }
+  gap: 0.4rem;
+  font-family: fonts.$font-interface;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: colors.$OS-NAVY;
+  margin: 0 0 0.75rem;
+  i { font-size: 0.75rem; }
 }
 
-// ── FOOTER INTERNALS ──────────────────────────────────
-.footer {
-  &__links {
+.booking__heading { margin-bottom: 1.75rem; }
+
+.booking__title {
+  @include fonts.heading-font(800);
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+  color: colors.$OS-DARK;
+  margin: 0 0 0.6rem;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+
+  &-accent { color: colors.$OS-RED; }
+}
+
+.booking__subtitle {
+  font-size: 0.93rem;
+  color: #4A5F7A;
+  line-height: 1.6;
+  margin: 0;
+}
+
+// ── Calendar ─────────────────────────────────────────────────────────────────
+.calendar__wrap {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #E4EDF7;
+  box-shadow: 0 4px 24px rgba(0, 63, 125, 0.07);
+}
+
+.calendar__iframe {
+  width: 100%;
+  display: block;
+  min-height: 600px;
+}
+
+// ── Footer ───────────────────────────────────────────────────────────────────
+.booking__footer {
+  padding: 1.5rem;
+  border-top: 1px solid #F0F4FB;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+
+  &-links {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-
+    gap: 1.5rem;
     a {
-      font-family: fonts.$font-interface;
-      font-size: 0.8rem;
-      color: rgba(colors.$white, 0.4);
+      font-size: 0.76rem;
+      color: #B0C0D5;
       text-decoration: none;
-      transition: color 0.2s;
-
-      &:hover { color: colors.$white; }
+      &:hover { color: colors.$OS-NAVY; }
     }
   }
 
-  &__sep {
-    color: rgba(colors.$white, 0.2);
-  }
-
-  &__copy {
-    font-family: fonts.$font-interface;
-    font-size: 0.75rem;
-    color: rgba(colors.$white, 0.25);
+  &-copy {
+    font-size: 0.72rem;
+    color: #C8D8ED;
     margin: 0;
   }
 }

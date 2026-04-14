@@ -1,20 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import RegistrationModal from '@/components/RegistrationModal.vue'
 import { captureFbParams } from '@/utils/fbclid'
-
-const bakanoLogo = 'https://res.cloudinary.com/dpuody0df/image/upload/v1775587085/bakano/logos/bakano-light.png'
-const luisPhoto = 'https://res.cloudinary.com/dpuody0df/image/upload/v1775587087/bakano/team/luis.webp'
+import osLogo from '@/assets/logos/logo-small.png'
 
 const router = useRouter()
 const modalOpen = ref(false)
-
 const IS_DEV = window.location.hostname === 'localhost'
 
 const openModal = () => {
   if (!IS_DEV) {
-    const disqAt = localStorage.getItem('bk_disq_at')
+    const disqAt = localStorage.getItem('os_disq_at')
     if (disqAt && Date.now() - Number(disqAt) < 24 * 60 * 60 * 1000) {
       router.push('/sin-espacio')
       return
@@ -25,40 +22,58 @@ const openModal = () => {
 
 const stats = [
   {
-    icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z',
-    number: '+25',
-    text: 'negocios establecidos aumentaron su facturación más de un 20%',
+    icon: 'fa-solid fa-circle-check',
+    number: '0',
+    text: 'paradas por recalentamiento en 6 meses tras implementar Honda BF2.3',
   },
   {
-    icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-    number: '+$50K',
-    text: 'USD en ventas generadas para clientes con estrategia digital',
+    icon: 'fa-solid fa-gas-pump',
+    number: '22%',
+    text: 'de ahorro en combustible reportado por clientes camaroneros',
   },
   {
-    icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h.5A2.5 2.5 0 0020.5 5.5V3.935',
-    number: '4',
-    text: 'países: Ecuador, Colombia, Estados Unidos y Singapur',
+    icon: 'fa-solid fa-award',
+    number: '1964',
+    text: 'año en que Honda Marine comenzó a liderar la innovación náutica mundial',
   },
 ]
 
 const pillars = [
-  'Sin depender de la suerte',
-  'Sin agencias de viralidad',
-  'Sin improvisación',
-  'Con estrategia data-driven',
+  'Sin motores baratos que fallan en media faena',
+  'Sin consumo excesivo que devora tus márgenes',
+  'Sin dificultad para conseguir repuestos originales',
+  'Con tecnología 100% japonesa fabricada en Japón',
 ]
 
-// Countdown urgency timer (24h rolling)
+const methodology = [
+  {
+    num: '01',
+    icon: 'fa-solid fa-gear',
+    title: 'Ingeniería de Precisión Japonesa',
+    body: 'Motores como el BF150 con tecnología VTEC y BLAST. Fabricados y ensamblados en Japón para resistir el trabajo más duro.',
+  },
+  {
+    num: '02',
+    icon: 'fa-solid fa-wrench',
+    title: 'Mantenimiento Simplificado',
+    body: 'Desde el portátil BF2.3 enfriado por aire hasta sistemas electrónicos que garantizan arranques fáciles cada mañana.',
+  },
+  {
+    num: '03',
+    icon: 'fa-solid fa-shield-halved',
+    title: 'Equipamiento Integral',
+    body: 'No es solo el motor. Te asesoramos con baterías de ciclo profundo y direcciones hidráulicas de alta tecnología.',
+  },
+]
+
+// Countdown urgency (24h rolling)
 const hours = ref('23')
 const minutes = ref('47')
 const seconds = ref('12')
-
 let interval: ReturnType<typeof setInterval>
 
 onMounted(() => {
-  // Captura fbclid de la URL (llega cuando usuario hace click en anuncio Meta)
   captureFbParams()
-
   let total = 23 * 3600 + 47 * 60 + 12
   interval = setInterval(() => {
     total--
@@ -68,119 +83,101 @@ onMounted(() => {
     seconds.value = String(total % 60).padStart(2, '0')
   }, 1000)
 })
+
+onUnmounted(() => clearInterval(interval))
 </script>
 
 <template>
   <div class="funnel">
 
-    <!-- ══════════════════════════════════════════════
-         TOP BAR — solo logo centrado
-         ══════════════════════════════════════════════ -->
+    <!-- TOP BAR -->
     <header class="funnel__topbar">
-      <img :src="bakanoLogo" alt="Bakano" class="funnel__logo" />
+      <img :src="osLogo" alt="Ocean Safety" class="funnel__logo" />
     </header>
 
-    <!-- ══════════════════════════════════════════════
-         URGENCY BANNER
-         ══════════════════════════════════════════════ -->
+    <!-- URGENCY BANNER -->
     <div class="funnel__urgency" role="banner">
       <span class="funnel__urgency-dot" aria-hidden="true" />
-      <span>Esta oferta expira en:</span>
+      <span>Cupos limitados — expiran en:</span>
       <div class="funnel__timer" aria-live="polite" aria-label="Tiempo restante">
-        <span class="funnel__timer-block">
-          <strong>{{ hours }}</strong>
-          <small>h</small>
-        </span>
+        <span class="funnel__timer-block"><strong>{{ hours }}</strong><small>h</small></span>
         <span class="funnel__timer-sep" aria-hidden="true">:</span>
-        <span class="funnel__timer-block">
-          <strong>{{ minutes }}</strong>
-          <small>m</small>
-        </span>
+        <span class="funnel__timer-block"><strong>{{ minutes }}</strong><small>m</small></span>
         <span class="funnel__timer-sep" aria-hidden="true">:</span>
-        <span class="funnel__timer-block">
-          <strong>{{ seconds }}</strong>
-          <small>s</small>
-        </span>
+        <span class="funnel__timer-block"><strong>{{ seconds }}</strong><small>s</small></span>
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════
-         HERO — headline + VSL
-         ══════════════════════════════════════════════ -->
+    <!-- HERO -->
     <section class="funnel__hero" aria-labelledby="funnel-headline">
       <div class="funnel__container">
 
-        <!-- Eyebrow -->
-        <p class="funnel__eyebrow">Metodología Data Growth Business™</p>
+        <p class="funnel__eyebrow">
+          <i class="fa-solid fa-anchor" aria-hidden="true"></i>
+          Representantes Oficiales Honda Marine en Ecuador
+        </p>
 
-        <!-- Headline -->
         <h1 id="funnel-headline" class="funnel__headline">
-          Ayudamos a dueños de negocios establecidos a
-          <span class="funnel__headline-accent">abrir su mercado y aumentar su facturación entre un 10% y 20%</span>
-          de forma predecible
+          Profesionaliza tu flota y
+          <span class="funnel__headline-accent">elimina las paradas no programadas</span>
+          con ingeniería náutica japonesa
         </h1>
 
-        <!-- Sub-pillars -->
         <ul class="funnel__pillars" role="list">
           <li v-for="p in pillars" :key="p" class="funnel__pillar">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-              <polyline points="20 6 9 17 4 12"/>
-            </svg>
+            <i class="fa-solid fa-check" aria-hidden="true"></i>
             {{ p }}
           </li>
         </ul>
 
-        <!-- VSL Frame -->
+        <!-- VSL clickable area -->
         <div class="funnel__vsl-wrap">
-          <div class="funnel__vsl-glow" aria-hidden="true" />
-          <div class="funnel__vsl" role="button" tabindex="0" aria-label="Ver video y registrarse" @click="openModal()" @keydown.enter="openModal()" @keydown.space.prevent="openModal()">
-            <img
-              src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/pEFChujwCCaMWBNbZYD1/media/698ba28538edf84b711ef48c.png"
-              alt="Video — Metodología Data Growth Business"
-              class="funnel__vsl-img"
-              loading="eager"
-            />
+          <div
+            class="funnel__vsl"
+            role="button"
+            tabindex="0"
+            aria-label="Ver video y reservar consulta técnica"
+            @click="openModal()"
+            @keydown.enter="openModal()"
+            @keydown.space.prevent="openModal()"
+          >
+            <div class="funnel__vsl-bg" aria-hidden="true">
+              <img :src="osLogo" alt="" class="funnel__vsl-watermark" />
+            </div>
             <div class="funnel__vsl-overlay" aria-hidden="true">
               <div class="funnel__vsl-play">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <polygon points="5 3 19 12 5 21 5 3"/>
-                </svg>
+                <i class="fa-solid fa-play"></i>
               </div>
+              <p class="funnel__vsl-caption">
+                Descubre cómo los líderes del sector camaronero protegen su operación
+              </p>
             </div>
           </div>
         </div>
 
-        <!-- CTA primary -->
+        <!-- CTA -->
         <div class="funnel__cta-wrap">
           <button class="funnel__cta-btn" @click="openModal()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
-            </svg>
-            REGISTRARME A LA ASESORÍA ¡AHORA!
+            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+            AGENDAR CONSULTA TÉCNICA GRATIS
           </button>
           <p class="funnel__cta-sub">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
-            </svg>
-            100% gratuito · Sin compromiso · Cupos limitados
+            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+            100% gratuito &nbsp;·&nbsp; Sin compromiso &nbsp;·&nbsp; Cupos limitados
           </p>
         </div>
 
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════════════
-         SOCIAL PROOF — stats
-         ══════════════════════════════════════════════ -->
+    <!-- STATS -->
     <section class="funnel__stats" aria-label="Resultados comprobados">
       <div class="funnel__container">
-        <p class="funnel__section-label">Resultados reales de clientes reales</p>
+        <p class="funnel__section-label funnel__section-label--light">Resultados reales — clientes reales</p>
         <div class="funnel__stats-grid">
           <div v-for="stat in stats" :key="stat.number" class="funnel__stat">
             <div class="funnel__stat-icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path :d="stat.icon"/>
-              </svg>
+              <i :class="stat.icon"></i>
             </div>
             <strong class="funnel__stat-number">{{ stat.number }}</strong>
             <p class="funnel__stat-text">{{ stat.text }}</p>
@@ -189,221 +186,212 @@ onMounted(() => {
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════════════
-         AUTHORITY — Luis Reyes
-         ══════════════════════════════════════════════ -->
-    <section class="funnel__authority" aria-labelledby="authority-heading">
-      <div class="funnel__container funnel__authority-inner">
-
-        <!-- Foto -->
-        <div class="funnel__authority-photo-wrap">
-          <div class="funnel__authority-photo-glow" aria-hidden="true" />
-          <img
-            :src="luisPhoto"
-            alt="Luis Reyes — Co-fundador y Gerente de Bakano"
-            class="funnel__authority-photo"
-            loading="lazy"
-          />
-          <div class="funnel__authority-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
-            </svg>
-            Fundador verificado
+    <!-- PROBLEMA -->
+    <section class="funnel__problem" aria-labelledby="problem-heading">
+      <div class="funnel__container">
+        <p class="funnel__section-label">¿Te identificas con esto?</p>
+        <h2 id="problem-heading" class="funnel__section-title">
+          El error que cometen la mayoría de operadores
+        </h2>
+        <div class="funnel__problem-grid">
+          <div class="funnel__problem-item">
+            <i class="fa-solid fa-triangle-exclamation funnel__problem-icon" aria-hidden="true"></i>
+            <div>
+              <strong>Compran por precio inicial</strong>
+              <p>Motores baratos que fallan a los pocos meses, generando costos de reparación que superan el ahorro.</p>
+            </div>
+          </div>
+          <div class="funnel__problem-item">
+            <i class="fa-solid fa-triangle-exclamation funnel__problem-icon" aria-hidden="true"></i>
+            <div>
+              <strong>Bombas de agua obstruidas por sedimento</strong>
+              <p>Motores enfriados por agua en ríos poco profundos. El BF2.3 enfriado por aire elimina este problema por completo.</p>
+            </div>
+          </div>
+          <div class="funnel__problem-item">
+            <i class="fa-solid fa-triangle-exclamation funnel__problem-icon" aria-hidden="true"></i>
+            <div>
+              <strong>Sin repuestos ni respaldo técnico</strong>
+              <p>Una avería sin stock local puede dejar tu flota paralizada por días, con pérdidas operativas reales.</p>
+            </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Bio -->
-        <div class="funnel__authority-bio">
-          <p class="funnel__section-label">Conoce a tu mentor</p>
-          <h2 id="authority-heading" class="funnel__authority-name">Luis Reyes</h2>
-          <p class="funnel__authority-role">CEO & Co-fundador de Bakano</p>
-          <p class="funnel__authority-desc">
-            Luis Reyes ha dedicado su carrera a construir modelos de negocio escalables con tecnología y datos,
-            optimizando operaciones y aumentando ventas en empresas de múltiples industrias en
-            <strong>Ecuador, Colombia, Estados Unidos y Singapur</strong>.
+    <!-- METODOLOGÍA -->
+    <section class="funnel__method" aria-labelledby="method-heading">
+      <div class="funnel__container">
+        <p class="funnel__section-label">Nuestra metodología de asesoría</p>
+        <h2 id="method-heading" class="funnel__section-title">
+          Tres pilares que protegen tu operación
+        </h2>
+        <div class="funnel__method-grid">
+          <div v-for="m in methodology" :key="m.num" class="funnel__method-card">
+            <div class="funnel__method-num" aria-hidden="true">{{ m.num }}</div>
+            <div class="funnel__method-icon" aria-hidden="true">
+              <i :class="m.icon"></i>
+            </div>
+            <h3 class="funnel__method-title">{{ m.title }}</h3>
+            <p class="funnel__method-body">{{ m.body }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIAL -->
+    <section class="funnel__testimonial" aria-labelledby="testimonial-heading">
+      <div class="funnel__container">
+        <p class="funnel__section-label">Caso de éxito real</p>
+        <div class="funnel__testimonial-card">
+          <i class="fa-solid fa-quote-left funnel__testimonial-quote" aria-hidden="true"></i>
+          <blockquote class="funnel__testimonial-text">
+            "Roberto, por fin duermo tranquilo porque sé que mis embarcaciones arrancarán mañana.
+            Cero paradas por recalentamiento en 6 meses y un 22% menos en consumo de combustible."
+          </blockquote>
+          <footer class="funnel__testimonial-author">
+            <div class="funnel__testimonial-avatar" aria-hidden="true">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div>
+              <strong>Administrador de flota</strong>
+              <span>Una de las camaroneras más importantes del Ecuador</span>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTHORITY — Roberto Allú -->
+    <section class="funnel__authority" aria-labelledby="authority-heading">
+      <div class="funnel__container funnel__authority-inner">
+        <div class="funnel__authority-photo-wrap">
+          <div class="funnel__authority-avatar" aria-hidden="true">
+            <i class="fa-solid fa-user-tie"></i>
+          </div>
+        </div>
+        <div class="funnel__authority-content">
+          <p class="funnel__authority-eyebrow">Tu especialista asignado</p>
+          <h2 id="authority-heading" class="funnel__authority-name">Roberto Allú</h2>
+          <p class="funnel__authority-role">Especialista en Soluciones Náuticas Industriales</p>
+          <p class="funnel__authority-bio">
+            Como representantes oficiales de Honda Marine en Ecuador, llevo años ayudando
+            a operadores camaroneros, de transporte y seguridad a profesionalizar sus flotas.
+            No se trata de vender un motor — se trata de que
+            <strong>tus embarcaciones arranquen mañana</strong>, y todos los días.
           </p>
-
-          <ul class="funnel__authority-achievements" role="list">
-            <li class="funnel__authority-achievement">
-              <span class="funnel__achievement-icon" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </span>
-              <span>Ha ayudado a <strong>más de 25 negocios establecidos</strong> en Latinoamérica a aumentar su facturación en más de un 20% sin depender de videos virales</span>
-            </li>
-            <li class="funnel__authority-achievement">
-              <span class="funnel__achievement-icon" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </span>
-              <span>Generó <strong>más de $50.000 USD en ventas</strong> para sus clientes con estrategia digital estructurada</span>
-            </li>
-            <li class="funnel__authority-achievement">
-              <span class="funnel__achievement-icon" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </span>
-              <span>Metodología probada en <strong>Ecuador, Colombia, EE.UU. y Singapur</strong></span>
-            </li>
+          <ul class="funnel__authority-creds" role="list">
+            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Representante oficial Honda Marine Ecuador</li>
+            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Especialista en flotas camaroneras y de seguridad</li>
+            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Asesoría llave en mano: motor + equipamiento</li>
           </ul>
         </div>
-
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════════════
-         SECOND CTA — repetición para conversión
-         ══════════════════════════════════════════════ -->
-    <section class="funnel__second-cta" aria-label="Registro a la asesoría">
-      <div class="funnel__container funnel__second-cta-inner">
-        <div class="funnel__second-cta-glow" aria-hidden="true" />
-
-        <img
-          src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/pEFChujwCCaMWBNbZYD1/media/4173c290-13d1-4df9-a357-3a3abfd860be.png"
-          alt="Bakano — Data Growth Business"
-          class="funnel__second-cta-img"
-          loading="lazy"
-        />
-
-        <h2 class="funnel__second-cta-title">
-          ¿Listo para profesionalizar<br>
-          <span class="funnel__headline-accent">tu marketing y ventas?</span>
-        </h2>
-        <p class="funnel__second-cta-sub">
-          Agenda tu asesoría gratuita y descubre cómo la metodología Data Growth Business
-          puede aumentar tu facturación de forma predecible.
-        </p>
-
-        <div class="funnel__cta-wrap">
-          <button class="funnel__cta-btn funnel__cta-btn--large" @click="openModal()">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
-            </svg>
-            REGISTRARME A LA ASESORÍA ¡AHORA!
-          </button>
-          <p class="funnel__cta-sub">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
-            </svg>
-            100% gratuito · Sin compromiso · Cupos limitados
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── Modal de registro ────────────────────────────────────────────────── -->
-    <RegistrationModal :open="modalOpen" @close="modalOpen = false" />
-
-    <!-- ══════════════════════════════════════════════
-         FUNNEL FOOTER — legal minimalista
-         ══════════════════════════════════════════════ -->
-    <footer class="funnel__footer" aria-label="Pie de página">
+    <!-- CTA FINAL -->
+    <section class="funnel__cta-final" aria-labelledby="cta-final-heading">
       <div class="funnel__container">
-        <img :src="bakanoLogo" alt="Bakano" class="funnel__footer-logo" />
+        <h2 id="cta-final-heading" class="funnel__cta-final-title">
+          ¿Listo para profesionalizar tu flota?
+        </h2>
+        <p class="funnel__cta-final-sub">
+          Agenda una consulta técnica gratuita de 15 minutos. Analizaremos tu operación
+          y te recomendaremos el caballaje y equipos exactos para tu flota.
+        </p>
+        <button class="funnel__cta-btn" @click="openModal()">
+          <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+          AGENDAR CONSULTA TÉCNICA GRATIS
+        </button>
+        <p class="funnel__cta-sub">
+          <i class="fa-solid fa-lock" aria-hidden="true"></i>
+          100% gratuito &nbsp;·&nbsp; Sin compromiso &nbsp;·&nbsp; Cupos limitados
+        </p>
+      </div>
+    </section>
 
+    <!-- FOOTER -->
+    <footer class="funnel__footer">
+      <div class="funnel__container funnel__footer-inner">
+        <img :src="osLogo" alt="Ocean Safety" class="funnel__footer-logo" />
         <nav class="funnel__footer-links" aria-label="Legal">
           <RouterLink to="/politicas-privacidad">Política de Privacidad</RouterLink>
-          <span aria-hidden="true">·</span>
           <RouterLink to="/aviso-legal">Aviso Legal</RouterLink>
         </nav>
-
-        <p class="funnel__footer-copyright">
-          Copyright <strong>NEGOCIOS DEL PACIFICO</strong> — Todos los derechos reservados
-        </p>
-
-        <p class="funnel__footer-disclaimer">
-          Esta página web es operada y mantenida por <strong>Negocios del Pacifico</strong>.
-          Somos una empresa de educación y capacitación en ventas y marketing. No vendemos
-          una oportunidad de negocio, ni programas para "hacerse rico rápido". Los resultados
-          varían y dependen del esfuerzo, tiempo y habilidad individuales.
-          Este sitio <strong>NO</strong> está respaldado por Meta Platforms, Inc. ni forma parte de Facebook.
+        <p class="funnel__footer-copy">
+          © {{ new Date().getFullYear() }} OCEAN SAFETY. Todos los derechos reservados.
         </p>
       </div>
     </footer>
 
   </div>
+
+  <RegistrationModal :open="modalOpen" @close="modalOpen = false" />
 </template>
 
 <style lang="scss" scoped>
-@use '@/styles/colorVariables.module.scss' as colors;
 @use '@/styles/fonts.modules.scss' as fonts;
+@use '@/styles/colorVariables.module.scss' as colors;
 
-// ── Variables ────────────────────────────────────────────────────────────────
-$dark: #0a0712;
-$dark-card: #110e1a;
-$border: rgba(255, 255, 255, 0.07);
-$text-muted: rgba(255, 255, 255, 0.45);
-$text-body: rgba(255, 255, 255, 0.72);
-
-// ── Base ─────────────────────────────────────────────────────────────────────
 .funnel {
-  background: $dark;
-  color: colors.$white;
+  background: #ffffff;
+  color: colors.$OS-DARK;
   min-height: 100vh;
-}
+  font-family: fonts.$font-secondary;
 
-// ── Container ────────────────────────────────────────────────────────────────
-.funnel__container {
-  max-width: 860px;
-  margin-inline: auto;
-  padding-inline: 24px;
-
-  @media (max-width: 600px) {
-    padding-inline: 16px;
+  &__container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    @media (min-width: 768px) { padding: 0 2rem; }
   }
 }
 
 // ── Top bar ──────────────────────────────────────────────────────────────────
 .funnel__topbar {
+  background: #ffffff;
+  border-bottom: 1px solid #E8EDF5;
+  padding: 0.9rem 1.5rem;
   display: flex;
   justify-content: center;
-  padding: 20px 24px;
-  border-bottom: 1px solid $border;
-  background: rgba($dark, 0.95);
   position: sticky;
   top: 0;
   z-index: 100;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
 }
 
 .funnel__logo {
-  height: 28px;
+  height: 38px;
   width: auto;
+  object-fit: contain;
 }
 
 // ── Urgency banner ───────────────────────────────────────────────────────────
 .funnel__urgency {
+  background: colors.$OS-NAVY;
+  color: #ffffff;
+  padding: 0.55rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 10px 16px;
-  background: linear-gradient(135deg,
-    rgba(colors.$BAKANO-PINK, 0.18) 0%,
-    rgba(colors.$BAKANO-PURPLE, 0.12) 100%);
-  border-bottom: 1px solid rgba(colors.$BAKANO-PINK, 0.2);
+  gap: 0.6rem;
+  flex-wrap: wrap;
   font-family: fonts.$font-interface;
   font-size: 0.82rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
-  flex-wrap: wrap;
-  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .funnel__urgency-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: colors.$BAKANO-PINK;
-  animation: pulse-dot 1.5s ease-in-out infinite;
+  background: #4ADE80;
   flex-shrink: 0;
+  animation: dot-pulse 1.5s infinite;
 }
 
-@keyframes pulse-dot {
+@keyframes dot-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.75); }
 }
@@ -411,608 +399,576 @@ $text-body: rgba(255, 255, 255, 0.72);
 .funnel__timer {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0.15rem;
 }
 
 .funnel__timer-block {
   display: flex;
   align-items: baseline;
-  gap: 2px;
-
-  strong {
-    font-family: fonts.$font-accent;
-    font-size: 1rem;
-    font-weight: 700;
-    color: colors.$BAKANO-PINK;
-    min-width: 1.8ch;
-    text-align: center;
-  }
-
-  small {
-    font-size: 0.65rem;
-    color: $text-muted;
-  }
+  gap: 1px;
+  strong { font-size: 0.95rem; font-weight: 800; }
+  small { font-size: 0.68rem; opacity: 0.75; }
 }
 
-.funnel__timer-sep {
-  color: colors.$BAKANO-PINK;
-  font-weight: 700;
-  margin-bottom: 2px;
-}
+.funnel__timer-sep { font-weight: 800; opacity: 0.5; padding: 0 1px; }
 
 // ── Hero ─────────────────────────────────────────────────────────────────────
 .funnel__hero {
-  padding: 72px 0 64px;
-  text-align: center;
-  position: relative;
-
-  @media (max-width: 600px) {
-    padding: 48px 0 40px;
-  }
+  padding: 3.5rem 0 3rem;
+  background: linear-gradient(180deg, #EEF4FF 0%, #ffffff 70%);
 }
 
 .funnel__eyebrow {
-  font-family: fonts.$font-accent;
-  font-size: 0.72rem;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(colors.$OS-NAVY, 0.06);
+  border: 1px solid rgba(colors.$OS-NAVY, 0.14);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  color: colors.$OS-NAVY;
+  font-family: fonts.$font-interface;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  letter-spacing: 4px;
-  color: colors.$BAKANO-PINK;
-  margin: 0 0 20px;
+  margin: 0 0 1.4rem;
+  i { font-size: 0.8rem; }
 }
 
 .funnel__headline {
-  font-family: fonts.$font-principal;
-  font-size: clamp(1.9rem, 4.5vw, 3rem);
-  font-weight: 800;
-  line-height: 1.18;
-  letter-spacing: -0.02em;
-  color: colors.$white;
-  margin: 0 0 32px;
+  @include fonts.heading-font(800);
+  font-size: clamp(2rem, 5vw, 3.1rem);
+  line-height: 1.15;
+  color: colors.$OS-DARK;
+  margin: 0 0 1.5rem;
+  letter-spacing: -0.025em;
 
-  @media (max-width: 600px) {
-    font-size: clamp(1.6rem, 6vw, 2.2rem);
-  }
-}
-
-.funnel__headline-accent {
-  background: linear-gradient(110deg, colors.$BAKANO-PINK 0%, colors.$BAKANO-PURPLE 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  &-accent { color: colors.$OS-RED; }
 }
 
 .funnel__pillars {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px 20px;
   list-style: none;
   padding: 0;
-  margin: 0 0 48px;
+  margin: 0 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
 }
 
 .funnel__pillar {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-family: fonts.$font-interface;
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: $text-body;
+  gap: 0.6rem;
+  font-size: 0.93rem;
+  color: #3A4F6A;
 
-  svg {
-    color: colors.$BAKANO-GREEN;
+  i {
+    color: colors.$OS-BLUE;
+    font-size: 0.82rem;
     flex-shrink: 0;
   }
 }
 
 // ── VSL ──────────────────────────────────────────────────────────────────────
-.funnel__vsl-wrap {
-  position: relative;
-  margin-bottom: 48px;
-}
-
-.funnel__vsl-glow {
-  position: absolute;
-  inset: -40px;
-  background: radial-gradient(ellipse 70% 60% at 50% 50%,
-    rgba(colors.$BAKANO-PINK, 0.12) 0%,
-    rgba(colors.$BAKANO-PURPLE, 0.07) 50%,
-    transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
+.funnel__vsl-wrap { margin-bottom: 2rem; }
 
 .funnel__vsl {
   position: relative;
-  z-index: 1;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(colors.$BAKANO-PINK, 0.2);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.04) inset,
-    0 32px 80px rgba(0,0,0,0.5),
-    0 0 60px rgba(colors.$BAKANO-PINK, 0.08);
   cursor: pointer;
+  border: 2px solid #D8E6F5;
+  box-shadow: 0 8px 40px rgba(0, 63, 125, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-  &:hover .funnel__vsl-play {
-    transform: scale(1.1);
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 48px rgba(0, 63, 125, 0.2);
+  }
+  &:focus-visible {
+    outline: 3px solid colors.$OS-BLUE;
+    outline-offset: 2px;
   }
 }
 
-.funnel__vsl-img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16/9;
-  object-fit: cover;
+.funnel__vsl-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, colors.$OS-NAVY 0%, #0055A5 60%, colors.$OS-BLUE 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.funnel__vsl-watermark {
+  height: 72px;
+  width: auto;
+  opacity: 0.1;
+  filter: brightness(100);
 }
 
 .funnel__vsl-overlay {
   position: absolute;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.35);
+  gap: 1.25rem;
 }
 
 .funnel__vsl-play {
-  width: 72px;
-  height: 72px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
-  background: linear-gradient(135deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: colors.$white;
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
-  box-shadow: 0 8px 32px rgba(colors.$BAKANO-PINK, 0.45);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease;
 
-  svg {
-    margin-left: 3px;
-  }
+  .funnel__vsl:hover & { transform: scale(1.1); }
 
-  @media (max-width: 600px) {
-    width: 56px;
-    height: 56px;
+  i {
+    color: colors.$OS-RED;
+    font-size: 1.7rem;
+    margin-left: 5px;
   }
 }
 
-// ── CTA button ───────────────────────────────────────────────────────────────
+.funnel__vsl-caption {
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 0 2rem;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+  max-width: 420px;
+}
+
+// ── CTA ──────────────────────────────────────────────────────────────────────
 .funnel__cta-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
-  padding: 16px 0 48px;
+  gap: 0.75rem;
 }
 
 .funnel__cta-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  font-family: fonts.$font-interface;
-  font-size: 0.92rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: colors.$white;
-  background: linear-gradient(135deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
+  gap: 0.6rem;
+  background: colors.$OS-RED;
+  color: #ffffff;
   border: none;
-  border-radius: 50px;
-  padding: 18px 40px;
-  text-decoration: none;
+  border-radius: 12px;
+  padding: 1.1rem 2.5rem;
+  font-family: fonts.$font-accent;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
   cursor: pointer;
-  box-shadow:
-    0 8px 32px rgba(colors.$BAKANO-PINK, 0.4),
-    0 0 0 1px rgba(255,255,255,0.08) inset;
-  transition: transform 0.2s ease, box-shadow 0.25s ease;
-  animation: cta-pulse 2.5s ease-in-out infinite;
+  width: 100%;
+  max-width: 480px;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(204, 0, 0, 0.35);
 
   &:hover {
-    transform: translateY(-3px);
-    box-shadow:
-      0 16px 48px rgba(colors.$BAKANO-PINK, 0.55),
-      0 0 0 1px rgba(255,255,255,0.12) inset;
-    animation: none;
+    background: #AA0000;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 28px rgba(204, 0, 0, 0.45);
   }
-
-  &:active {
-    transform: translateY(0);
-  }
-
-  &--large {
-    font-size: 1rem;
-    padding: 20px 48px;
-  }
-
-  @media (max-width: 600px) {
-    padding: 16px 24px;
-    font-size: 0.82rem;
-    width: 100%;
-
-    &--large {
-      padding: 18px 24px;
-      font-size: 0.88rem;
-    }
-  }
-}
-
-@keyframes cta-pulse {
-  0%, 100% { box-shadow: 0 8px 32px rgba(colors.$BAKANO-PINK, 0.4), 0 0 0 1px rgba(255,255,255,0.08) inset; }
-  50% { box-shadow: 0 8px 48px rgba(colors.$BAKANO-PINK, 0.65), 0 0 0 1px rgba(255,255,255,0.1) inset; }
+  &:active { transform: translateY(0); }
 }
 
 .funnel__cta-sub {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  font-family: fonts.$font-interface;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.38);
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: #8A9BB5;
   margin: 0;
-  letter-spacing: 0.2px;
-
-  svg {
-    flex-shrink: 0;
-    opacity: 0.5;
-  }
+  i { font-size: 0.72rem; }
 }
 
-// ── Stats ─────────────────────────────────────────────────────────────────────
+// ── Stats ────────────────────────────────────────────────────────────────────
 .funnel__stats {
-  padding: 64px 0;
-  border-top: 1px solid $border;
-  border-bottom: 1px solid $border;
-  background: $dark-card;
-  text-align: center;
+  background: colors.$OS-NAVY;
+  padding: 3rem 0;
 }
 
 .funnel__section-label {
-  font-family: fonts.$font-accent;
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-family: fonts.$font-interface;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 4px;
-  color: colors.$BAKANO-PINK;
-  margin: 0 0 40px;
+  color: colors.$OS-NAVY;
+  margin: 0 0 1rem;
+
+  &--light { color: rgba(#ffffff, 0.55); }
 }
 
 .funnel__stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-
-  @media (max-width: 768px) {
+  gap: 2rem;
+  @media (max-width: 580px) {
     grid-template-columns: 1fr;
-    gap: 24px;
-    max-width: 420px;
-    margin-inline: auto;
+    gap: 1.75rem;
   }
 }
 
-.funnel__stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 32px 24px;
-  border-radius: 16px;
-  border: 1px solid $border;
-  background: rgba(255,255,255,0.02);
-  transition: border-color 0.25s ease, background 0.25s ease;
-
-  &:hover {
-    border-color: rgba(colors.$BAKANO-PINK, 0.2);
-    background: rgba(colors.$BAKANO-PINK, 0.03);
-  }
-}
+.funnel__stat { text-align: center; }
 
 .funnel__stat-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: linear-gradient(135deg,
-    rgba(colors.$BAKANO-PINK, 0.15),
-    rgba(colors.$BAKANO-PURPLE, 0.1));
-  border: 1px solid rgba(colors.$BAKANO-PINK, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: colors.$BAKANO-PINK;
+  font-size: 1.6rem;
+  color: rgba(#ffffff, 0.35);
+  margin-bottom: 0.5rem;
 }
 
 .funnel__stat-number {
-  font-family: fonts.$font-accent;
-  font-size: 2.4rem;
-  font-weight: 700;
-  color: colors.$white;
+  display: block;
+  @include fonts.heading-font(800);
+  font-size: 2.6rem;
+  color: #ffffff;
   line-height: 1;
-  background: linear-gradient(110deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.03em;
 }
 
 .funnel__stat-text {
-  font-family: fonts.$font-secondary;
-  font-size: 0.88rem;
-  color: $text-body;
-  line-height: 1.5;
+  font-size: 0.83rem;
+  color: rgba(#ffffff, 0.7);
+  line-height: 1.45;
   margin: 0;
-  max-width: 200px;
 }
 
-// ── Authority ─────────────────────────────────────────────────────────────────
-.funnel__authority {
-  padding: 80px 0;
+// ── Problem ──────────────────────────────────────────────────────────────────
+.funnel__problem {
+  padding: 4rem 0;
+  background: #ffffff;
+}
 
-  @media (max-width: 600px) {
-    padding: 56px 0;
+.funnel__section-title {
+  @include fonts.heading-font(800);
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  color: colors.$OS-DARK;
+  margin: 0.25rem 0 2rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.funnel__problem-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.funnel__problem-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.25rem;
+  background: #F9FBFF;
+  border: 1px solid #E4EDF7;
+  border-radius: 12px;
+
+  strong {
+    display: block;
+    color: colors.$OS-DARK;
+    font-size: 0.93rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
   }
+  p {
+    font-size: 0.86rem;
+    color: #4A5F7A;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+.funnel__problem-icon {
+  font-size: 1.2rem;
+  color: colors.$OS-RED;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+// ── Methodology ──────────────────────────────────────────────────────────────
+.funnel__method {
+  padding: 4rem 0;
+  background: #F5F8FF;
+}
+
+.funnel__method-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  @media (max-width: 700px) { grid-template-columns: 1fr; }
+}
+
+.funnel__method-card {
+  background: #ffffff;
+  border: 1px solid #E4EDF7;
+  border-radius: 16px;
+  padding: 1.75rem 1.5rem;
+  position: relative;
+  box-shadow: 0 2px 12px rgba(0, 63, 125, 0.05);
+}
+
+.funnel__method-num {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  @include fonts.heading-font(800);
+  font-size: 2.5rem;
+  color: rgba(colors.$OS-NAVY, 0.07);
+  line-height: 1;
+  user-select: none;
+}
+
+.funnel__method-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: colors.$OS-NAVY;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  i { color: #ffffff; font-size: 1.1rem; }
+}
+
+.funnel__method-title {
+  @include fonts.heading-font(700);
+  font-size: 0.97rem;
+  color: colors.$OS-DARK;
+  margin: 0 0 0.5rem;
+}
+
+.funnel__method-body {
+  font-size: 0.86rem;
+  color: #4A5F7A;
+  line-height: 1.55;
+  margin: 0;
+}
+
+// ── Testimonial ──────────────────────────────────────────────────────────────
+.funnel__testimonial {
+  padding: 4rem 0;
+  background: #ffffff;
+}
+
+.funnel__testimonial-card {
+  background: #F5F8FF;
+  border: 1px solid rgba(colors.$OS-NAVY, 0.1);
+  border-left: 4px solid colors.$OS-NAVY;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 720px;
+  margin: 0 auto;
+  box-shadow: 0 4px 24px rgba(0, 63, 125, 0.07);
+}
+
+.funnel__testimonial-quote {
+  font-size: 2.2rem;
+  color: rgba(colors.$OS-NAVY, 0.12);
+  display: block;
+  margin-bottom: 0.75rem;
+  line-height: 1;
+}
+
+.funnel__testimonial-text {
+  font-size: 1.1rem;
+  color: colors.$OS-DARK;
+  line-height: 1.65;
+  margin: 0 0 1.5rem;
+  font-style: italic;
+}
+
+.funnel__testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  strong { display: block; color: colors.$OS-DARK; font-size: 0.88rem; font-weight: 700; }
+  span { font-size: 0.78rem; color: #8A9BB5; }
+}
+
+.funnel__testimonial-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: colors.$OS-NAVY;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  i { color: #ffffff; font-size: 1.2rem; }
+}
+
+// ── Authority ────────────────────────────────────────────────────────────────
+.funnel__authority {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #EEF4FF 0%, #F9FBFF 100%);
+  border-top: 1px solid #E4EDF7;
+  border-bottom: 1px solid #E4EDF7;
 }
 
 .funnel__authority-inner {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 60px;
-  align-items: start;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 40px;
-    text-align: center;
-  }
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+  @media (max-width: 640px) { flex-direction: column; align-items: center; }
 }
 
-.funnel__authority-photo-wrap {
-  position: relative;
+.funnel__authority-photo-wrap { flex-shrink: 0; }
 
-  @media (max-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-.funnel__authority-photo-glow {
-  position: absolute;
-  inset: -30px;
-  background: radial-gradient(circle,
-    rgba(colors.$BAKANO-PINK, 0.15) 0%,
-    transparent 65%);
-  pointer-events: none;
+.funnel__authority-avatar {
+  width: 112px;
+  height: 112px;
   border-radius: 50%;
-}
-
-.funnel__authority-photo {
-  width: 100%;
-  max-width: 280px;
-  aspect-ratio: 3/4;
-  object-fit: cover;
-  object-position: top;
-  border-radius: 20px;
-  border: 1px solid rgba(colors.$BAKANO-PINK, 0.15);
-  box-shadow:
-    0 32px 80px rgba(0,0,0,0.4),
-    0 0 0 1px rgba(255,255,255,0.04) inset;
-  position: relative;
-  z-index: 1;
-
-  @media (max-width: 768px) {
-    max-width: 220px;
-    aspect-ratio: 1/1;
-  }
-}
-
-.funnel__authority-badge {
-  position: absolute;
-  bottom: -14px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
+  background: colors.$OS-NAVY;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: 50px;
-  background: linear-gradient(135deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
-  color: colors.$white;
+  justify-content: center;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 63, 125, 0.2);
+  i { color: rgba(#ffffff, 0.85); font-size: 3.2rem; }
+}
+
+.funnel__authority-content { flex: 1; }
+
+.funnel__authority-eyebrow {
   font-family: fonts.$font-interface;
-  font-size: 0.7rem;
-  font-weight: 600;
-  white-space: nowrap;
-  box-shadow: 0 4px 16px rgba(colors.$BAKANO-PINK, 0.4);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: colors.$OS-BLUE;
+  margin: 0 0 0.35rem;
 }
 
 .funnel__authority-name {
-  font-family: fonts.$font-principal;
-  font-size: clamp(2rem, 4vw, 2.8rem);
-  font-weight: 800;
+  @include fonts.heading-font(800);
+  font-size: 2rem;
+  color: colors.$OS-DARK;
+  margin: 0 0 0.2rem;
   letter-spacing: -0.02em;
-  color: colors.$white;
-  margin: 0 0 6px;
 }
 
 .funnel__authority-role {
-  font-family: fonts.$font-interface;
-  font-size: 0.82rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: colors.$BAKANO-PINK;
-  margin: 0 0 20px;
+  font-size: 0.88rem;
+  color: #8A9BB5;
+  margin: 0 0 1rem;
 }
 
-.funnel__authority-desc {
-  font-family: fonts.$font-secondary;
-  font-size: 1rem;
-  line-height: 1.72;
-  color: $text-body;
-  margin: 0 0 28px;
+.funnel__authority-bio {
+  font-size: 0.93rem;
+  color: #3A4F6A;
+  line-height: 1.65;
+  margin: 0 0 1rem;
+  strong { color: colors.$OS-DARK; font-weight: 700; }
 }
 
-.funnel__authority-achievements {
+.funnel__authority-creds {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
+  gap: 0.4rem;
 
-.funnel__authority-achievement {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  font-family: fonts.$font-secondary;
-  font-size: 0.92rem;
-  line-height: 1.6;
-  color: $text-body;
-
-  @media (max-width: 768px) {
-    text-align: left;
-  }
-
-  strong {
-    color: colors.$white;
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.86rem;
+    color: #3A4F6A;
+    i { color: colors.$OS-BLUE; font-size: 0.82rem; flex-shrink: 0; }
   }
 }
 
-.funnel__achievement-icon {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: colors.$white;
-  margin-top: 1px;
-}
-
-// ── Second CTA ────────────────────────────────────────────────────────────────
-.funnel__second-cta {
-  padding: 96px 0 88px;
-  border-top: 1px solid $border;
-  background: $dark-card;
-}
-
-.funnel__second-cta-inner {
+// ── CTA Final ────────────────────────────────────────────────────────────────
+.funnel__cta-final {
+  padding: 4.5rem 0;
+  background: colors.$OS-NAVY;
   text-align: center;
-  position: relative;
+
+  .funnel__section-label { color: rgba(#ffffff, 0.5); }
+
+  .funnel__cta-btn {
+    margin: 0 auto 1rem;
+    background: colors.$OS-RED;
+    box-shadow: 0 4px 24px rgba(204, 0, 0, 0.4);
+    &:hover { background: #AA0000; }
+  }
+
+  .funnel__cta-sub { color: rgba(#ffffff, 0.5); }
+}
+
+.funnel__cta-final-title {
+  @include fonts.heading-font(800);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  color: #ffffff;
+  margin: 0 0 0.75rem;
+  letter-spacing: -0.025em;
+}
+
+.funnel__cta-final-sub {
+  font-size: 0.97rem;
+  color: rgba(#ffffff, 0.72);
+  margin: 0 auto 2rem;
+  max-width: 520px;
+  line-height: 1.55;
+}
+
+// ── Footer ───────────────────────────────────────────────────────────────────
+.funnel__footer {
+  background: colors.$OS-DARK;
+  padding: 2rem 1.5rem;
+}
+
+.funnel__footer-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
-}
-
-.funnel__second-cta-glow {
-  position: absolute;
-  inset: -60px;
-  background: radial-gradient(ellipse 70% 60% at 50% 50%,
-    rgba(colors.$BAKANO-PURPLE, 0.1) 0%,
-    rgba(colors.$BAKANO-PINK, 0.06) 50%,
-    transparent 70%);
-  pointer-events: none;
-}
-
-.funnel__second-cta-img {
-  display: block;
-  width: 100%;
-  max-width: 520px;
-  margin-inline: auto;
-  border-radius: 12px;
-  margin-bottom: 40px;
-  opacity: 0.9;
-}
-
-.funnel__second-cta-title {
-  font-family: fonts.$font-principal;
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.18;
-  color: colors.$white;
-  margin: 0 0 16px;
-  position: relative;
-
-  br {
-    @media (max-width: 480px) { display: none; }
-  }
-}
-
-.funnel__second-cta-sub {
-  font-family: fonts.$font-secondary;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: $text-body;
-  max-width: 560px;
-  margin-inline: auto;
-  margin-bottom: 52px;
-  position: relative;
-}
-
-// ── Footer ────────────────────────────────────────────────────────────────────
-.funnel__footer {
-  padding: 48px 0 40px;
-  border-top: 1px solid $border;
+  gap: 1rem;
   text-align: center;
-  background: #07050e;
 }
 
 .funnel__footer-logo {
-  height: 22px;
+  height: 30px;
   width: auto;
+  filter: brightness(100);
   opacity: 0.6;
-  margin-bottom: 20px;
+  object-fit: contain;
 }
 
 .funnel__footer-links {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
+  gap: 1.5rem;
 
   a {
-    font-family: fonts.$font-interface;
     font-size: 0.78rem;
-    color: $text-muted;
+    color: rgba(#ffffff, 0.45);
     text-decoration: none;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: colors.$white;
-    }
-  }
-
-  span {
-    color: $border;
-    font-size: 0.7rem;
+    transition: color 0.2s;
+    &:hover { color: rgba(#ffffff, 0.85); }
   }
 }
 
-.funnel__footer-copyright {
-  font-family: fonts.$font-interface;
-  font-size: 0.75rem;
-  color: $text-muted;
-  margin: 0 0 20px;
-}
-
-.funnel__footer-disclaimer {
-  font-family: fonts.$font-interface;
-  font-size: 0.68rem;
-  line-height: 1.65;
-  color: rgba(255,255,255,0.25);
-  max-width: 680px;
-  margin-inline: auto;
-  margin-bottom: 0;
+.funnel__footer-copy {
+  font-size: 0.72rem;
+  color: rgba(#ffffff, 0.28);
+  margin: 0;
 }
 </style>

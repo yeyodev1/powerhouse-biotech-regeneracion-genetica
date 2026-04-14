@@ -157,7 +157,7 @@ const handleSubmit = async () => {
     ...getStoredFbParams(),
   }
 
-  console.info('[Bakano Registro]', payload)
+  console.info('[OceanSafety Registro]', payload)
 
   await fetch('https://services.leadconnectorhq.com/hooks/pEFChujwCCaMWBNbZYD1/webhook-trigger/acf01034-9790-4a8f-a765-dfe9ae157e2d', {
     method: 'POST',
@@ -172,7 +172,7 @@ const handleSubmit = async () => {
   )
 
   submitting.value = false
-  localStorage.setItem('bk_contact', JSON.stringify({
+  localStorage.setItem('os_contact', JSON.stringify({
     nombre: form.value.nombre.trim(),
     email: form.value.email.trim().toLowerCase(),
     phone: parsedPhoneE164.value,

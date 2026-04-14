@@ -12,7 +12,7 @@
  * utm_id       → ID numérico de la campaña (opcional)
  */
 
-const STORAGE_KEY = 'bk_fb'
+const STORAGE_KEY = 'os_fb'
 
 export interface FbParams {
   fbclid: string

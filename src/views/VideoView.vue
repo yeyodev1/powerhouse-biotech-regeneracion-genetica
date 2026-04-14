@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { RouterLink } from 'vue-router'
 import CalendarModal from '@/components/CalendarModal.vue'
 import { trackStage, generateEventId } from '@/utils/ghl'
 import { useContactStore } from '@/stores/contact'
+import osLogo from '@/assets/logos/logo-small.png'
 
 const contactStore = useContactStore()
 
@@ -12,7 +12,7 @@ const calendarOpen = ref(false)
 
 // ── Contact capture guard ─────────────────────────────────────────────────────
 const captureOpen = ref(false)
-const captureForm = ref({ nombre: '', apellido: '', negocio: '', email: '', telefono: '' })
+const captureForm = ref({ nombre: '', apellido: '', empresa: '', email: '', telefono: '' })
 const captureErrors = ref<Record<string, string>>({})
 const captureTouched = ref<Record<string, boolean>>({})
 const captureSubmitting = ref(false)
@@ -21,7 +21,7 @@ const validateCapture = () => {
   const e: Record<string, string> = {}
   if (captureForm.value.nombre.trim().length < 2) e.nombre = 'Ingresa tu nombre'
   if (captureForm.value.apellido.trim().length < 2) e.apellido = 'Ingresa tu apellido'
-  if (captureForm.value.negocio.trim().length < 2) e.negocio = 'Ingresa el nombre de tu negocio'
+  if (captureForm.value.empresa.trim().length < 2) e.empresa = 'Ingresa el nombre de tu empresa o flota'
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(captureForm.value.email.trim())) e.email = 'Email inválido'
   if (captureForm.value.telefono.trim().length < 7) e.telefono = 'Teléfono inválido'
   captureErrors.value = e
@@ -29,14 +29,14 @@ const validateCapture = () => {
 }
 
 const submitCapture = async () => {
-  captureTouched.value = { nombre: true, apellido: true, negocio: true, email: true, telefono: true }
+  captureTouched.value = { nombre: true, apellido: true, empresa: true, email: true, telefono: true }
   if (!validateCapture()) return
   captureSubmitting.value = true
 
   contactStore.save({
     nombre: captureForm.value.nombre.trim(),
     apellido: captureForm.value.apellido.trim(),
-    negocio: captureForm.value.negocio.trim(),
+    negocio: captureForm.value.empresa.trim(),
     email: captureForm.value.email.trim().toLowerCase(),
     telefono: captureForm.value.telefono.trim(),
   })
@@ -58,7 +58,7 @@ const submitCapture = async () => {
   startTimer()
 }
 
-// ── 2-minute countdown (3 s en localhost para testing) ───────────────────────
+// ── 2-minute countdown (3s en localhost para testing) ────────────────────────
 const IS_DEV = window.location.hostname === 'localhost'
 const COUNTDOWN_SECONDS = IS_DEV ? 3 : 120
 const secondsLeft = ref(COUNTDOWN_SECONDS)
@@ -93,24 +93,18 @@ onMounted(() => {
   }
 })
 
-onUnmounted(() => {
-  if (timer) clearInterval(timer)
-})
+onUnmounted(() => { if (timer) clearInterval(timer) })
 </script>
 
 <template>
   <div class="vv-page">
 
-    <!-- ── Top bar ──────────────────────────────────────────────────────────── -->
+    <!-- Top bar -->
     <header class="vv-topbar">
-      <img
-        src="https://res.cloudinary.com/dpuody0df/image/upload/v1775587085/bakano/logos/bakano-light.png"
-        alt="Bakano"
-        class="vv-topbar__logo"
-      />
+      <img :src="osLogo" alt="Ocean Safety" class="vv-topbar__logo" />
     </header>
 
-    <!-- ── Main content ─────────────────────────────────────────────────────── -->
+    <!-- Main content -->
     <main class="vv-main">
 
       <!-- Progress stepper -->
@@ -124,22 +118,26 @@ onUnmounted(() => {
 
       <!-- Headline -->
       <section class="vv-headline">
-        <p class="vv-eyebrow">Antes de agendar</p>
+        <p class="vv-eyebrow">
+          <i class="fa-solid fa-anchor" aria-hidden="true"></i>
+          Antes de agendar
+        </p>
         <h1 class="vv-h1">
-          Mira el video &mdash; puede
-          <span class="vv-accent">transformar tu negocio</span>
+          Descubre por qué los líderes del sector camaronero
+          <span class="vv-accent">eligen Honda Marine</span>
         </h1>
         <p class="vv-subtitle">
-          Ve el video completo. Los siguientes 2 minutos pueden cambiar el rumbo de tu negocio.
+          Ve el video completo. Roberto Allú te explica cómo proteger tu operación con ingeniería náutica japonesa.
         </p>
       </section>
 
       <!-- Wistia video embed -->
       <div class="vv-video-wrapper">
         <div class="vv-video-ratio">
+          <!-- TODO: Reemplazar VIDEO_ID con el ID de Wistia de Ocean Safety -->
           <iframe
             src="https://fast.wistia.net/embed/iframe/u9yljeo589?videoFoam=true"
-            title="Video Bakano"
+            title="Video Ocean Safety — Honda Marine Ecuador"
             allow="autoplay; fullscreen"
             allowfullscreen
             class="vv-video-iframe"
@@ -149,331 +147,219 @@ onUnmounted(() => {
 
       <!-- CTA section -->
       <div class="vv-cta-section">
-
-        <!-- Lock notice (visible while countdown active) -->
-        <Transition name="lock-fade">
-          <div v-if="!ctaUnlocked" class="vv-lock-notice">
-            <i class="fa-solid fa-lock vv-lock-notice__icon" aria-hidden="true"></i>
-            <span class="vv-lock-notice__text">
-              El botón se habilita en
-              <strong class="vv-lock-notice__timer">{{ formattedTime() }}</strong>
-              &mdash; el video tiene la clave para tu negocio
-            </span>
+        <div v-if="!ctaUnlocked" class="vv-cta-locked" aria-live="polite">
+          <i class="fa-solid fa-clock vv-cta-locked__icon" aria-hidden="true"></i>
+          <p class="vv-cta-locked__text">
+            El botón se habilitará en <strong>{{ formattedTime() }}</strong>
+          </p>
+          <div class="vv-cta-locked__bar-wrap" aria-hidden="true">
+            <div
+              class="vv-cta-locked__bar"
+              :style="{ width: ((COUNTDOWN_SECONDS - secondsLeft) / COUNTDOWN_SECONDS * 100) + '%' }"
+            />
           </div>
-        </Transition>
+        </div>
 
-        <!-- CTA button -->
         <button
+          v-else
           class="vv-cta-btn"
-          :class="{ 'vv-cta-btn--active': ctaUnlocked, 'vv-cta-btn--locked': !ctaUnlocked }"
-          :disabled="!ctaUnlocked"
-          @click="ctaUnlocked && (calendarOpen = true)"
+          @click="calendarOpen = true"
         >
-          <i
-            v-if="ctaUnlocked"
-            class="fa-solid fa-calendar-check"
-            aria-hidden="true"
-          ></i>
-          <i
-            v-else
-            class="fa-solid fa-lock"
-            aria-hidden="true"
-          ></i>
-          <span v-if="ctaUnlocked">QUIERO AGENDAR MI CITA ESTRATÉGICA AHORA</span>
-          <span v-else>QUIERO AGENDAR MI CITA</span>
+          <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+          AGENDAR MI CONSULTA TÉCNICA
         </button>
 
-        <!-- Trust line -->
-        <p class="vv-trust">
+        <p class="vv-cta-sub">
           <i class="fa-solid fa-lock" aria-hidden="true"></i>
-          100% gratuito &middot; Sin compromiso &middot; Cupos limitados
+          100% gratuito &nbsp;·&nbsp; Sin compromiso &nbsp;·&nbsp; Cupos limitados
         </p>
-
       </div>
 
     </main>
 
-    <!-- ── Footer ────────────────────────────────────────────────────────────── -->
+    <!-- Footer -->
     <footer class="vv-footer">
-      <p class="vv-footer__copy">&copy; {{ new Date().getFullYear() }} NEGOCIOS DEL PACIFICO. Todos los derechos reservados.</p>
       <nav class="vv-footer__links" aria-label="Legal">
-        <RouterLink to="/politicas-privacidad" class="vv-footer__link">Politicas de Privacidad</RouterLink>
-        <span class="vv-footer__sep" aria-hidden="true">&middot;</span>
-        <RouterLink to="/aviso-legal" class="vv-footer__link">Aviso Legal</RouterLink>
+        <RouterLink to="/politicas-privacidad">Política de Privacidad</RouterLink>
+        <RouterLink to="/aviso-legal">Aviso Legal</RouterLink>
       </nav>
+      <p class="vv-footer__copy">© {{ new Date().getFullYear() }} OCEAN SAFETY. Todos los derechos reservados.</p>
     </footer>
 
   </div>
 
   <!-- Calendar modal -->
-  <CalendarModal
-    :open="calendarOpen"
-    nombre=""
-    @close="calendarOpen = false"
-  />
+  <CalendarModal :open="calendarOpen" @close="calendarOpen = false" />
 
-  <!-- ── Contact capture overlay ─────────────────────────────────────────────── -->
-  <Transition name="capture-fade">
-    <div v-if="captureOpen" class="cap-overlay" role="dialog" aria-modal="true" aria-labelledby="cap-title">
-      <div class="cap-card">
-
-        <div class="cap-icon-wrap">
-          <i class="fa-solid fa-user-lock cap-icon" aria-hidden="true"></i>
+  <!-- Contact capture overlay -->
+  <Teleport to="body">
+    <Transition name="capture-fade">
+      <div v-if="captureOpen" class="capture-overlay" role="dialog" aria-modal="true" aria-labelledby="capture-title">
+        <div class="capture-modal">
+          <div class="capture-modal__header">
+            <img :src="osLogo" alt="Ocean Safety" class="capture-modal__logo" />
+            <h2 id="capture-title" class="capture-modal__title">
+              Antes de ver el video, <span>confirma tus datos</span>
+            </h2>
+            <p class="capture-modal__sub">Para personalizar tu asesoría técnica</p>
+          </div>
+          <form class="capture-modal__form" @submit.prevent="submitCapture" novalidate>
+            <div class="capture-row">
+              <div class="capture-field" :class="{ error: captureTouched.nombre && captureErrors.nombre }">
+                <label>Nombre</label>
+                <input v-model="captureForm.nombre" type="text" placeholder="Roberto" @blur="captureTouched.nombre = true" />
+                <span v-if="captureTouched.nombre && captureErrors.nombre" class="capture-field__error">{{ captureErrors.nombre }}</span>
+              </div>
+              <div class="capture-field" :class="{ error: captureTouched.apellido && captureErrors.apellido }">
+                <label>Apellido</label>
+                <input v-model="captureForm.apellido" type="text" placeholder="Allú" @blur="captureTouched.apellido = true" />
+                <span v-if="captureTouched.apellido && captureErrors.apellido" class="capture-field__error">{{ captureErrors.apellido }}</span>
+              </div>
+            </div>
+            <div class="capture-field" :class="{ error: captureTouched.empresa && captureErrors.empresa }">
+              <label>Empresa o flota</label>
+              <input v-model="captureForm.empresa" type="text" placeholder="Nombre de tu empresa" @blur="captureTouched.empresa = true" />
+              <span v-if="captureTouched.empresa && captureErrors.empresa" class="capture-field__error">{{ captureErrors.empresa }}</span>
+            </div>
+            <div class="capture-field" :class="{ error: captureTouched.email && captureErrors.email }">
+              <label>Email</label>
+              <input v-model="captureForm.email" type="email" placeholder="tu@empresa.com" @blur="captureTouched.email = true" />
+              <span v-if="captureTouched.email && captureErrors.email" class="capture-field__error">{{ captureErrors.email }}</span>
+            </div>
+            <div class="capture-field" :class="{ error: captureTouched.telefono && captureErrors.telefono }">
+              <label>Teléfono</label>
+              <input v-model="captureForm.telefono" type="tel" placeholder="+593 98 000 0000" @blur="captureTouched.telefono = true" />
+              <span v-if="captureTouched.telefono && captureErrors.telefono" class="capture-field__error">{{ captureErrors.telefono }}</span>
+            </div>
+            <button type="submit" class="capture-submit" :disabled="captureSubmitting">
+              <span v-if="!captureSubmitting">
+                <i class="fa-solid fa-play" aria-hidden="true"></i>
+                Ver el video
+              </span>
+              <span v-else>
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+                Cargando...
+              </span>
+            </button>
+          </form>
         </div>
-
-        <h2 id="cap-title" class="cap-h2">Antes de ver el video, déjanos tus datos</h2>
-        <p class="cap-sub">Lo guardamos para enviarte los recursos de la sesión</p>
-
-        <form class="cap-form" @submit.prevent="submitCapture" novalidate>
-
-          <div class="cap-row">
-            <div class="cap-field" :class="{ 'cap-field--error': captureTouched.nombre && captureErrors.nombre }">
-              <label class="cap-label" for="cap-nombre">Nombre</label>
-              <input
-                id="cap-nombre"
-                v-model="captureForm.nombre"
-                type="text"
-                class="cap-input"
-                placeholder="Tu nombre"
-                autocomplete="given-name"
-                @blur="captureTouched.nombre = true; validateCapture()"
-              />
-              <span v-if="captureTouched.nombre && captureErrors.nombre" class="cap-error">{{ captureErrors.nombre }}</span>
-            </div>
-
-            <div class="cap-field" :class="{ 'cap-field--error': captureTouched.apellido && captureErrors.apellido }">
-              <label class="cap-label" for="cap-apellido">Apellido</label>
-              <input
-                id="cap-apellido"
-                v-model="captureForm.apellido"
-                type="text"
-                class="cap-input"
-                placeholder="Tu apellido"
-                autocomplete="family-name"
-                @blur="captureTouched.apellido = true; validateCapture()"
-              />
-              <span v-if="captureTouched.apellido && captureErrors.apellido" class="cap-error">{{ captureErrors.apellido }}</span>
-            </div>
-          </div>
-
-          <div class="cap-field" :class="{ 'cap-field--error': captureTouched.negocio && captureErrors.negocio }">
-            <label class="cap-label" for="cap-negocio">Nombre de tu negocio</label>
-            <input
-              id="cap-negocio"
-              v-model="captureForm.negocio"
-              type="text"
-              class="cap-input"
-              placeholder="Ej: Pastelería Nicole"
-              autocomplete="organization"
-              @blur="captureTouched.negocio = true; validateCapture()"
-            />
-            <span v-if="captureTouched.negocio && captureErrors.negocio" class="cap-error">{{ captureErrors.negocio }}</span>
-          </div>
-
-          <div class="cap-field" :class="{ 'cap-field--error': captureTouched.email && captureErrors.email }">
-            <label class="cap-label" for="cap-email">Email</label>
-            <input
-              id="cap-email"
-              v-model="captureForm.email"
-              type="email"
-              class="cap-input"
-              placeholder="tu@email.com"
-              autocomplete="email"
-              @blur="captureTouched.email = true; validateCapture()"
-            />
-            <span v-if="captureTouched.email && captureErrors.email" class="cap-error">{{ captureErrors.email }}</span>
-          </div>
-
-          <div class="cap-field" :class="{ 'cap-field--error': captureTouched.telefono && captureErrors.telefono }">
-            <label class="cap-label" for="cap-telefono">Teléfono / WhatsApp</label>
-            <input
-              id="cap-telefono"
-              v-model="captureForm.telefono"
-              type="tel"
-              class="cap-input"
-              placeholder="+593 99 999 9999"
-              autocomplete="tel"
-              @blur="captureTouched.telefono = true; validateCapture()"
-            />
-            <span v-if="captureTouched.telefono && captureErrors.telefono" class="cap-error">{{ captureErrors.telefono }}</span>
-          </div>
-
-          <button type="submit" class="cap-submit" :disabled="captureSubmitting">
-            <i v-if="!captureSubmitting" class="fa-solid fa-play" aria-hidden="true"></i>
-            <i v-else class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
-            <span>{{ captureSubmitting ? 'Un momento...' : 'CONTINUAR AL VIDEO' }}</span>
-          </button>
-
-        </form>
-
-        <p class="cap-privacy">
-          <i class="fa-solid fa-lock" aria-hidden="true"></i>
-          Tus datos están seguros &middot; No spam
-        </p>
-
       </div>
-    </div>
-  </Transition>
+    </Transition>
+  </Teleport>
 </template>
 
 <style lang="scss" scoped>
-@use '@/styles/colorVariables.module.scss' as colors;
 @use '@/styles/fonts.modules.scss' as fonts;
+@use '@/styles/colorVariables.module.scss' as colors;
 
-$bg:          #0a0712;
-$bg2:         #0f0b1a;
-$border:      rgba(255, 255, 255, 0.07);
-$text-muted:  rgba(255, 255, 255, 0.38);
-$text-body:   rgba(255, 255, 255, 0.68);
-
-// ── Page shell ────────────────────────────────────────────────────────────────
 .vv-page {
   min-height: 100vh;
-  background: $bg;
+  background: #ffffff;
+  color: colors.$OS-DARK;
   display: flex;
   flex-direction: column;
-  color: colors.$white;
 }
 
-// ── Top bar ───────────────────────────────────────────────────────────────────
 .vv-topbar {
+  background: #ffffff;
+  border-bottom: 1px solid #E8EDF5;
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  justify-content: center;
   position: sticky;
   top: 0;
   z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px 24px;
-  background: rgba($bg, 0.88);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid $border;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+
+  &__logo { height: 36px; width: auto; object-fit: contain; }
 }
 
-.vv-topbar__logo {
-  height: 28px;
-  width: auto;
-  display: block;
-}
-
-// ── Main ──────────────────────────────────────────────────────────────────────
 .vv-main {
   flex: 1;
-  width: 100%;
-  max-width: 780px;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 48px 24px 64px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 36px;
-
-  @media (max-width: 600px) {
-    padding: 32px 16px 48px;
-    gap: 28px;
-  }
+  padding: 2rem 1.5rem 3rem;
+  width: 100%;
 }
 
-// ── Stepper ───────────────────────────────────────────────────────────────────
 .vv-stepper {
   display: flex;
   justify-content: center;
-}
+  margin-bottom: 1.75rem;
 
-.vv-stepper__pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px 6px 10px;
-  background: rgba(colors.$BAKANO-PURPLE, 0.1);
-  border: 1px solid rgba(colors.$BAKANO-PURPLE, 0.22);
-  border-radius: 100px;
-}
+  &__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #F5F8FF;
+    border: 1px solid #E4EDF7;
+    border-radius: 999px;
+    padding: 0.4rem 1rem;
+  }
 
-.vv-stepper__dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-  flex-shrink: 0;
-  transition: background 0.2s;
+  &__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #D0DBE8;
+    transition: background 0.2s;
 
-  &--active {
-    background: colors.$BAKANO-PURPLE;
-    box-shadow: 0 0 8px rgba(colors.$BAKANO-PURPLE, 0.7);
+    &--active { background: colors.$OS-NAVY; }
+  }
+
+  &__label {
+    font-family: fonts.$font-interface;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #7A8EA5;
+    letter-spacing: 0.03em;
   }
 }
 
-.vv-stepper__label {
-  font-family: fonts.$font-accent;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(colors.$BAKANO-PURPLE, 0.85);
-  padding-left: 4px;
-}
-
-// ── Headline ──────────────────────────────────────────────────────────────────
-.vv-headline {
-  text-align: center;
-  max-width: 680px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
 .vv-eyebrow {
-  font-family: fonts.$font-accent;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: fonts.$font-interface;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: colors.$BAKANO-PURPLE;
-  margin: 0;
+  color: colors.$OS-NAVY;
+  margin: 0 0 0.75rem;
+  i { font-size: 0.75rem; }
 }
+
+.vv-headline { margin-bottom: 1.75rem; }
 
 .vv-h1 {
-  font-family: fonts.$font-principal;
-  font-size: clamp(1.7rem, 4.5vw, 2.6rem);
-  font-weight: 800;
+  @include fonts.heading-font(800);
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  color: colors.$OS-DARK;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
   letter-spacing: -0.025em;
-  line-height: 1.18;
-  color: colors.$white;
-  margin: 0;
 }
 
-.vv-accent {
-  background: linear-gradient(110deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+.vv-accent { color: colors.$OS-RED; }
 
 .vv-subtitle {
-  font-family: fonts.$font-secondary;
-  font-size: clamp(0.92rem, 2vw, 1.05rem);
-  color: $text-body;
+  font-size: 0.95rem;
+  color: #4A5F7A;
   line-height: 1.6;
   margin: 0;
 }
 
-// ── Video ─────────────────────────────────────────────────────────────────────
-.vv-video-wrapper {
-  width: 100%;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid rgba(colors.$BAKANO-PURPLE, 0.3);
-  box-shadow:
-    0 0 0 1px rgba(colors.$BAKANO-PURPLE, 0.08) inset,
-    0 0 60px rgba(colors.$BAKANO-PURPLE, 0.18),
-    0 32px 80px rgba(0, 0, 0, 0.7);
-}
+.vv-video-wrapper { margin-bottom: 1.75rem; }
 
 .vv-video-ratio {
   position: relative;
-  width: 100%;
-  padding-top: 56.25%; // 16:9
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 63, 125, 0.12);
+  border: 1px solid #E4EDF7;
+  background: colors.$OS-NAVY;
 }
 
 .vv-video-iframe {
@@ -482,362 +368,236 @@ $text-body:   rgba(255, 255, 255, 0.68);
   width: 100%;
   height: 100%;
   border: none;
-  display: block;
 }
 
-// ── CTA section ───────────────────────────────────────────────────────────────
+// ── CTA section ──────────────────────────────────────────────────────────────
 .vv-cta-section {
-  width: 100%;
-  max-width: 560px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 0.75rem;
 }
 
-// Lock notice
-.vv-lock-notice {
+.vv-cta-locked {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 12px 20px;
-  background: rgba(colors.$BAKANO-DARK, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
+  gap: 0.6rem;
   width: 100%;
+  max-width: 420px;
+
+  &__icon { font-size: 1.4rem; color: #B0C0D5; }
+
+  &__text {
+    font-size: 0.88rem;
+    color: #8A9BB5;
+    margin: 0;
+    strong { color: colors.$OS-NAVY; }
+  }
+
+  &__bar-wrap {
+    width: 100%;
+    height: 4px;
+    background: #E8EDF5;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  &__bar {
+    height: 100%;
+    background: colors.$OS-BLUE;
+    border-radius: 99px;
+    transition: width 0.8s linear;
+  }
 }
 
-.vv-lock-notice__icon {
-  font-size: 0.82rem;
-  color: $text-muted;
-  flex-shrink: 0;
-}
-
-.vv-lock-notice__text {
-  font-family: fonts.$font-interface;
-  font-size: 0.82rem;
-  color: $text-body;
-  line-height: 1.45;
-}
-
-.vv-lock-notice__timer {
-  font-family: fonts.$font-accent;
-  font-weight: 700;
-  color: colors.$BAKANO-PURPLE;
-}
-
-// CTA button
 .vv-cta-btn {
-  width: 100%;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 18px 28px;
-  font-family: fonts.$font-accent;
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: colors.$white;
+  gap: 0.6rem;
+  background: colors.$OS-RED;
+  color: #ffffff;
   border: none;
   border-radius: 12px;
-  cursor: not-allowed;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease, opacity 0.25s;
+  padding: 1.1rem 2.5rem;
+  font-family: fonts.$font-accent;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  width: 100%;
+  max-width: 420px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(204, 0, 0, 0.35);
 
-  i { font-size: 1rem; }
-
-  // Locked state
-  &--locked {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    color: rgba(255, 255, 255, 0.28);
-    cursor: not-allowed;
-
-    i { color: rgba(255, 255, 255, 0.2); }
-  }
-
-  // Active / unlocked state
-  &--active {
-    background: linear-gradient(135deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
-    box-shadow:
-      0 8px 32px rgba(colors.$BAKANO-PINK, 0.35),
-      0 2px 8px rgba(0, 0, 0, 0.4);
-    cursor: pointer;
-    animation: cta-pulse 2.8s ease-in-out infinite;
-
-    &:hover {
-      transform: translateY(-3px);
-      box-shadow:
-        0 14px 44px rgba(colors.$BAKANO-PINK, 0.5),
-        0 4px 12px rgba(0, 0, 0, 0.5);
-      animation: none;
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
-  }
+  &:hover { background: #AA0000; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(204, 0, 0, 0.45); }
+  &:active { transform: translateY(0); }
 }
 
-@keyframes cta-pulse {
-  0%, 100% { box-shadow: 0 8px 32px rgba(colors.$BAKANO-PINK, 0.35), 0 2px 8px rgba(0,0,0,0.4); }
-  50%       { box-shadow: 0 10px 44px rgba(colors.$BAKANO-PINK, 0.55), 0 2px 8px rgba(0,0,0,0.4); }
-}
-
-// Trust line
-.vv-trust {
-  font-family: fonts.$font-interface;
-  font-size: 0.74rem;
-  color: $text-muted;
+.vv-cta-sub {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 0.4rem;
+  font-size: 0.76rem;
+  color: #B0C0D5;
   margin: 0;
-
-  i { font-size: 0.65rem; }
+  i { font-size: 0.7rem; }
 }
 
-// Lock notice transition
-.lock-fade-leave-active {
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-.lock-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-6px);
-}
-
-// ── Footer ────────────────────────────────────────────────────────────────────
+// ── Footer ───────────────────────────────────────────────────────────────────
 .vv-footer {
-  padding: 24px 24px 32px;
-  border-top: 1px solid $border;
+  padding: 1.5rem;
+  border-top: 1px solid #F0F4FB;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 0.5rem;
+
+  &__links {
+    display: flex;
+    gap: 1.5rem;
+    a {
+      font-size: 0.76rem;
+      color: #B0C0D5;
+      text-decoration: none;
+      &:hover { color: colors.$OS-NAVY; }
+    }
+  }
+
+  &__copy {
+    font-size: 0.72rem;
+    color: #C8D8ED;
+    margin: 0;
+  }
 }
 
-.vv-footer__copy {
-  font-family: fonts.$font-interface;
-  font-size: 0.7rem;
-  color: $text-muted;
-  margin: 0;
-  text-align: center;
-}
+// ── Capture overlay ──────────────────────────────────────────────────────────
+.capture-fade-enter-active,
+.capture-fade-leave-active { transition: opacity 0.25s ease; }
+.capture-fade-enter-from,
+.capture-fade-leave-to { opacity: 0; }
 
-.vv-footer__links {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.vv-footer__link {
-  font-family: fonts.$font-interface;
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.3);
-  text-decoration: none;
-  transition: color 0.2s;
-
-  &:hover { color: rgba(255, 255, 255, 0.6); }
-}
-
-.vv-footer__sep {
-  color: $text-muted;
-  font-size: 0.7rem;
-}
-
-// ── Contact capture overlay ───────────────────────────────────────────────────
-.cap-overlay {
+.capture-overlay {
   position: fixed;
   inset: 0;
-  z-index: 200;
-  background: rgba(0, 0, 0, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  z-index: 950;
+  background: rgba(colors.$OS-DARK, 0.8);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
-  overflow-y: auto;
+  padding: 1rem;
 }
 
-.cap-card {
+.capture-modal {
+  background: #ffffff;
+  border-radius: 20px;
   width: 100%;
   max-width: 460px;
-  background: #12101c;
-  border: 1px solid rgba(colors.$BAKANO-PURPLE, 0.25);
-  border-radius: 20px;
-  padding: 40px 36px 32px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  box-shadow:
-    0 0 0 1px rgba(colors.$BAKANO-PURPLE, 0.08) inset,
-    0 32px 80px rgba(0, 0, 0, 0.8),
-    0 0 60px rgba(colors.$BAKANO-PURPLE, 0.15);
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
 
-  @media (max-width: 480px) {
-    padding: 32px 22px 28px;
+  &__header {
+    padding: 2rem 2rem 1.25rem;
+    text-align: center;
+    background: linear-gradient(135deg, #EEF4FF 0%, #F9FBFF 100%);
+    border-bottom: 1px solid #E8EDF5;
+  }
+
+  &__logo {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    @include fonts.heading-font(800);
+    font-size: 1.3rem;
+    color: colors.$OS-DARK;
+    margin: 0 0 0.4rem;
+    letter-spacing: -0.02em;
+    span { color: colors.$OS-RED; }
+  }
+
+  &__sub {
+    font-size: 0.82rem;
+    color: #8A9BB5;
+    margin: 0;
+  }
+
+  &__form {
+    padding: 1.5rem 1.75rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
   }
 }
 
-.cap-icon-wrap {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: rgba(colors.$BAKANO-PURPLE, 0.12);
-  border: 1px solid rgba(colors.$BAKANO-PURPLE, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.cap-icon {
-  font-size: 1.8rem;
-  color: colors.$BAKANO-PURPLE;
-}
-
-.cap-h2 {
-  font-family: fonts.$font-principal;
-  font-size: clamp(1.2rem, 4vw, 1.45rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  color: colors.$white;
-  text-align: center;
-  margin: 0 0 10px;
-}
-
-.cap-sub {
-  font-family: fonts.$font-secondary;
-  font-size: 0.88rem;
-  color: $text-body;
-  text-align: center;
-  line-height: 1.5;
-  margin: 0 0 28px;
-}
-
-.cap-form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.cap-row {
+.capture-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-
-  @media (max-width: 420px) {
-    grid-template-columns: 1fr;
-  }
+  gap: 0.75rem;
+  @media (max-width: 400px) { grid-template-columns: 1fr; }
 }
 
-.cap-field {
+.capture-field {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 0.3rem;
 
-  &--error .cap-input {
-    border-color: rgba(colors.$BAKANO-PINK, 0.6);
-    background: rgba(colors.$BAKANO-PINK, 0.04);
+  label {
+    font-family: fonts.$font-interface;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #4A5F7A;
+    letter-spacing: 0.02em;
+  }
+
+  input {
+    border: 1.5px solid #E4EDF7;
+    border-radius: 9px;
+    padding: 0.7rem 0.85rem;
+    font-family: fonts.$font-secondary;
+    font-size: 0.88rem;
+    color: colors.$OS-DARK;
+    background: #FAFBFF;
+    outline: none;
+    transition: border-color 0.18s;
+    &::placeholder { color: #B8CAE0; }
+    &:focus { border-color: colors.$OS-BLUE; background: #F5F9FF; }
+  }
+
+  &.error input { border-color: colors.$OS-RED; }
+
+  &__error {
+    font-size: 0.73rem;
+    color: colors.$OS-RED;
   }
 }
 
-.cap-label {
-  font-family: fonts.$font-interface;
-  font-size: 0.74rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: rgba(colors.$white, 0.5);
-}
-
-.cap-input {
-  width: 100%;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  color: colors.$white;
-  font-family: fonts.$font-secondary;
-  font-size: 0.95rem;
-  outline: none;
-  transition: border-color 0.2s, background 0.2s;
-  box-sizing: border-box;
-
-  &::placeholder { color: rgba(255, 255, 255, 0.22); }
-
-  &:focus {
-    border-color: rgba(colors.$BAKANO-PURPLE, 0.55);
-    background: rgba(colors.$BAKANO-PURPLE, 0.06);
-  }
-}
-
-.cap-error {
-  font-family: fonts.$font-interface;
-  font-size: 0.74rem;
-  color: colors.$BAKANO-PINK;
-}
-
-.cap-submit {
-  margin-top: 6px;
-  width: 100%;
+.capture-submit {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 16px 24px;
-  background: linear-gradient(135deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
+  gap: 0.6rem;
+  background: colors.$OS-RED;
+  color: #ffffff;
   border: none;
-  border-radius: 12px;
-  color: colors.$white;
+  border-radius: 11px;
+  padding: 0.95rem 1.5rem;
   font-family: fonts.$font-accent;
-  font-size: 0.88rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
-  box-shadow: 0 8px 28px rgba(colors.$BAKANO-PINK, 0.35);
+  width: 100%;
+  margin-top: 0.25rem;
+  transition: background 0.2s, transform 0.15s;
+  box-shadow: 0 4px 16px rgba(204, 0, 0, 0.3);
 
-  i { font-size: 0.95rem; }
-
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 36px rgba(colors.$BAKANO-PINK, 0.5);
-  }
-
-  &:active:not(:disabled) { transform: translateY(0); }
-
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-}
-
-.cap-privacy {
-  margin-top: 18px;
-  font-family: fonts.$font-interface;
-  font-size: 0.72rem;
-  color: $text-muted;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  i { font-size: 0.62rem; }
-}
-
-// Overlay transition
-.capture-fade-enter-active,
-.capture-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.capture-fade-enter-from,
-.capture-fade-leave-to {
-  opacity: 0;
+  &:hover:not(:disabled) { background: #AA0000; transform: translateY(-1px); }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 </style>
