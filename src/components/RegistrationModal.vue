@@ -178,6 +178,7 @@ const handleSubmit = async () => {
     phone: parsedPhoneE164.value,
     timestamp: Date.now(),
   }))
+  ;(window as any).fbq?.('track', 'CompleteRegistration')
   emit('close')
   router.push('/ver-video')
 }

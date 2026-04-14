@@ -134,6 +134,7 @@ ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
   emit('close')
 
   if (califica) {
+    ;(window as any).fbq?.('track', 'Lead')
     router.push('/agendar')
   } else {
     if (!IS_DEV) localStorage.setItem('os_disq_at', String(Date.now()))
