@@ -3,8 +3,8 @@ import { ref, computed } from 'vue'
 import { getStoredFbParams } from '@/utils/fbclid'
 
 // ── Webhooks ─────────────────────────────────────────────────────────────────
-const WH_CONTACT = 'https://services.leadconnectorhq.com/hooks/pEFChujwCCaMWBNbZYD1/webhook-trigger/6c18375e-289b-4dc8-95c8-84d55b65d513'
-const WH_QUALIFY = 'https://services.leadconnectorhq.com/hooks/pEFChujwCCaMWBNbZYD1/webhook-trigger/2a7e1afa-66cf-4791-b17b-c4e3a1e5d7fa'
+const WH_CONTACT = import.meta.env.VITE_WEBHOOK_REGISTRO
+const WH_QUALIFY = import.meta.env.VITE_WEBHOOK_CALIFICACION
 
 defineEmits<{ close: [] }>()
 
