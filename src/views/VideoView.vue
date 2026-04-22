@@ -85,7 +85,7 @@ const startTimer = () => {
 onMounted(() => {
   const c = contactStore.get()
   const hasContact = !!c.email && !!c.nombre
-  if (!IS_DEV && !hasContact) {
+  if (!hasContact) {
     captureOpen.value = true
   } else {
     ;(window as any).fbq?.('track', 'ViewContent', { content_name: 'video-vsl' })

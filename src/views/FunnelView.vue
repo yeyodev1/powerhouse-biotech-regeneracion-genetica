@@ -130,10 +130,19 @@ onUnmounted(() => clearInterval(interval))
           </li>
         </ul>
 
-        <!-- VSL clickable area -->
+        <!-- VSL Gated Area -->
         <div class="funnel__vsl-wrap">
-          <div class="funnel__vsl-player-container">
-            <wistia-player media-id="5ql8l131me" aspect="1.7777777777777777"></wistia-player>
+          <div class="funnel__vsl" @click="openModal()" role="button" aria-label="Ver video" tabindex="0">
+            <div class="funnel__vsl-bg">
+              <img src="https://fast.wistia.com/embed/medias/5ql8l131me/swatch" class="funnel__vsl-thumb" alt="Vista previa video" />
+              <div class="funnel__vsl-blur-overlay"></div>
+            </div>
+            <div class="funnel__vsl-overlay">
+              <div class="funnel__vsl-play">
+                <i class="fa-solid fa-play" aria-hidden="true"></i>
+              </div>
+              <p class="funnel__vsl-caption">Mira el video exclusivo y descubre cómo transformamos tus espacios con madera de alta gama</p>
+            </div>
           </div>
         </div>
 
