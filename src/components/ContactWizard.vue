@@ -58,8 +58,8 @@ const s1 = ref({
 
 // Step 2
 const s2 = ref({
-  revenue: '',
-  location: '',
+  projectType: '', // Casa, Oficina, Local, etc.
+  budget: '' as '' | 'yes' | 'no', // ¿Más de $1200?
   objective: '',
   urgency: '' as '' | 'immediate' | 'next-month' | 'just-looking',
   message: '',
@@ -77,7 +77,7 @@ const s1Valid = computed(() =>
 )
 
 const s2Valid = computed(() =>
-  !!s2.value.revenue && !!s2.value.location &&
+  !!s2.value.projectType && !!s2.value.budget &&
   !!s2.value.objective && !!s2.value.urgency
 )
 
@@ -90,13 +90,12 @@ const URGENCY_LABEL: Record<string, string> = {
 
 function buildNotes(): string {
   return [
-    `Empresa: ${s1.value.company.trim()}`,
-    `Facturación mensual: ${s2.value.revenue}`,
-    `Ubicación: ${s2.value.location}`,
-    `Objetivo principal: ${s2.value.objective}`,
+    `Proyecto: ${s2.value.projectType}`,
+    `Presupuesto +$1200: ${s2.value.budget === 'yes' ? 'Sí' : 'No'}`,
+    `Objetivo: ${s2.value.objective}`,
     `Urgencia: ${URGENCY_LABEL[s2.value.urgency] ?? s2.value.urgency}`,
     s2.value.message.trim() ? `Mensaje del lead: ${s2.value.message.trim()}` : null,
-    `Fuente: Formulario web bakano.ec`,
+    `Fuente: Formulario Ale Barreto`,
   ].filter(Boolean).join('\n')
 }
 
@@ -104,17 +103,14 @@ function buildNotes(): string {
 function calcTags(): string[] {
   // "Solo estoy explorando" → descalifica y no es urgente
   if (s2.value.urgency === 'just-looking') {
-    return ['no-cualificado-web', 'no-urgente']
+    return ['no-cualificado-ab', 'no-urgente']
   }
 
-  // Los 3 criterios deben cumplirse para cualificar
-  const qualifies =
-    (s2.value.revenue === 'Entre $10,000 y $25,000 USD' || s2.value.revenue === 'Más de $25,000 USD') &&
-    s2.value.location === 'Guayaquil / Samborondón' &&
-    s2.value.objective !== 'Aumentar seguidores, likes y hacerme viral con tendencias.'
+  // El criterio clave es el presupuesto mayor a $1200
+  const qualifies = s2.value.budget === 'yes'
 
   return [
-    qualifies ? 'cualificado-web' : 'no-cualificado-web',
+    qualifies ? 'cualificado-ab' : 'no-cualificado-ab',
     s2.value.urgency === 'immediate' ? 'urgente' : 'no-urgente',
   ]
 }
@@ -176,15 +172,15 @@ async function submitS2() {
           email: s1.value.email.trim(),
           phone,
           companyName: s1.value.company.trim(),
-          source: 'bakano-web',
-          // Datos de cualificación (Step 2) — keys = texto exacto de la pregunta en GHL
-          '1. ¿Cuál es el rango de facturación mensual actual de tu negocio?': s2.value.revenue,
-          '2. ¿Dónde se encuentra ubicado tu establecimiento o base de operaciones principal?': s2.value.location,
-          '3. ¿Cuál es tu objetivo principal al invertir en marketing este año?': s2.value.objective,
+          source: 'ale-barreto-web',
+          // Datos de cualificación (Step 2)
+          '1. ¿Qué tipo de proyecto buscas?': s2.value.projectType,
+          '2. ¿Dispones de más de $1200 para este proyecto?': s2.value.budget === 'yes' ? 'Sí' : 'No',
+          '3. ¿Cuál es tu objetivo principal?': s2.value.objective,
           urgency: s2.value.urgency,
           message: s2.value.message.trim(),
           tags,
-          // Resumen legible para notas en GHL
+          // Resumen legible para notas
           notes,
         }),
       })
@@ -204,21 +200,22 @@ function goBack() {
 }
 
 // ── Opciones step 2 ───────────────────────────────────────────────────────────
-const revenueOpts = [
-  { value: 'Menos de $10,000 USD', label: 'Menos de $10,000 USD' },
-  { value: 'Entre $10,000 y $25,000 USD', label: 'Entre $10,000 y $25,000 USD' },
-  { value: 'Más de $25,000 USD', label: 'Más de $25,000 USD' },
+const projectOpts = [
+  { value: 'Residencial (Casa / Departamento)', label: 'Residencial (Casa / Departamento)' },
+  { value: 'Oficina / Corporativo', label: 'Oficina / Corporativo' },
+  { value: 'Local Comercial / Restaurante', label: 'Local Comercial / Restaurante' },
+  { value: 'Otro', label: 'Otro' },
 ]
 
-const locationOpts = [
-  { value: 'Guayaquil / Samborondón', label: 'Guayaquil / Samborondón' },
-  { value: 'Otra ciudad de Ecuador o el extranjero', label: 'Otra ciudad de Ecuador o el extranjero' },
+const budgetOpts = [
+  { value: 'yes', label: 'Sí, dispongo de más de $1200' },
+  { value: 'no', label: 'No, mi presupuesto es menor' },
 ]
 
 const objectiveOpts = [
-  { value: 'Aumentar seguidores, likes y hacerme viral con tendencias.', label: 'Aumentar seguidores, likes y hacerme viral con tendencias.' },
-  { value: 'Abrir mercado, aumentar la facturación y mejorar la rentabilidad con datos.', label: 'Abrir mercado, aumentar la facturación y mejorar la rentabilidad con datos.' },
-  { value: 'Profesionalizar mi proceso de ventas y captación de clientes.', label: 'Profesionalizar mi proceso de ventas y captación de clientes.' },
+  { value: 'Remodelación completa de espacios.', label: 'Remodelación completa de espacios.' },
+  { value: 'Diseño y fabricación de muebles a medida.', label: 'Diseño y fabricación de muebles a medida.' },
+  { value: 'Construcción de estructuras en madera (pérgolas, decks, etc.).', label: 'Construcción de estructuras en madera (pérgolas, decks, etc.).' },
 ]
 
 const urgencyOpts = [
@@ -349,33 +346,33 @@ const urgencyOpts = [
     <Transition :name="`wiz-${dir}`" mode="out-in">
       <div class="wiz__body" v-if="step === 2" key="s2">
 
-        <!-- Q1: Facturación -->
+        <!-- Q1: Proyecto -->
         <div class="wf-question">
           <p class="wf-q-num">01</p>
-          <p class="wf-q-title">¿Cuál es el rango de facturación mensual actual de tu negocio?</p>
+          <p class="wf-q-title">¿Qué tipo de proyecto buscas realizar?</p>
           <label
-            v-for="opt in revenueOpts"
+            v-for="opt in projectOpts"
             :key="opt.value"
             class="wf-opt"
-            :class="{ 'wf-opt--sel': s2.revenue === opt.value }"
+            :class="{ 'wf-opt--sel': s2.projectType === opt.value }"
           >
-            <input type="radio" v-model="s2.revenue" :value="opt.value" class="sr-only" />
+            <input type="radio" v-model="s2.projectType" :value="opt.value" class="sr-only" />
             <span class="wf-opt__radio" />
             <span class="wf-opt__text">{{ opt.label }}</span>
           </label>
         </div>
 
-        <!-- Q2: Ubicación -->
+        <!-- Q2: Presupuesto -->
         <div class="wf-question">
           <p class="wf-q-num">02</p>
-          <p class="wf-q-title">¿Dónde se encuentra ubicado tu establecimiento o base de operaciones principal?</p>
+          <p class="wf-q-title">¿Dispones de un presupuesto de más de $1200 para este proyecto?</p>
           <label
-            v-for="opt in locationOpts"
+            v-for="opt in budgetOpts"
             :key="opt.value"
             class="wf-opt"
-            :class="{ 'wf-opt--sel': s2.location === opt.value }"
+            :class="{ 'wf-opt--sel': s2.budget === opt.value }"
           >
-            <input type="radio" v-model="s2.location" :value="opt.value" class="sr-only" />
+            <input type="radio" v-model="s2.budget" :value="opt.value" class="sr-only" />
             <span class="wf-opt__radio" />
             <span class="wf-opt__text">{{ opt.label }}</span>
           </label>
@@ -384,7 +381,7 @@ const urgencyOpts = [
         <!-- Q3: Objetivo -->
         <div class="wf-question">
           <p class="wf-q-num">03</p>
-          <p class="wf-q-title">¿Cuál es tu objetivo principal al invertir en marketing este año?</p>
+          <p class="wf-q-title">¿Cuál es tu objetivo principal con este proyecto?</p>
           <label
             v-for="opt in objectiveOpts"
             :key="opt.value"

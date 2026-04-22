@@ -6,7 +6,7 @@ import osLogo from '@/assets/logos/logo-small.png'
 const router = useRouter()
 const iframeHeight = ref(1100)
 
-// TODO: Actualizar URL del calendario Ocean Safety en GHL
+// TODO: Actualizar URL del calendario Ale Barreto en GHL
 const BASE_URL = 'https://api.leadconnectorhq.com/widget/booking/dtpY2GCQjoOkpm8JUtYz'
 
 const calendarUrl = computed(() => {
@@ -44,7 +44,7 @@ onUnmounted(() => window.removeEventListener('message', onMessage))
 
     <!-- TOP BAR -->
     <header class="booking__topbar">
-      <img :src="osLogo" alt="Ocean Safety" class="booking__logo" />
+      <h2 class="booking__logo-text">ALE BARRETO</h2>
     </header>
 
     <main class="booking__main">
@@ -69,15 +69,15 @@ onUnmounted(() => window.removeEventListener('message', onMessage))
       <!-- Heading -->
       <section class="booking__heading">
         <p class="booking__eyebrow">
-          <i class="fa-solid fa-anchor" aria-hidden="true"></i>
+          <i class="fa-solid fa-tree" aria-hidden="true"></i>
           Casi listo
         </p>
         <h1 class="booking__title">
           Elige el horario de tu
-          <span class="booking__title-accent">consulta técnica</span>
+          <span class="booking__title-accent">asesoría de diseño</span>
         </h1>
         <p class="booking__subtitle">
-          Una sesión de 15 minutos con Roberto Allú para analizar tu flota y recomendarte los equipos exactos.
+          Una sesión de 15 minutos con Ale Barreto para conversar sobre tu proyecto y definir los siguientes pasos.
         </p>
       </section>
 
@@ -86,7 +86,7 @@ onUnmounted(() => window.removeEventListener('message', onMessage))
         <iframe
           :src="calendarUrl"
           :style="{ height: iframeHeight + 'px' }"
-          title="Agenda tu consulta técnica con Ocean Safety"
+          title="Agenda tu asesoría con Ale Barreto"
           class="calendar__iframe"
           frameborder="0"
           scrolling="no"
@@ -101,7 +101,7 @@ onUnmounted(() => window.removeEventListener('message', onMessage))
         <RouterLink to="/politicas-privacidad">Política de Privacidad</RouterLink>
         <RouterLink to="/aviso-legal">Aviso Legal</RouterLink>
       </nav>
-      <p class="booking__footer-copy">© {{ new Date().getFullYear() }} OCEAN SAFETY. Todos los derechos reservados.</p>
+      <p class="booking__footer-copy">© {{ new Date().getFullYear() }} ALE BARRETO. Todos los derechos reservados.</p>
     </footer>
 
   </div>

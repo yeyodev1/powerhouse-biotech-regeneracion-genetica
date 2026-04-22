@@ -1,18 +1,17 @@
-// Ocean Safety — Honda Marine Ecuador
-$BAKANO-PINK:   #CC0000;   // Honda red   → CTAs / urgencia
-$BAKANO-DARK:   #0D1B2A;   // Dark navy   → textos
-$BAKANO-LIGHT:  #F0F6FF;   // Light blue  → fondos
-$BAKANO-PURPLE: #003F7D;   // Ocean navy  → brand principal
-$BAKANO-GREEN:  #0066CC;   // Ocean blue  → secundario
+// Ale Barreto — Expert in Wood
+$BAKANO-PINK:   #D4A373;   // Wood Pastel (Primary)
+$BAKANO-DARK:   #283618;   // Dark Forest/Earth (Text)
+$BAKANO-LIGHT:  #FEFAE0;   // Cream/Soft Pastel (Backgrounds)
+$BAKANO-PURPLE: #BC6C25;   // Earthy Brown (Secondary)
+$BAKANO-GREEN:  #606C38;   // Sage Green (Accent)
 
 // Aliases semánticos
-$OS-RED:     #CC0000;
-$OS-NAVY:    #003F7D;
-$OS-BLUE:    #0066CC;
-$OS-DARK:    #0D1B2A;
-$OS-LIGHT:   #F0F6FF;
-$OS-SURFACE: #F5F8FF;
-$OS-WHITE:   #ffffff;
+$AB-WOOD:    #D4A373;
+$AB-EARTH:   #BC6C25;
+$AB-FOREST:  #283618;
+$AB-SAGE:    #606C38;
+$AB-CREAM:   #FEFAE0;
+$AB-WHITE:   #ffffff;
 
 // Color primario
 $BAKANO-PRIMARY: $BAKANO-PINK;
@@ -20,9 +19,9 @@ $BAKANO-PRIMARY: $BAKANO-PINK;
 // Colores base
 $white: #ffffff;
 $text-light: #f5f5f5;
-$overlay-purple: rgba($BAKANO-PURPLE, 0.1);
+$overlay-wood: rgba($BAKANO-PINK, 0.1);
 
-// Colores adicionales para UI
+// Colores adicionales para UI (Mantenemos la escala de grises para utilidad)
 $gray-100: #f8f9fa;
 $gray-200: #e9ecef;
 $gray-300: #dee2e6;
@@ -32,3 +31,9 @@ $gray-600: #6c757d;
 $gray-700: #495057;
 $gray-800: #343a40;
 $gray-900: #212529;
+
+// Legacy Aliases (to prevent build errors)
+$OS-RED:   $BAKANO-PINK;
+$OS-NAVY:  $AB-FOREST;
+$OS-BLUE:  $AB-SAGE;
+$OS-DARK:  $AB-FOREST;

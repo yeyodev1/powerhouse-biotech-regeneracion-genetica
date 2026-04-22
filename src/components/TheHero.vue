@@ -29,33 +29,33 @@ const hProgress        = ref(0)      // 0–1 progreso del track horizontal
 
 // Estadísticas que rotan
 const stats = [
-  { number: '20%', label: 'Aumento en Facturación' },
-  { number: '150+', label: 'Negocios Transformados' },
-  { number: '90%', label: 'Clientes Satisfechos' },
-  { number: '24/7', label: 'Soporte Especializado' }
+  { number: '15+', label: 'Años de Experiencia' },
+  { number: '500+', label: 'Proyectos Entregados' },
+  { number: '100%', label: 'Madera Certificada' },
+  { number: '24/7', label: 'Asesoría Técnica' }
 ]
 
 // Beneficios clave
 const benefits = [
   {
-    icon: 'fa-solid fa-chart-line',
-    title: 'Crecimiento Garantizado',
-    description: 'Estrategias probadas que aumentan tu facturación hasta un 20%'
+    icon: 'fa-solid fa-tree',
+    title: 'Madera de Calidad',
+    description: 'Seleccionamos las mejores piezas para garantizar durabilidad y estética superior.'
   },
   {
-    icon: 'fa-solid fa-bullseye', // Sin Dependencias
-    title: 'Sin Dependencias',
-    description: 'No necesitas agencias, campañas virales ni caos operativo'
+    icon: 'fa-solid fa-couch',
+    title: 'Diseño a Medida',
+    description: 'Creamos espacios únicos que reflejan tu estilo, desde casas hasta oficinas.'
   },
   {
-    icon: 'fa-solid fa-rocket',
-    title: 'Resultados Rápidos',
-    description: 'Ve el impacto en tu negocio desde el primer mes'
+    icon: 'fa-solid fa-hammer',
+    title: 'Mano de Obra Experta',
+    description: 'Artesanos especializados con años de trayectoria en el manejo de la madera.'
   },
   {
-    icon: 'fa-solid fa-lightbulb',
-    title: 'Soluciones Inteligentes',
-    description: 'Tecnología avanzada adaptada a tu industria'
+    icon: 'fa-solid fa-shield-halved',
+    title: 'Garantía Total',
+    description: 'Respaldamos cada proyecto con una garantía de calidad inigualable.'
   }
 ]
 
@@ -162,13 +162,13 @@ const { open: openContactModal } = useContactModal()
         
         <!-- Cara Frontal (Negra + Video) -->
         <div class="cube-face cube-front">
-          <!-- Video Oculto (Se muestra en hover o scroll) -->
-          <video :src="heroVideo" ref="hiddenVideo" class="cube-abstract-video" autoplay loop muted playsinline></video>
+          <!-- Wistia Player -->
+          <wistia-player media-id="5ql8l131me" aspect="1.7777777777777777" class="cube-abstract-video"></wistia-player>
           
           <!-- Logo Textual Sutil (Se oculta al hacer zoom) -->
           <div class="cube-logo">
-            <svg viewBox="0 0 300 100" class="cube-logo__svg">
-              <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-size="48" font-weight="900" letter-spacing="4">BAKANO</text>
+            <svg viewBox="0 0 350 100" class="cube-logo__svg">
+              <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-size="42" font-weight="900" letter-spacing="2">ALE BARRETO</text>
             </svg>
           </div>
         </div>
@@ -194,17 +194,17 @@ const { open: openContactModal } = useContactModal()
         <div class="track-panel panel-intro">
           <div class="panel-intro__content">
             <h1 class="hero-huge__subtitle">
-              Ayudamos a Dueños de Negocios a Aumentar hasta un<br/>
-              <strong>20% su Facturación Mensual o Rentabilidad</strong>
+              Transformamos tus espacios con la calidez y<br/>
+              <strong>Elegancia de la Madera de Alta Gama</strong>
             </h1>
             <p class="hero-huge__desc">
-              Sin depender de agencias, campañas virales, ni caos operativo.<br/>
-              Resultados medibles, crecimiento sostenible.
+              Diseño y construcción experta para hogares y oficinas.<br/>
+              Calidad artesanal con visión contemporánea.
             </p>
 
             <div class="hero-huge__cta">
               <button class="btn btn--primary" @click="openContactModal">
-                <span>ESCALA MI NEGOCIO AHORA</span>
+                <span>INICIAR MI PROYECTO</span>
               </button>
             </div>
           </div>

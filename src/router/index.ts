@@ -32,14 +32,14 @@ const router = createRouter({
       name: 'funnel',
       component: FunnelView,
       meta: {
-        title: 'Ocean Safety | Aumenta tu operación entre 10% y 20% — Asesoría Gratuita',
+        title: 'Ale Barreto | Expertos en Madera — Diseño y Construcción de Alta Gama',
         description:
-          'Ayudamos a dueños de negocios establecidos a aumentar su operación entre un 10% y 20% de forma predecible con la metodología Honda Marine Ecuador. Agenda tu asesoría gratuita.',
-        canonical: 'https://oceansafety.ec/',
-        ogTitle: 'Ocean Safety | Aumenta tu operación entre 10% y 20%',
+          'Expertos en diseño y construcción en madera. Transformamos espacios con acabados premium y estructuras sostenibles. Agenda tu asesoría gratuita.',
+        canonical: 'https://alebarreto.com/',
+        ogTitle: 'Ale Barreto | Expertos en Madera',
         ogDescription:
-          'Metodología Honda Marine Ecuador: profesionaliza tu marketing y ventas sin depender de la suerte ni de agencias de viralidad. Asesoría gratuita — cupos limitados.',
-        ogUrl: 'https://oceansafety.ec/',
+          'Diseño y construcción en madera de alta gama. Calidad artesanal para tus proyectos residenciales y comerciales.',
+        ogUrl: 'https://alebarreto.com/',
       } satisfies RouteMeta,
     },
     {
@@ -47,12 +47,12 @@ const router = createRouter({
       name: 'video',
       component: VideoView,
       meta: {
-        title: 'Mira el video | Ocean Safety — Paso 1 de 2',
-        description: 'Ve el video completo y descubre cómo la metodología Honda Marine Ecuador puede aumentar la operación de tu negocio entre un 10% y 20%.',
-        canonical: 'https://oceansafety.ec/ver-video',
-        ogTitle: 'Mira el video | Ocean Safety',
-        ogDescription: 'Ve el video y agenda tu Cita Estratégica gratuita con el equipo de Ocean Safety.',
-        ogUrl: 'https://oceansafety.ec/ver-video',
+        title: 'Mira el video | Ale Barreto — Paso 1 de 2',
+        description: 'Descubre cómo transformamos espacios con madera de alta gama en nuestro video exclusivo.',
+        canonical: 'https://alebarreto.com/ver-video',
+        ogTitle: 'Mira el video | Ale Barreto',
+        ogDescription: 'Ve el video y agenda tu Cita Estratégica gratuita con Ale Barreto.',
+        ogUrl: 'https://alebarreto.com/ver-video',
       } satisfies RouteMeta,
     },
     {
@@ -60,12 +60,12 @@ const router = createRouter({
       name: 'booking',
       component: BookingView,
       meta: {
-        title: 'Agenda tu Cita | Ocean Safety — Paso 2 de 2',
-        description: 'Selecciona el día y hora para tu Cita Estratégica gratuita con el equipo de Ocean Safety.',
-        canonical: 'https://oceansafety.ec/agendar',
-        ogTitle: 'Agenda tu Cita | Ocean Safety',
-        ogDescription: 'Elige tu horario y reserva tu Cita Estratégica gratuita con Ocean Safety.',
-        ogUrl: 'https://oceansafety.ec/agendar',
+        title: 'Agenda tu Cita | Ale Barreto — Paso 2 de 2',
+        description: 'Selecciona el día y hora para tu Cita Estratégica gratuita con Ale Barreto.',
+        canonical: 'https://alebarreto.com/agendar',
+        ogTitle: 'Agenda tu Cita | Ale Barreto',
+        ogDescription: 'Elige tu horario y reserva tu Cita Estratégica gratuita.',
+        ogUrl: 'https://alebarreto.com/agendar',
       } satisfies RouteMeta,
     },
     {
@@ -73,12 +73,12 @@ const router = createRouter({
       name: 'booked',
       component: BookedView,
       meta: {
-        title: 'Cita Confirmada | Ocean Safety',
-        description: 'Tu cita estratégica con el equipo de Ocean Safety está confirmada. Revisa tu correo y prepárate.',
-        canonical: 'https://oceansafety.ec/cita-confirmada',
-        ogTitle: 'Cita Confirmada | Ocean Safety',
-        ogDescription: 'Tu cita con el equipo de Ocean Safety está reservada. Te contactaremos pronto.',
-        ogUrl: 'https://oceansafety.ec/cita-confirmada',
+        title: 'Cita Confirmada | Ale Barreto',
+        description: 'Tu cita estratégica con Ale Barreto está confirmada. Revisa tu correo y prepárate.',
+        canonical: 'https://alebarreto.com/cita-confirmada',
+        ogTitle: 'Cita Confirmada | Ale Barreto',
+        ogDescription: 'Tu cita está reservada. Te contactaremos pronto.',
+        ogUrl: 'https://alebarreto.com/cita-confirmada',
       } satisfies RouteMeta,
     },
     {
@@ -86,12 +86,12 @@ const router = createRouter({
       name: 'no-space',
       component: NoSpaceView,
       meta: {
-        title: 'Sin Espacio Disponible | Ocean Safety',
-        description: 'En este momento los cupos de asesoría de Ocean Safety están completos. Te notificaremos cuando se libere un espacio.',
-        canonical: 'https://oceansafety.ec/sin-espacio',
-        ogTitle: 'Sin Espacio Disponible | Ocean Safety',
+        title: 'Sin Espacio Disponible | Ale Barreto',
+        description: 'En este momento los cupos de asesoría de Ale Barreto están completos. Te notificaremos cuando se libere un espacio.',
+        canonical: 'https://alebarreto.com/sin-espacio',
+        ogTitle: 'Sin Espacio Disponible | Ale Barreto',
         ogDescription: 'Los cupos de asesoría están completos. Te avisaremos cuando haya disponibilidad.',
-        ogUrl: 'https://oceansafety.ec/sin-espacio',
+        ogUrl: 'https://alebarreto.com/sin-espacio',
       } satisfies RouteMeta,
     },
     {
@@ -99,12 +99,12 @@ const router = createRouter({
       name: 'privacy-policy',
       component: PrivacyPolicyView,
       meta: {
-        title: 'Política de Privacidad | Ocean Safety Ecuador',
-        description: 'Política de privacidad de Ocean Safety. Información sobre el tratamiento de datos personales conforme a la Ley Orgánica de Protección de Datos Personales del Ecuador.',
-        canonical: 'https://oceansafety.ec/politicas-privacidad',
-        ogTitle: 'Política de Privacidad | Ocean Safety Ecuador',
-        ogDescription: 'Política de privacidad de Ocean Safety Ecuador.',
-        ogUrl: 'https://oceansafety.ec/politicas-privacidad',
+        title: 'Política de Privacidad | Ale Barreto',
+        description: 'Política de privacidad de Ale Barreto. Información sobre el tratamiento de datos personales.',
+        canonical: 'https://alebarreto.com/politicas-privacidad',
+        ogTitle: 'Política de Privacidad | Ale Barreto',
+        ogDescription: 'Política de privacidad de Ale Barreto.',
+        ogUrl: 'https://alebarreto.com/politicas-privacidad',
       } satisfies RouteMeta,
     },
     {
@@ -112,12 +112,12 @@ const router = createRouter({
       name: 'legal-notice',
       component: LegalNoticeView,
       meta: {
-        title: 'Aviso Legal | Ocean Safety Ecuador',
-        description: 'Aviso legal de Ocean Safety Ecuador. Términos y condiciones de uso del sitio web oceansafety.ec.',
-        canonical: 'https://oceansafety.ec/aviso-legal',
-        ogTitle: 'Aviso Legal | Ocean Safety Ecuador',
-        ogDescription: 'Aviso legal de Ocean Safety Ecuador.',
-        ogUrl: 'https://oceansafety.ec/aviso-legal',
+        title: 'Aviso Legal | Ale Barreto',
+        description: 'Aviso legal de Ale Barreto. Términos y condiciones de uso del sitio web.',
+        canonical: 'https://alebarreto.com/aviso-legal',
+        ogTitle: 'Aviso Legal | Ale Barreto',
+        ogDescription: 'Aviso legal de Ale Barreto.',
+        ogUrl: 'https://alebarreto.com/aviso-legal',
       } satisfies RouteMeta,
     },
   ],
@@ -144,7 +144,7 @@ const setCanonical = (href: string) => {
 
 router.afterEach((to) => {
   const meta = to.meta
-  document.title = meta.title ?? 'Ocean Safety'
+  document.title = meta.title ?? 'Ale Barreto'
   setMeta('description', meta.description ?? '')
   setOgMeta('og:title', meta.ogTitle ?? meta.title ?? '')
   setOgMeta('og:description', meta.ogDescription ?? meta.description ?? '')

@@ -157,12 +157,15 @@ const handleSubmit = async () => {
     ...getStoredFbParams(),
   }
 
-  console.info('[OceanSafety Registro]', payload)
+  console.info('[AleBarreto Registro]', payload)
 
   await fetch('https://services.leadconnectorhq.com/hooks/nSvINWsG3QGCGfcdpPdu/webhook-trigger/VwBt884DE0WtwQRVMzp9', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      ...payload,
+      source: 'ale-barreto-web',
+    }),
   }).catch(() => {})
 
   // Meta Pixel — evento Lead (deduplicado con CAPI via event_id)
@@ -225,9 +228,10 @@ watch(dropdownOpen, open => {
           </button>
 
           <!-- ── FORMULARIO ─────────────────────────────────── -->
+          <!-- ── FORMULARIO ─────────────────────────────────── -->
             <p class="rmodal__eyebrow">Asesoría gratuita</p>
             <h2 id="rmodal-title" class="rmodal__title">Agenda tu sesión<br><span class="rmodal__title-accent">sin costo</span></h2>
-            <p class="rmodal__subtitle">Cupos limitados — completa tus datos y te contactamos.</p>
+            <p class="rmodal__subtitle">Cupos limitados — completa tus datos y te daremos acceso al video.</p>
 
             <form class="rmodal__form" @submit.prevent="handleSubmit" novalidate>
 
@@ -357,12 +361,12 @@ watch(dropdownOpen, open => {
 
               <!-- Empresa -->
               <div class="rmodal__field" :class="{ 'has-error': touched.empresa && errors.empresa }">
-                <label for="r-empresa">Nombre de la empresa</label>
+                <label for="r-empresa">Nombre de tu proyecto</label>
                 <input
                   id="r-empresa"
                   v-model="form.empresa"
                   type="text"
-                  placeholder="Mi Empresa S.A."
+                  placeholder="Ej: Remodelación Sala"
                   autocomplete="organization"
                   @blur="onBlur('empresa')"
                 />
@@ -379,7 +383,7 @@ watch(dropdownOpen, open => {
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                 </template>
-                {{ submitting ? 'Enviando...' : 'REGISTRARME A LA ASESORÍA' }}
+                {{ submitting ? 'Enviando...' : 'AGENDAR MI ASESORÍA' }}
               </button>
 
               <p class="rmodal__legal">
@@ -401,11 +405,12 @@ watch(dropdownOpen, open => {
 @use '@/styles/colorVariables.module.scss' as colors;
 @use '@/styles/fonts.modules.scss' as fonts;
 
-$dark: #0d0a18;
-$border: rgba(255, 255, 255, 0.08);
-$input-bg: rgba(255, 255, 255, 0.04);
-$text-muted: rgba(255, 255, 255, 0.4);
-$text-body: rgba(255, 255, 255, 0.72);
+$bg: #ffffff;
+$border: rgba(colors.$OS-NAVY, 0.1);
+$input-bg: #f9fbff;
+$text-muted: #7a8ea5;
+$text-body: #3a4f6a;
+$accent: colors.$OS-RED;
 
 // ── Overlay ──────────────────────────────────────────────────────────────────
 .rmodal-overlay {
@@ -427,14 +432,13 @@ $text-body: rgba(255, 255, 255, 0.72);
   position: relative;
   width: 100%;
   max-width: 520px;
-  background: $dark;
+  background: $bg;
   border: 1px solid $border;
   border-radius: 24px;
   padding: 48px 40px 40px;
   box-shadow:
-    0 0 0 1px rgba(255,255,255,0.03) inset,
-    0 40px 100px rgba(0,0,0,0.7),
-    0 0 80px rgba(colors.$BAKANO-PINK, 0.05);
+    0 10px 40px rgba(colors.$OS-NAVY, 0.08),
+    0 40px 100px rgba(colors.$OS-NAVY, 0.12);
   max-height: 92vh;
   overflow-y: auto;
 
@@ -462,9 +466,9 @@ $text-body: rgba(255, 255, 255, 0.72);
   transition: border-color 0.2s, color 0.2s, background 0.2s;
 
   &:hover {
-    border-color: rgba(colors.$BAKANO-PINK, 0.4);
-    color: colors.$BAKANO-PINK;
-    background: rgba(colors.$BAKANO-PINK, 0.06);
+    border-color: rgba($accent, 0.4);
+    color: $accent;
+    background: rgba($accent, 0.06);
   }
 }
 
@@ -475,7 +479,7 @@ $text-body: rgba(255, 255, 255, 0.72);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 4px;
-  color: colors.$BAKANO-PINK;
+  color: $accent;
   margin: 0 0 12px;
 }
 
@@ -485,15 +489,12 @@ $text-body: rgba(255, 255, 255, 0.72);
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.18;
-  color: colors.$white;
+  color: colors.$OS-DARK;
   margin: 0 0 8px;
 }
 
 .rmodal__title-accent {
-  background: linear-gradient(110deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: $accent;
 }
 
 .rmodal__subtitle {
@@ -529,7 +530,7 @@ $text-body: rgba(255, 255, 255, 0.72);
     font-family: fonts.$font-interface;
     font-size: 0.74rem;
     font-weight: 600;
-    color: rgba(255,255,255,0.55);
+    color: #4a5f7a;
     letter-spacing: 0.5px;
   }
 
@@ -542,16 +543,16 @@ $text-body: rgba(255, 255, 255, 0.72);
     padding: 11px 14px;
     font-family: fonts.$font-secondary;
     font-size: 0.92rem;
-    color: colors.$white;
+    color: colors.$OS-DARK;
     outline: none;
     transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
 
-    &::placeholder { color: rgba(255,255,255,0.22); }
+    &::placeholder { color: #b8cae0; }
 
     &:focus {
-      border-color: rgba(colors.$BAKANO-PINK, 0.5);
-      background: rgba(colors.$BAKANO-PINK, 0.04);
-      box-shadow: 0 0 0 3px rgba(colors.$BAKANO-PINK, 0.08);
+      border-color: rgba($accent, 0.5);
+      background: rgba($accent, 0.04);
+      box-shadow: 0 0 0 3px rgba($accent, 0.08);
     }
   }
 
@@ -579,8 +580,8 @@ $text-body: rgba(255, 255, 255, 0.72);
   transition: border-color 0.2s, box-shadow 0.2s;
 
   &:focus-within {
-    border-color: rgba(colors.$BAKANO-PINK, 0.5);
-    box-shadow: 0 0 0 3px rgba(colors.$BAKANO-PINK, 0.08);
+    border-color: rgba($accent, 0.5);
+    box-shadow: 0 0 0 3px rgba($accent, 0.08);
   }
 
   .has-error & {
@@ -617,7 +618,7 @@ $text-body: rgba(255, 255, 255, 0.72);
   font-family: fonts.$font-accent;
   font-size: 0.82rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.8);
+  color: #4a5f7a;
 }
 
 .rmodal__chevron {
@@ -639,10 +640,10 @@ $text-body: rgba(255, 255, 255, 0.72);
   width: 280px;
   max-height: 240px;
   overflow: hidden;
-  background: #16111f;
-  border: 1px solid rgba(255,255,255,0.1);
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.1);
   border-radius: 12px;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.15);
   display: flex;
   flex-direction: column;
 
@@ -658,13 +659,13 @@ $text-body: rgba(255, 255, 255, 0.72);
   background: rgba(255,255,255,0.04);
   border: none;
   border-bottom: 1px solid rgba(255,255,255,0.07);
-  color: colors.$white;
+  color: colors.$OS-DARK;
   font-family: fonts.$font-secondary;
   font-size: 0.84rem;
   outline: none;
   border-radius: 12px 12px 0 0;
 
-  &::placeholder { color: rgba(255,255,255,0.25); }
+  &::placeholder { color: #b8cae0; }
 }
 
 .rmodal__country-dropdown ul {
@@ -689,11 +690,11 @@ $text-body: rgba(255, 255, 255, 0.72);
   transition: background 0.15s;
 
   &:hover:not(.separator) {
-    background: rgba(colors.$BAKANO-PINK, 0.08);
+    background: rgba($accent, 0.08);
   }
 
   &.active {
-    background: rgba(colors.$BAKANO-PINK, 0.12);
+    background: rgba($accent, 0.12);
   }
 
   &.separator {
@@ -712,7 +713,7 @@ $text-body: rgba(255, 255, 255, 0.72);
 .rmodal__country-name {
   font-family: fonts.$font-secondary;
   font-size: 0.82rem;
-  color: rgba(255,255,255,0.75);
+  color: #3a4f6a;
   flex: 1;
   white-space: nowrap;
   overflow: hidden;
@@ -722,7 +723,7 @@ $text-body: rgba(255, 255, 255, 0.72);
 .rmodal__country-dial {
   font-family: fonts.$font-accent;
   font-size: 0.75rem;
-  color: rgba(255,255,255,0.35);
+  color: #a0b0c5;
   flex-shrink: 0;
 }
 
@@ -736,11 +737,11 @@ $text-body: rgba(255, 255, 255, 0.72);
   padding: 11px 40px 11px 12px !important;
   font-family: fonts.$font-secondary;
   font-size: 0.92rem;
-  color: colors.$white;
+  color: colors.$OS-DARK;
   outline: none !important;
   box-shadow: none !important;
 
-  &::placeholder { color: rgba(255,255,255,0.22); }
+  &::placeholder { color: #b8cae0; }
 }
 
 .rmodal__phone-status {
@@ -757,8 +758,8 @@ $text-body: rgba(255, 255, 255, 0.72);
   flex-shrink: 0;
 
   &.valid {
-    background: rgba(colors.$BAKANO-GREEN, 0.15);
-    color: colors.$BAKANO-GREEN;
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
   }
 
   &.invalid {
@@ -770,7 +771,7 @@ $text-body: rgba(255, 255, 255, 0.72);
 .rmodal__phone-preview {
   font-family: fonts.$font-interface;
   font-size: 0.68rem;
-  color: rgba(colors.$BAKANO-GREEN, 0.8);
+  color: #10b981;
   padding: 2px 0;
 }
 
@@ -788,12 +789,12 @@ $text-body: rgba(255, 255, 255, 0.72);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: colors.$white;
-  background: linear-gradient(135deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
+  color: #ffffff;
+  background: $accent;
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0 8px 28px rgba(colors.$BAKANO-PINK, 0.35);
+  box-shadow: 0 8px 28px rgba($accent, 0.35);
   transition: transform 0.2s ease, box-shadow 0.25s ease, opacity 0.2s;
 
   &:hover:not(:disabled) {

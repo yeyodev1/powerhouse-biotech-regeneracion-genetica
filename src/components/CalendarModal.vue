@@ -34,8 +34,6 @@ const isValid = () =>
   form.value.consent
 
 const qualifies = () => {
-  if (form.value.sector === 'otro') return false
-  if (form.value.embarcaciones === '1-2') return false
   if (form.value.presupuesto === 'menos1200') return false
   return true
 }
@@ -50,21 +48,21 @@ const handleSubmit = async () => {
   const scheduleEventId = generateEventId('schedule')
 
   const sectorLabel: Record<string, string> = {
-    camaronero: 'Sector camaronero / acuícola',
-    transporte:  'Transporte fluvial o marítimo',
-    seguridad:   'Seguridad y vigilancia naval',
-    otro:        'Otro sector',
+    residencial: 'Proyecto residencial (Casa/Depto)',
+    comercial:   'Proyecto comercial (Local/Oficina)',
+    nautico:     'Proyecto náutico (Interiores yates)',
+    otro:        'Otro proyecto',
   }
   const embarcacionesLabel: Record<string, string> = {
-    '1-2':   '1 a 2 embarcaciones',
-    '3-10':  '3 a 10 embarcaciones',
-    '11-50': '11 a 50 embarcaciones',
-    'mas50': 'Más de 50 embarcaciones',
+    'cuarto': 'Habitación o espacio único',
+    'casa':   'Casa o departamento completo',
+    'local':  'Local comercial u oficina',
+    'yate':   'Embarcación o yate',
   }
   const hpLabel: Record<string, string> = {
-    bajo:  'Bajo consumo (2 – 20 HP)',
-    alto:  'Alta potencia (150 – 350 HP)',
-    ambos: 'Ambos rangos',
+    rustico:   'Rústico / Natural',
+    moderno:   'Moderno / Lujoso',
+    industrial: 'Industrial / Vintage',
   }
   const presupuestoLabel: Record<string, string> = {
     menos1200: 'Menos de $1,200 USD',
@@ -73,28 +71,28 @@ const handleSubmit = async () => {
   }
 
   const etiquetas = [
-    'funnel-oceansafety',
+    'funnel-alebarreto',
     'step-2-cualificacion',
-    califica ? 'califica' : 'no-califica',
-    `sector-${form.value.sector}`,
-    `flota-${form.value.embarcaciones}`,
-    `hp-${form.value.hp}`,
+    califica ? 'califica-ab' : 'no-califica-ab',
+    `tipo-${form.value.sector}`,
+    `espacio-${form.value.embarcaciones}`,
+    `estilo-${form.value.hp}`,
     `budget-${form.value.presupuesto}`,
   ]
 
   const notas = `
 ━━━━━━━━━━━━━━━━━━━━━━━━
-🚢 OCEAN SAFETY — Cualificación
+🪵 ALE BARRETO — Cualificación
 ━━━━━━━━━━━━━━━━━━━━━━━━
 👤 ${contact.nombre} ${contact.apellido}
 📧 ${contact.email}
 📱 ${contact.telefono}
 ━━━━━━━━━━━━━━━━━━━━━━━━
-🏭 Sector: ${sectorLabel[form.value.sector] ?? form.value.sector}
-⚓ Flota: ${embarcacionesLabel[form.value.embarcaciones] ?? form.value.embarcaciones}
-⚙️ HP: ${hpLabel[form.value.hp] ?? form.value.hp}
+🏠 Tipo: ${sectorLabel[form.value.sector] ?? form.value.sector}
+📐 Espacio: ${embarcacionesLabel[form.value.embarcaciones] ?? form.value.embarcaciones}
+🎨 Estilo: ${hpLabel[form.value.hp] ?? form.value.hp}
 💰 Presupuesto: ${presupuestoLabel[form.value.presupuesto] ?? form.value.presupuesto}
-💡 Reto: ${form.value.reto}
+💡 Idea/Reto: ${form.value.reto}
 ━━━━━━━━━━━━━━━━━━━━━━━━
 ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
   `.trim()
@@ -118,7 +116,7 @@ ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
 
   trackStage('cualificacion_completada', payload)
 
-  // TODO: Actualizar webhook URL para Ocean Safety
+  // TODO: Actualizar webhook URL para Ale Barreto
   await fetch('https://services.leadconnectorhq.com/hooks/nSvINWsG3QGCGfcdpPdu/webhook-trigger/Dgr46VPmCNAtluiaBEQS', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -169,29 +167,29 @@ watch(() => props.open, (v) => {
 
           <div class="cal-header">
             <div class="cal-header-icon" aria-hidden="true">
-              <i class="fa-solid fa-anchor"></i>
+              <i class="fa-solid fa-tree"></i>
             </div>
             <h2 id="cal-title" class="cal-title">
               Antes de agendar, cuéntanos sobre
-              <span class="cal-accent">tu flota</span>
+              <span class="cal-accent">tu proyecto</span>
             </h2>
-            <p class="cal-subtitle">5 preguntas rápidas para asignarte la solución ideal — 60 segundos.</p>
+            <p class="cal-subtitle">5 preguntas rápidas para entender tu visión — 60 segundos.</p>
           </div>
 
           <form class="cal-form" @submit.prevent="handleSubmit" novalidate>
 
-            <!-- Q1 — Sector -->
+            <!-- Q1 — Tipo de Proyecto -->
             <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.sector }">
               <legend class="cal-legend">
                 <span class="cal-q-num">01</span>
-                ¿En qué sector opera su flota?
+                ¿Qué tipo de proyecto estás buscando?
               </legend>
               <div class="cal-options">
                 <label v-for="opt in [
-                  { value: 'camaronero', label: 'Camaronero / acuícola' },
-                  { value: 'transporte', label: 'Transporte fluvial o marítimo' },
-                  { value: 'seguridad', label: 'Seguridad y vigilancia naval' },
-                  { value: 'otro', label: 'Otro sector' },
+                  { value: 'residencial', label: 'Residencial (Casa o Departamento)' },
+                  { value: 'comercial', label: 'Comercial (Oficina o Local)' },
+                  { value: 'nautico', label: 'Náutico (Interiores de Embarcación)' },
+                  { value: 'otro', label: 'Otro proyecto' },
                 ]" :key="opt.value" class="cal-option" :class="{ selected: form.sector === opt.value }">
                   <input type="radio" :value="opt.value" v-model="form.sector" hidden />
                   <span class="cal-option__radio" aria-hidden="true" />
@@ -201,18 +199,18 @@ watch(() => props.open, (v) => {
               <span v-if="touched && !form.sector" class="cal-error">Selecciona una opción</span>
             </fieldset>
 
-            <!-- Q2 — Embarcaciones -->
+            <!-- Q2 — Espacio -->
             <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.embarcaciones }">
               <legend class="cal-legend">
                 <span class="cal-q-num">02</span>
-                ¿Cuántas embarcaciones tiene actualmente?
+                ¿Para qué espacio principal es el trabajo?
               </legend>
               <div class="cal-options">
                 <label v-for="opt in [
-                  { value: '1-2',   label: '1 a 2 embarcaciones' },
-                  { value: '3-10',  label: '3 a 10 embarcaciones' },
-                  { value: '11-50', label: '11 a 50 embarcaciones' },
-                  { value: 'mas50', label: 'Más de 50 embarcaciones' },
+                  { value: 'cuarto', label: 'Habitación o espacio único' },
+                  { value: 'casa',   label: 'Casa o departamento completo' },
+                  { value: 'local',  label: 'Local comercial u oficina' },
+                  { value: 'yate',   label: 'Yate o bote' },
                 ]" :key="opt.value" class="cal-option" :class="{ selected: form.embarcaciones === opt.value }">
                   <input type="radio" :value="opt.value" v-model="form.embarcaciones" hidden />
                   <span class="cal-option__radio" aria-hidden="true" />
@@ -222,17 +220,17 @@ watch(() => props.open, (v) => {
               <span v-if="touched && !form.embarcaciones" class="cal-error">Selecciona una opción</span>
             </fieldset>
 
-            <!-- Q3 — HP -->
+            <!-- Q3 — Estilo -->
             <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.hp }">
               <legend class="cal-legend">
                 <span class="cal-q-num">03</span>
-                ¿Qué rango de potencia necesita principalmente?
+                ¿Qué estilo de diseño prefiere?
               </legend>
               <div class="cal-options">
                 <label v-for="opt in [
-                  { value: 'bajo',  label: 'Bajo consumo (2 – 20 HP)' },
-                  { value: 'alto',  label: 'Alta potencia (150 – 350 HP)' },
-                  { value: 'ambos', label: 'Ambos rangos' },
+                  { value: 'rustico',   label: 'Rústico / Natural' },
+                  { value: 'moderno',   label: 'Moderno / Lujoso' },
+                  { value: 'industrial', label: 'Industrial / Vintage' },
                 ]" :key="opt.value" class="cal-option" :class="{ selected: form.hp === opt.value }">
                   <input type="radio" :value="opt.value" v-model="form.hp" hidden />
                   <span class="cal-option__radio" aria-hidden="true" />
@@ -246,13 +244,13 @@ watch(() => props.open, (v) => {
             <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.presupuesto }">
               <legend class="cal-legend">
                 <span class="cal-q-num">04</span>
-                ¿Cuenta con presupuesto para invertir en su flota?
+                ¿Dispone de un presupuesto mayor a $1,200?
               </legend>
               <div class="cal-options">
                 <label v-for="opt in [
                   { value: 'mas2000',   label: 'Sí, cuento con más de $2,000 USD' },
                   { value: 'mas1200',   label: 'Sí, cuento con al menos $1,200 USD' },
-                  { value: 'menos1200', label: 'Cuento con menos de $1,200 USD' },
+                  { value: 'menos1200', label: 'No, por ahora menos de $1,200 USD' },
                 ]" :key="opt.value" class="cal-option" :class="{ selected: form.presupuesto === opt.value }">
                   <input type="radio" :value="opt.value" v-model="form.presupuesto" hidden />
                   <span class="cal-option__radio" aria-hidden="true" />
@@ -262,16 +260,16 @@ watch(() => props.open, (v) => {
               <span v-if="touched && !form.presupuesto" class="cal-error">Selecciona una opción</span>
             </fieldset>
 
-            <!-- Q5 — Reto principal -->
+            <!-- Q5 — Idea/Reto -->
             <fieldset class="cal-fieldset" :class="{ 'has-error': touched && wordCount(form.reto) < 10 }">
               <legend class="cal-legend">
                 <span class="cal-q-num">05</span>
-                ¿Cuál es el principal reto con sus motores actuales?
+                ¿Qué idea tienes en mente para tu espacio?
               </legend>
               <textarea
                 v-model="form.reto"
                 class="cal-textarea"
-                placeholder="Ej: Nuestros motores se recalientan frecuentemente en las operaciones de patrullaje, lo que nos genera paradas inesperadas..."
+                placeholder="Ej: Me gustaría revestir una pared principal de mi sala con madera noble y añadir una estantería empotrada que combine con..."
                 rows="4"
                 aria-describedby="q4-hint"
               ></textarea>
@@ -279,7 +277,7 @@ watch(() => props.open, (v) => {
                 {{ wordCount(form.reto) }}/10 palabras mínimo
               </span>
               <span v-if="touched && wordCount(form.reto) < 10" class="cal-error">
-                Describe tu reto con al menos 10 palabras
+                Describe tu idea con al menos 10 palabras
               </span>
             </fieldset>
 
@@ -288,7 +286,7 @@ watch(() => props.open, (v) => {
               <input type="checkbox" v-model="form.consent" />
               <span class="cal-consent__box" aria-hidden="true" />
               <span class="cal-consent__text">
-                Acepto que Ocean Safety me contacte para brindarme asesoría técnica personalizada.
+                Acepto que Ale Barreto me contacte para brindarme una asesoría de diseño personalizada.
               </span>
             </label>
             <span v-if="touched && !form.consent" class="cal-error">Debes aceptar para continuar</span>

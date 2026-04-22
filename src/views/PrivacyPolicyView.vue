@@ -13,21 +13,21 @@ onMounted(() => {
       <header class="privacy-policy__header">
         <h1 class="privacy-policy__title">Política de Privacidad</h1>
         <p class="privacy-policy__intro">
-          Le damos la bienvenida a <strong>https://bakano.ec.</strong> Su presencia aquí demuestra la importancia que le otorga a sus datos personales. Para nosotros, su privacidad es una prioridad y nos comprometemos a protegerla. En esta política explicamos de forma clara y transparente cómo recogemos, usamos y protegemos su información.
+          Le damos la bienvenida a <strong>https://alebarreto.com.</strong> Su presencia aquí demuestra la importancia que le otorga a sus datos personales. Para nosotros, su privacidad es una prioridad y nos comprometemos a protegerla. En esta política explicamos de forma clara y transparente cómo recogemos, usamos y protegemos su información.
         </p>
         <p class="privacy-policy__legal">
-          De conformidad con lo dispuesto en la Ley Orgánica de Protección de Datos Personales del Ecuador (LOPDP), al aceptar esta Política de Privacidad, usted otorga su consentimiento informado, expreso, libre e inequívoco para que los datos personales que proporcione a través de nuestro sitio web <strong>https://bakano.ec</strong> (en adelante, el "SITIO WEB") sean tratados por nuestra empresa.
+          De conformidad con lo dispuesto en la Ley Orgánica de Protección de Datos Personales del Ecuador (LOPDP), al aceptar esta Política de Privacidad, usted otorga su consentimiento informado, expreso, libre e inequívoco para que los datos personales que proporcione a través de nuestro sitio web <strong>https://alebarreto.com</strong> (en adelante, el "SITIO WEB") sean tratados por nuestra empresa.
         </p>
       </header>
 
       <section class="privacy-policy__section">
         <h2 class="privacy-policy__section-title">1. ¿Quién es el Responsable del Tratamiento de sus Datos?</h2>
         <div class="privacy-policy__company-info">
-          <p><strong>Razón Social:</strong> Negocios del Pacífico S.A.</p>
+          <p><strong>Razón Social:</strong> Ale Barreto Wood Design</p>
           <p><strong>RUC:</strong> 0993028428001</p>
-          <p><strong>Domicilio:</strong> Garzota 2, Guayaquil, Ecuador</p>
-          <p><strong>Correo electrónico de contacto:</strong> lreyes@bakano.ec</p>
-          <p><strong>Actividad comercial:</strong> Servicios profesionales, formación y consultoría.</p>
+          <p><strong>Domicilio:</strong> Samborondón, Guayaquil, Ecuador</p>
+          <p><strong>Correo electrónico de contacto:</strong> info@alebarreto.com</p>
+          <p><strong>Actividad comercial:</strong> Diseño y construcción en madera de alta gama.</p>
         </div>
         <p>
           La presente Política de Privacidad es válida únicamente para los datos de carácter personal obtenidos en el SITIO WEB, no siendo aplicable para aquella información recabada por terceros en otras páginas web, incluso si están enlazadas desde nuestro sitio.
@@ -47,9 +47,9 @@ onMounted(() => {
         
         <h3 class="privacy-policy__subsection-title">Estos datos son tratados con las siguientes finalidades:</h3>
         <ul class="privacy-policy__list">
-          <li>Gestionar la venta de nuestros cursos, formaciones y servicios de marketing digital.</li>
-          <li>Coordinar y ejecutar sesiones de consultoría individuales o grupales.</li>
-          <li>Administrar nuestra lista de suscriptores y enviar comunicaciones de valor como boletines (newsletters), nuevos artículos del blog, ofertas comerciales y otras comunicaciones que consideramos de su interés.</li>
+          <li>Gestionar la asesoría técnica y proyectos de construcción en madera.</li>
+          <li>Coordinar y ejecutar visitas técnicas de evaluación.</li>
+          <li>Administrar nuestra lista de interesados y enviar comunicaciones sobre nuevos materiales, diseños y ofertas exclusivas.</li>
           <li>Gestionar nuestra red de afiliados y los pagos correspondientes.</li>
           <li>Responder a las consultas y requerimientos de los usuarios.</li>
         </ul>
@@ -59,7 +59,7 @@ onMounted(() => {
         </p>
         
         <p>
-          Únicamente el titular, Negocios del Pacífico S.A., tendrá acceso a sus datos. Le garantizamos que bajo ningún concepto estos datos serán cedidos, compartidos, transferidos ni vendidos a terceros, salvo por obligación legal expresa.
+          Únicamente el titular, Ale Barreto Wood Design, tendrá acceso a sus datos. Le garantizamos que bajo ningún concepto estos datos serán cedidos, compartidos, transferidos ni vendidos a terceros, salvo por obligación legal expresa.
         </p>
       </section>
 
@@ -76,7 +76,7 @@ onMounted(() => {
       <section class="privacy-policy__section">
         <h2 class="privacy-policy__section-title">4. Cumplimiento de la Normativa Ecuatoriana</h2>
         <p>
-          Negocios del Pacífico S.A. cumple con las disposiciones de la Ley Orgánica de Protección de Datos Personales (LOPDP) y su reglamento, así como con la demás normativa ecuatoriana aplicable a los servicios de la sociedad de la información y comercio electrónico.
+          Ale Barreto Wood Design cumple con las disposiciones de la Ley Orgánica de Protección de Datos Personales (LOPDP) y su reglamento, así como con la demás normativa ecuatoriana aplicable a los servicios de la sociedad de la información y comercio electrónico.
         </p>
       </section>
 
@@ -99,7 +99,7 @@ onMounted(() => {
           <li><strong>Suspensión del tratamiento:</strong> Solicitar un cese temporal del tratamiento de sus datos.</li>
         </ul>
         <p>
-          Para ejercer cualquiera de estos derechos, puede enviar una comunicación escrita a <strong>dreyes@bakano.ec</strong> con la referencia "Protección de Datos", especificando su solicitud, acreditando su identidad y adjuntando los justificativos pertinentes.
+          Para ejercer cualquiera de estos derechos, puede enviar una comunicación escrita a <strong>info@alebarreto.com</strong> con la referencia "Protección de Datos", especificando su solicitud, acreditando su identidad y adjuntando los justificativos pertinentes.
         </p>
       </section>
 
@@ -113,7 +113,7 @@ onMounted(() => {
       <section class="privacy-policy__section">
         <h2 class="privacy-policy__section-title">8. Modificación de la Política de Privacidad</h2>
         <p>
-          Negocios del Pacífico S.A. se reserva el derecho a modificar esta Política de Privacidad para adaptarla a futuras novedades legislativas, jurisprudenciales o a nuevas prácticas del sector. Cualquier modificación será publicada en esta página con una antelación razonable a su efectiva aplicación. El uso continuado del SITIO WEB después de dichos cambios implicará su aceptación.
+          Ale Barreto Wood Design se reserva el derecho a modificar esta Política de Privacidad para adaptarla a futuras novedades legislativas, jurisprudenciales o a nuevas prácticas del sector. Cualquier modificación será publicada en esta página con una antelación razonable a su efectiva aplicación. El uso continuado del SITIO WEB después de dichos cambios implicará su aceptación.
         </p>
       </section>
 
@@ -240,7 +240,7 @@ onMounted(() => {
   font-family: 'Poppins', sans-serif;
   font-size: 3rem;
   font-weight: 700;
-  color: #FF6B35;
+  color: #D4A373;
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -274,10 +274,10 @@ onMounted(() => {
   line-height: 1.6;
   color: #4A5568;
   font-style: italic;
-  background: rgba(255, 107, 53, 0.05);
+  background: rgba(212, 163, 115, 0.05);
   padding: 1.5rem;
   border-radius: 8px;
-  border-left: 4px solid #FF6B35;
+  border-left: 4px solid #D4A373;
   text-align: justify;
 }
 
@@ -308,10 +308,10 @@ onMounted(() => {
   font-family: 'Poppins', sans-serif;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #FF6B35;
+  color: #BC6C25;
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid rgba(255, 107, 53, 0.2);
+  border-bottom: 2px solid rgba(188, 108, 37, 0.2);
 }
 
 @media (max-width: 768px) {
@@ -337,7 +337,7 @@ onMounted(() => {
 }
 
 .privacy-policy__company-info {
-  background: rgba(255, 107, 53, 0.05);
+  background: rgba(212, 163, 115, 0.05);
   padding: 1.5rem;
   border-radius: 8px;
   margin: 1rem 0;
@@ -378,7 +378,7 @@ onMounted(() => {
 
 .privacy-policy__list li::before {
   content: '•';
-  color: #FF6B35;
+  color: #D4A373;
   font-weight: bold;
   position: absolute;
   left: 0;
@@ -409,7 +409,7 @@ onMounted(() => {
 }
 
 .privacy-policy p strong {
-  color: #FF6B35;
+  color: #BC6C25;
   font-weight: 600;
 }
 </style>

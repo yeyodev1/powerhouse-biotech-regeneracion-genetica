@@ -22,7 +22,7 @@ const validateCapture = () => {
   const e: Record<string, string> = {}
   if (captureForm.value.nombre.trim().length < 2) e.nombre = 'Ingresa tu nombre'
   if (captureForm.value.apellido.trim().length < 2) e.apellido = 'Ingresa tu apellido'
-  if (captureForm.value.empresa.trim().length < 2) e.empresa = 'Ingresa el nombre de tu empresa o flota'
+  if (captureForm.value.empresa.trim().length < 2) e.empresa = 'Ingresa el nombre de tu proyecto'
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(captureForm.value.email.trim())) e.email = 'Email inválido'
   if (captureForm.value.telefono.trim().length < 7) e.telefono = 'Teléfono inválido'
   captureErrors.value = e
@@ -95,7 +95,7 @@ onMounted(() => {
   if (!document.getElementById('wistia-embed-js')) {
     const s2 = document.createElement('script')
     s2.id = 'wistia-embed-js'
-    s2.src = 'https://fast.wistia.com/embed/0elz43iiiw.js'
+    s2.src = 'https://fast.wistia.com/embed/5ql8l131me.js'
     s2.async = true
     s2.type = 'module'
     document.head.appendChild(s2)
@@ -119,7 +119,7 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
 
     <!-- Top bar -->
     <header class="vv-topbar">
-      <img :src="osLogo" alt="Ocean Safety" class="vv-topbar__logo" />
+      <h2 class="vv-topbar__logo-text">ALE BARRETO</h2>
     </header>
 
     <!-- Main content -->
@@ -137,22 +137,22 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
       <!-- Headline -->
       <section class="vv-headline">
         <p class="vv-eyebrow">
-          <i class="fa-solid fa-anchor" aria-hidden="true"></i>
+          <i class="fa-solid fa-tree" aria-hidden="true"></i>
           Antes de agendar
         </p>
         <h1 class="vv-h1">
-          Descubre por qué los líderes del sector camaronero
-          <span class="vv-accent">eligen Honda Marine</span>
+          Descubre por qué los proyectos de lujo
+          <span class="vv-accent">eligen a Ale Barreto</span>
         </h1>
         <p class="vv-subtitle">
-          Ve el video completo. Roberto Allú te explica cómo proteger tu operación con ingeniería náutica japonesa.
+          Ve el video completo. Ale Barreto te explica cómo transformamos espacios con la nobleza de la madera.
         </p>
       </section>
 
       <!-- Wistia video embed -->
       <div class="vv-video-wrapper">
         <div class="vv-video-ratio">
-          <wistia-player media-id="0elz43iiiw" aspect="1.7777777777777777"></wistia-player>
+          <wistia-player media-id="5ql8l131me" aspect="1.7777777777777777"></wistia-player>
         </div>
       </div>
 
@@ -177,7 +177,7 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
           @click="calendarOpen = true"
         >
           <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-          AGENDAR MI CONSULTA TÉCNICA
+          AGENDAR MI ASESORÍA DE DISEÑO
         </button>
 
         <p class="vv-cta-sub">
@@ -191,23 +191,22 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
         <div class="vv-authority__inner">
           <div class="vv-authority__photo-wrap">
             <div class="vv-authority__avatar" aria-hidden="true">
-              <img :src="robertoPhoto" alt="Roberto Allú" class="vv-authority__img" />
+              <img :src="robertoPhoto" alt="Ale Barreto" class="vv-authority__img" />
             </div>
           </div>
           <div class="vv-authority__content">
             <p class="vv-authority__eyebrow">Tu especialista asignado</p>
-            <h2 id="authority-heading" class="vv-authority__name">Roberto Allú</h2>
-            <p class="vv-authority__role">Especialista en Soluciones Náuticas Industriales</p>
+            <h2 id="authority-heading" class="vv-authority__name">Ale Barreto</h2>
+            <p class="vv-authority__role">Experta en Diseño y Construcción en Madera</p>
             <p class="vv-authority__bio">
-              Como representantes oficiales de Honda Marine en Ecuador, llevo años ayudando
-              a operadores camaroneros, de transporte y seguridad a profesionalizar sus flotas.
-              No se trata de vender un motor — se trata de que
-              <strong>tus embarcaciones arranquen mañana</strong>, y todos los días.
+              Con años de experiencia en el mercado ecuatoriano, me especializo en crear
+              espacios que combinan la nobleza de la madera con diseños modernos y funcionales.
+              Mi objetivo es que cada proyecto sea una inversión que dure toda la vida.
             </p>
             <ul class="vv-authority__creds" role="list">
-              <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Representante oficial Honda Marine Ecuador</li>
-              <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Especialista en flotas camaroneras y de seguridad</li>
-              <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Asesoría llave en mano: motor + equipamiento</li>
+              <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Especialista en maderas nobles y tratadas</li>
+              <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Diseños exclusivos a medida</li>
+              <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Gestión integral: del plano a la instalación</li>
             </ul>
           </div>
         </div>
@@ -221,7 +220,7 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
         <RouterLink to="/politicas-privacidad">Política de Privacidad</RouterLink>
         <RouterLink to="/aviso-legal">Aviso Legal</RouterLink>
       </nav>
-      <p class="vv-footer__copy">© {{ new Date().getFullYear() }} OCEAN SAFETY. Todos los derechos reservados.</p>
+      <p class="vv-footer__copy">© {{ new Date().getFullYear() }} ALE BARRETO. Todos los derechos reservados.</p>
     </footer>
 
   </div>
@@ -235,11 +234,11 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
       <div v-if="captureOpen" class="capture-overlay" role="dialog" aria-modal="true" aria-labelledby="capture-title">
         <div class="capture-modal">
           <div class="capture-modal__header">
-            <img :src="osLogo" alt="Ocean Safety" class="capture-modal__logo" />
+            <h2 class="capture-modal__logo-text">ALE BARRETO</h2>
             <h2 id="capture-title" class="capture-modal__title">
               Antes de ver el video, <span>confirma tus datos</span>
             </h2>
-            <p class="capture-modal__sub">Para personalizar tu asesoría técnica</p>
+            <p class="capture-modal__sub">Para personalizar tu asesoría de diseño</p>
           </div>
           <form class="capture-modal__form" @submit.prevent="submitCapture" novalidate>
             <div class="capture-row">
@@ -255,8 +254,8 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
               </div>
             </div>
             <div class="capture-field" :class="{ error: captureTouched.empresa && captureErrors.empresa }">
-              <label>Empresa o flota</label>
-              <input v-model="captureForm.empresa" type="text" placeholder="Nombre de tu empresa" @blur="captureTouched.empresa = true" />
+              <label>Tu proyecto</label>
+              <input v-model="captureForm.empresa" type="text" placeholder="Ej: Remodelación Sala" @blur="captureTouched.empresa = true" />
               <span v-if="captureTouched.empresa && captureErrors.empresa" class="capture-field__error">{{ captureErrors.empresa }}</span>
             </div>
             <div class="capture-field" :class="{ error: captureTouched.email && captureErrors.email }">
@@ -405,7 +404,7 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
     height: 100%;
 
     &:not(:defined) {
-      background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/0elz43iiiw/swatch');
+      background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/5ql8l131me/swatch');
       display: block;
       filter: blur(5px);
       padding-top: 56.25%;

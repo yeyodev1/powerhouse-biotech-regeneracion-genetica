@@ -24,47 +24,47 @@ const openModal = () => {
 
 const stats = [
   {
-    icon: 'fa-solid fa-circle-check',
-    number: '0',
-    text: 'paradas por recalentamiento en 6 meses tras implementar Honda BF2.3',
+    icon: 'fa-solid fa-tree',
+    number: '15+',
+    text: 'Años trabajando con maderas nobles y certificadas',
   },
   {
-    icon: 'fa-solid fa-gas-pump',
-    number: '22%',
-    text: 'de ahorro en combustible reportado por clientes camaroneros',
+    icon: 'fa-solid fa-house-chimney',
+    number: '500+',
+    text: 'Proyectos residenciales y comerciales entregados',
   },
   {
     icon: 'fa-solid fa-award',
-    number: '1964',
-    text: 'año en que Honda Marine comenzó a liderar la innovación náutica mundial',
+    number: '100%',
+    text: 'Compromiso con la calidad artesanal y diseño premium',
   },
 ]
 
 const pillars = [
-  'Sin motores baratos que fallan en media faena',
-  'Sin consumo excesivo que devora tus márgenes',
-  'Sin dificultad para conseguir repuestos originales',
-  'Con tecnología 100% japonesa fabricada en Japón',
+  'Sin materiales de baja calidad que se deterioran rápido',
+  'Sin diseños genéricos que no aprovechan tu espacio',
+  'Sin retrasos en la entrega de tu proyecto',
+  'Con maderas seleccionadas y procesos de secado óptimos',
 ]
 
 const methodology = [
   {
     num: '01',
-    icon: 'fa-solid fa-gear',
-    title: 'Ingeniería de Precisión Japonesa',
-    body: 'Motores como el BF150 con tecnología VTEC y BLAST. Fabricados y ensamblados en Japón para resistir el trabajo más duro.',
+    icon: 'fa-solid fa-pencil-ruler',
+    title: 'Diseño Conceptual y 3D',
+    body: 'Visualizamos tu proyecto antes de cortar la primera pieza. Planificación al detalle para resultados perfectos.',
   },
   {
     num: '02',
-    icon: 'fa-solid fa-wrench',
-    title: 'Mantenimiento Simplificado',
-    body: 'Desde el portátil BF2.3 enfriado por aire hasta sistemas electrónicos que garantizan arranques fáciles cada mañana.',
+    icon: 'fa-solid fa-hammer',
+    title: 'Fabricación Artesanal',
+    body: 'Cada pieza es tratada por manos expertas, utilizando técnicas tradicionales y tecnología de punta.',
   },
   {
     num: '03',
-    icon: 'fa-solid fa-shield-halved',
-    title: 'Equipamiento Integral',
-    body: 'No es solo el motor. Te asesoramos con baterías de ciclo profundo y direcciones hidráulicas de alta tecnología.',
+    icon: 'fa-solid fa-truck-ramp-box',
+    title: 'Instalación y Acabado',
+    body: 'Nos encargamos de todo el proceso hasta que el último detalle esté en su lugar, con limpieza y precisión.',
   },
 ]
 
@@ -94,7 +94,7 @@ onUnmounted(() => clearInterval(interval))
 
     <!-- TOP BAR -->
     <header class="funnel__topbar">
-      <img :src="osLogo" alt="Ocean Safety" class="funnel__logo" />
+      <h2 class="funnel__logo-text">ALE BARRETO</h2>
     </header>
 
     <!-- URGENCY BANNER -->
@@ -115,14 +115,14 @@ onUnmounted(() => clearInterval(interval))
       <div class="funnel__container">
 
         <p class="funnel__eyebrow">
-          <i class="fa-solid fa-anchor" aria-hidden="true"></i>
-          Representantes Oficiales Honda Marine en Ecuador
+          <i class="fa-solid fa-tree" aria-hidden="true"></i>
+          Expertos en Madera y Diseño de Interiores
         </p>
 
         <h1 id="funnel-headline" class="funnel__headline">
-          Profesionaliza tu flota y
-          <span class="funnel__headline-accent">elimina las paradas no programadas</span>
-          con ingeniería náutica japonesa
+          Transforma tu hogar con la
+          <span class="funnel__headline-accent">calidez y elegancia de la madera</span>
+          de alta gama
         </h1>
 
         <ul class="funnel__pillars" role="list">
@@ -138,7 +138,7 @@ onUnmounted(() => clearInterval(interval))
             class="funnel__vsl"
             role="button"
             tabindex="0"
-            aria-label="Ver video y reservar consulta técnica"
+            aria-label="Ver video y solicitar presupuesto"
             @click="openModal()"
             @keydown.enter="openModal()"
             @keydown.space.prevent="openModal()"
@@ -146,14 +146,13 @@ onUnmounted(() => clearInterval(interval))
             <div class="funnel__vsl-bg" aria-hidden="true">
               <img :src="videoPlaceholder" alt="" class="funnel__vsl-thumb" />
               <div class="funnel__vsl-blur-overlay"></div>
-              <img :src="osLogo" alt="" class="funnel__vsl-watermark" />
             </div>
             <div class="funnel__vsl-overlay" aria-hidden="true">
               <div class="funnel__vsl-play">
                 <i class="fa-solid fa-play"></i>
               </div>
               <p class="funnel__vsl-caption">
-                Descubre cómo los líderes del sector camaronero protegen su operación
+                Descubre cómo transformamos espacios comunes en ambientes de lujo
               </p>
             </div>
           </div>
@@ -163,7 +162,7 @@ onUnmounted(() => clearInterval(interval))
         <div class="funnel__cta-wrap">
           <button class="funnel__cta-btn" @click="openModal()">
             <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-            AGENDAR CONSULTA TÉCNICA GRATIS
+            AGENDAR ASESORÍA GRATUITA
           </button>
           <p class="funnel__cta-sub">
             <i class="fa-solid fa-lock" aria-hidden="true"></i>
@@ -201,22 +200,22 @@ onUnmounted(() => clearInterval(interval))
           <div class="funnel__problem-item">
             <i class="fa-solid fa-triangle-exclamation funnel__problem-icon" aria-hidden="true"></i>
             <div>
-              <strong>Compran por precio inicial</strong>
-              <p>Motores baratos que fallan a los pocos meses, generando costos de reparación que superan el ahorro.</p>
+              <strong>Usan maderas sin tratar</strong>
+              <p>El uso de madera "verde" o sin el secado adecuado provoca torceduras y grietas a los pocos meses de instalación.</p>
             </div>
           </div>
           <div class="funnel__problem-item">
             <i class="fa-solid fa-triangle-exclamation funnel__problem-icon" aria-hidden="true"></i>
             <div>
-              <strong>Bombas de agua obstruidas por sedimento</strong>
-              <p>Motores enfriados por agua en ríos poco profundos. El BF2.3 enfriado por aire elimina este problema por completo.</p>
+              <strong>Diseños poco funcionales</strong>
+              <p>Muebles que se ven bien pero no aprovechan el espacio o no resisten el uso diario en el hogar u oficina.</p>
             </div>
           </div>
           <div class="funnel__problem-item">
             <i class="fa-solid fa-triangle-exclamation funnel__problem-icon" aria-hidden="true"></i>
             <div>
-              <strong>Sin repuestos ni respaldo técnico</strong>
-              <p>Una avería sin stock local puede dejar tu flota paralizada por días, con pérdidas operativas reales.</p>
+              <strong>Acabados de baja calidad</strong>
+              <p>Barnices y selladores que se pelan o pierden su brillo rápido, obligando a mantenimientos costosos y frecuentes.</p>
             </div>
           </div>
         </div>
@@ -246,20 +245,20 @@ onUnmounted(() => clearInterval(interval))
     <!-- TESTIMONIAL -->
     <section class="funnel__testimonial" aria-labelledby="testimonial-heading">
       <div class="funnel__container">
-        <p class="funnel__section-label">Caso de éxito real</p>
+        <p class="funnel__section-label">Lo que dicen nuestros clientes</p>
         <div class="funnel__testimonial-card">
           <i class="fa-solid fa-quote-left funnel__testimonial-quote" aria-hidden="true"></i>
           <blockquote class="funnel__testimonial-text">
-            "Roberto, por fin duermo tranquilo porque sé que mis embarcaciones arrancarán mañana.
-            Cero paradas por recalentamiento en 6 meses y un 22% menos en consumo de combustible."
+            "Ale logró captar exactamente lo que queríamos para nuestra oficina. 
+            La calidez de la madera y la precisión de los acabados han transformado por completo el ambiente de trabajo."
           </blockquote>
           <footer class="funnel__testimonial-author">
             <div class="funnel__testimonial-avatar" aria-hidden="true">
               <i class="fa-solid fa-user"></i>
             </div>
             <div>
-              <strong>Administrador de flota</strong>
-              <span>Una de las camaroneras más importantes del Ecuador</span>
+              <strong>Directora de Diseño</strong>
+              <span>Estudio Arquitectónico Independiente</span>
             </div>
           </footer>
         </div>
@@ -271,23 +270,22 @@ onUnmounted(() => clearInterval(interval))
       <div class="funnel__container funnel__authority-inner">
         <div class="funnel__authority-photo-wrap">
           <div class="funnel__authority-avatar" aria-hidden="true">
-            <img :src="robertoPhoto" alt="Roberto Allú" class="funnel__authority-img" />
+            <img :src="robertoPhoto" alt="Ale Barreto" class="funnel__authority-img" />
           </div>
         </div>
         <div class="funnel__authority-content">
           <p class="funnel__authority-eyebrow">Tu especialista asignado</p>
-          <h2 id="authority-heading" class="funnel__authority-name">Roberto Allú</h2>
-          <p class="funnel__authority-role">Especialista en Soluciones Náuticas Industriales</p>
+          <h2 id="authority-heading" class="funnel__authority-name">Ale Barreto</h2>
+          <p class="funnel__authority-role">Experta en Diseño y Construcción en Madera</p>
           <p class="funnel__authority-bio">
-            Como representantes oficiales de Honda Marine en Ecuador, llevo años ayudando
-            a operadores camaroneros, de transporte y seguridad a profesionalizar sus flotas.
-            No se trata de vender un motor — se trata de que
-            <strong>tus embarcaciones arranquen mañana</strong>, y todos los días.
+            Con años de experiencia en el mercado ecuatoriano, me especializo en crear
+            espacios que combinan la nobleza de la madera con diseños modernos y funcionales.
+            Mi objetivo es que cada proyecto sea una inversión que dure toda la vida.
           </p>
           <ul class="funnel__authority-creds" role="list">
-            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Representante oficial Honda Marine Ecuador</li>
-            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Especialista en flotas camaroneras y de seguridad</li>
-            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Asesoría llave en mano: motor + equipamiento</li>
+            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Especialista en maderas nobles y tratadas</li>
+            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Diseños exclusivos a medida</li>
+            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Gestión integral: del plano a la instalación</li>
           </ul>
         </div>
       </div>
@@ -297,11 +295,11 @@ onUnmounted(() => clearInterval(interval))
     <section class="funnel__cta-final" aria-labelledby="cta-final-heading">
       <div class="funnel__container">
         <h2 id="cta-final-heading" class="funnel__cta-final-title">
-          ¿Listo para profesionalizar tu flota?
+          ¿Listo para iniciar tu proyecto?
         </h2>
         <p class="funnel__cta-final-sub">
-          Agenda una consulta técnica gratuita de 15 minutos. Analizaremos tu operación
-          y te recomendaremos el caballaje y equipos exactos para tu flota.
+          Agenda una asesoría gratuita de 15 minutos. Conversaremos sobre tu idea,
+          el espacio disponible y te daremos una primera visión técnica y estética.
         </p>
         <button class="funnel__cta-btn" @click="openModal()">
           <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
@@ -317,13 +315,13 @@ onUnmounted(() => clearInterval(interval))
     <!-- FOOTER -->
     <footer class="funnel__footer">
       <div class="funnel__container funnel__footer-inner">
-        <img :src="osLogo" alt="Ocean Safety" class="funnel__footer-logo" />
+        <h2 class="funnel__footer-logo-text">ALE BARRETO</h2>
         <nav class="funnel__footer-links" aria-label="Legal">
           <RouterLink to="/politicas-privacidad">Política de Privacidad</RouterLink>
           <RouterLink to="/aviso-legal">Aviso Legal</RouterLink>
         </nav>
         <p class="funnel__footer-copy">
-          © {{ new Date().getFullYear() }} OCEAN SAFETY. Todos los derechos reservados.
+          © {{ new Date().getFullYear() }} ALE BARRETO. Todos los derechos reservados.
         </p>
       </div>
     </footer>

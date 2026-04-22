@@ -26,17 +26,17 @@ const nextSteps = [
   {
     icon: 'fa-solid fa-envelope',
     title: 'Revisa tu email',
-    body: 'Te enviamos la confirmación con todos los detalles de tu consulta técnica.',
+    body: 'Te enviamos la confirmación con todos los detalles de tu asesoría de diseño.',
   },
   {
     icon: 'fa-brands fa-whatsapp',
     title: 'Te contactamos por WhatsApp',
-    body: 'Roberto Allú te escribirá para confirmar la cita y resolver cualquier duda previa.',
+    body: 'Ale Barreto te escribirá para confirmar la cita y conocer un poco más sobre tu idea.',
   },
   {
-    icon: 'fa-solid fa-anchor',
-    title: 'Prepara la info de tu flota',
-    body: 'Ten a mano el número de embarcaciones, HP actuales y los principales problemas operativos.',
+    icon: 'fa-solid fa-tree',
+    title: 'Prepara tu inspiración',
+    body: 'Ten a mano referencias o ideas de lo que te gustaría lograr en tu espacio.',
   },
 ]
 </script>
@@ -46,7 +46,7 @@ const nextSteps = [
 
     <!-- TOP BAR -->
     <header class="booked__topbar">
-      <img :src="osLogo" alt="Ocean Safety" class="booked__logo" />
+      <h2 class="booked__logo-text">ALE BARRETO</h2>
     </header>
 
     <main class="booked__main">
@@ -65,7 +65,7 @@ const nextSteps = [
           </template>
         </h1>
         <p class="booked__hero-subtitle">
-          Tu consulta técnica con Roberto Allú ha sido agendada correctamente.
+          Tu asesoría de diseño con Ale Barreto ha sido agendada correctamente.
           En breve recibirás todos los detalles.
         </p>
       </section>
@@ -85,7 +85,7 @@ const nextSteps = [
         </div>
       </section>
 
-      <!-- Team card — Roberto Allú -->
+      <!-- Team card — Ale Barreto -->
       <section class="booked__team" aria-labelledby="team-heading">
         <p id="team-heading" class="booked__team-label">Tu especialista</p>
         <div class="booked__team-card">
@@ -93,10 +93,10 @@ const nextSteps = [
             <i class="fa-solid fa-user-tie"></i>
           </div>
           <div class="booked__team-info">
-            <strong class="booked__team-name">Roberto Allú</strong>
-            <span class="booked__team-role">Especialista en Soluciones Náuticas Industriales</span>
+            <strong class="booked__team-name">Ale Barreto</strong>
+            <span class="booked__team-role">Experta en Diseño y Construcción en Madera</span>
             <p class="booked__team-note">
-              "No es solo vender un motor — es garantizar que tu operación no se detenga."
+              "La madera no es solo un material — es el alma de un espacio que cuenta una historia."
             </p>
           </div>
         </div>
@@ -116,7 +116,7 @@ const nextSteps = [
         <RouterLink to="/politicas-privacidad">Política de Privacidad</RouterLink>
         <RouterLink to="/aviso-legal">Aviso Legal</RouterLink>
       </nav>
-      <p class="booked__footer-copy">© {{ new Date().getFullYear() }} OCEAN SAFETY. Todos los derechos reservados.</p>
+      <p class="booked__footer-copy">© {{ new Date().getFullYear() }} ALE BARRETO. Todos los derechos reservados.</p>
     </footer>
 
   </div>
