@@ -51,13 +51,45 @@ const dropdownOpen = ref(false)
 const countrySearch = ref('')
 const submitting = ref(false)
 
+type Urgency = '' | 'immediate' | 'next-month' | 'just-looking'
+
 const form = ref({
   nombre: '',
   apellido: '',
   email: '',
   phone: '',
   empresa: '',
+  urgency: '' as Urgency,
 })
+
+const URGENCY_LABEL: Record<Exclude<Urgency, ''>, string> = {
+  'immediate': 'Necesita iniciar de inmediato (este mes)',
+  'next-month': 'En 1–3 meses',
+  'just-looking': 'Solo explorando, sin urgencia',
+}
+
+const urgencyOpts: { value: Exclude<Urgency, ''>; label: string; sub: string; hot?: boolean }[] = [
+  { value: 'immediate',   label: 'Necesito iniciar de inmediato', sub: 'Contrato este mes', hot: true },
+  { value: 'next-month',  label: 'En los próximos 1–3 meses',     sub: 'Planificación cercana' },
+  { value: 'just-looking', label: 'Solo estoy explorando',         sub: 'Sin urgencia particular' },
+]
+
+function calcTags(urgency: Urgency): string[] {
+  const base = ['web-lead', 'funnel-registro']
+  if (urgency === 'immediate')    return [...base, 'urgente', 'contrato-inmediato']
+  if (urgency === 'next-month')   return [...base, 'urgencia-media']
+  if (urgency === 'just-looking') return [...base, 'no-urgente', 'explorando']
+  return base
+}
+
+function buildNote(f: typeof form.value, country: string): string {
+  return [
+    'Lead desde funnel VSL (registro inicial).',
+    `Proyecto: ${f.empresa}`,
+    `Urgencia: ${f.urgency ? URGENCY_LABEL[f.urgency] : '—'}`,
+    `País: ${country}`,
+  ].join('\n')
+}
 
 const errors = ref<Record<string, string>>({})
 const touched = ref<Record<string, boolean>>({})
@@ -88,6 +120,7 @@ const validators: Record<string, (v: string) => string | null> = {
   email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? null : 'Email inválido',
   phone: () => phoneValid.value ? null : 'Número inválido para el país seleccionado',
   empresa: v => v.trim().length < 2 ? 'Ingresa el nombre de tu proyecto' : null,
+  urgency: v => !v ? 'Selecciona cuándo necesitas iniciar' : null,
 }
 
 const validate = () => {
@@ -136,7 +169,7 @@ const handleClickOutside = (e: MouseEvent) => {
 
 // ── Submit ────────────────────────────────────────────────────────────────────
 const handleSubmit = async () => {
-  touched.value = { nombre: true, apellido: true, email: true, phone: true, empresa: true }
+  touched.value = { nombre: true, apellido: true, email: true, phone: true, empresa: true, urgency: true }
   if (!validate()) return
 
   submitting.value = true
@@ -152,6 +185,10 @@ const handleSubmit = async () => {
     telefonoDisplay: selectedCountry.value.dial + ' ' + formattedPhone.value,
     empresa: form.value.empresa.trim(),
     pais: selectedCountry.value.name,
+    urgency: form.value.urgency,
+    urgencyLabel: form.value.urgency ? URGENCY_LABEL[form.value.urgency] : '',
+    tags: calcTags(form.value.urgency),
+    note: buildNote(form.value, selectedCountry.value.name),
     timestamp: new Date().toISOString(),
     event_id: leadEventId,
     ...getStoredFbParams(),
@@ -174,7 +211,6 @@ const handleSubmit = async () => {
     { eventID: leadEventId }
   )
 
-  submitting.value = false
   localStorage.setItem('os_contact', JSON.stringify({
     nombre: form.value.nombre.trim(),
     email: form.value.email.trim().toLowerCase(),
@@ -182,7 +218,17 @@ const handleSubmit = async () => {
     timestamp: Date.now(),
   }))
   ;(window as any).fbq?.('track', 'CompleteRegistration')
+
+  submitting.value = false
   emit('close')
+
+  // Disqualify "just-looking" → /sin-espacio (mismo patrón que CalendarModal)
+  if (form.value.urgency === 'just-looking') {
+    localStorage.setItem('os_disq_at', String(Date.now()))
+    router.push('/sin-espacio')
+    return
+  }
+
   router.push('/ver-video')
 }
 
@@ -373,8 +419,48 @@ watch(dropdownOpen, open => {
                 <span v-if="touched.empresa && errors.empresa" class="rmodal__error">{{ errors.empresa }}</span>
               </div>
 
+              <!-- Urgencia -->
+              <div class="rmodal__field rmodal__field--urgency" :class="{ 'has-error': touched.urgency && errors.urgency }">
+                <label class="rmodal__urgency-label">
+                  <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                  ¿Cuándo necesitas iniciar tu proyecto?
+                </label>
+                <div class="rmodal__urgency-opts" role="radiogroup">
+                  <label
+                    v-for="opt in urgencyOpts"
+                    :key="opt.value"
+                    class="rmodal__urgency-opt"
+                    :class="{
+                      'rmodal__urgency-opt--sel': form.urgency === opt.value,
+                      'rmodal__urgency-opt--hot': opt.hot,
+                      'rmodal__urgency-opt--hot-sel': opt.hot && form.urgency === opt.value,
+                    }"
+                  >
+                    <input
+                      type="radio"
+                      v-model="form.urgency"
+                      :value="opt.value"
+                      class="rmodal__urgency-radio sr-only"
+                      @change="onBlur('urgency')"
+                    />
+                    <span class="rmodal__urgency-opt-dot" aria-hidden="true"></span>
+                    <span class="rmodal__urgency-opt-text">
+                      <strong>{{ opt.label }}</strong>
+                      <small>{{ opt.sub }}</small>
+                    </span>
+                    <i v-if="opt.hot" class="fa-solid fa-fire rmodal__urgency-opt-flame" aria-hidden="true"></i>
+                  </label>
+                </div>
+                <span v-if="touched.urgency && errors.urgency" class="rmodal__error">{{ errors.urgency }}</span>
+              </div>
+
               <!-- Submit -->
-              <button class="rmodal__submit" type="submit" :disabled="submitting">
+              <button
+                class="rmodal__submit"
+                :class="{ 'rmodal__submit--urgent': form.urgency === 'immediate' }"
+                type="submit"
+                :disabled="submitting"
+              >
                 <svg v-if="submitting" class="rmodal__spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
                 </svg>
@@ -383,7 +469,9 @@ watch(dropdownOpen, open => {
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                 </template>
-                {{ submitting ? 'Enviando...' : 'AGENDAR MI ASESORÍA' }}
+                {{ submitting
+                  ? 'Enviando...'
+                  : (form.urgency === 'immediate' ? 'RESERVAR MI CUPO AHORA' : 'AGENDAR MI ASESORÍA') }}
               </button>
 
               <p class="rmodal__legal">
@@ -955,6 +1043,156 @@ $accent: colors.$OS-RED;
 @keyframes cta-glow {
   0%, 100% { box-shadow: 0 8px 28px rgba(colors.$BAKANO-PINK, 0.35); }
   50% { box-shadow: 0 8px 44px rgba(colors.$BAKANO-PINK, 0.6); }
+}
+
+// ── Urgency field ─────────────────────────────────────────────────────────────
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.rmodal__field--urgency {
+  gap: 8px;
+}
+
+.rmodal__urgency-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  i {
+    color: colors.$AB-URGENT;
+    font-size: 0.78rem;
+  }
+}
+
+.rmodal__urgency-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rmodal__urgency-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  background: $input-bg;
+  border: 1px solid $border;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, transform 0.15s, box-shadow 0.2s;
+  position: relative;
+
+  &:hover {
+    border-color: rgba($accent, 0.4);
+    background: rgba($accent, 0.04);
+  }
+
+  &--sel {
+    border-color: $accent;
+    background: rgba($accent, 0.08);
+    box-shadow: 0 0 0 3px rgba($accent, 0.08);
+  }
+
+  &--hot {
+    border-color: rgba(colors.$AB-URGENT, 0.35);
+    background: colors.$AB-URGENT-BG;
+
+    &:hover {
+      border-color: colors.$AB-URGENT;
+      background: rgba(colors.$AB-URGENT, 0.08);
+    }
+  }
+
+  &--hot-sel {
+    border-color: colors.$AB-URGENT !important;
+    background: rgba(colors.$AB-URGENT, 0.12) !important;
+    box-shadow: 0 0 0 3px rgba(colors.$AB-URGENT, 0.18) !important;
+
+    .rmodal__urgency-opt-dot {
+      border-color: colors.$AB-URGENT;
+      background: colors.$AB-URGENT;
+      box-shadow: inset 0 0 0 3px #ffffff;
+    }
+
+    .rmodal__urgency-opt-text strong {
+      color: colors.$AB-URGENT-DARK;
+    }
+  }
+}
+
+.rmodal__urgency-opt-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #c5d3e3;
+  background: #ffffff;
+  flex-shrink: 0;
+  transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+
+  .rmodal__urgency-opt--sel & {
+    border-color: $accent;
+    background: $accent;
+    box-shadow: inset 0 0 0 3px #ffffff;
+  }
+}
+
+.rmodal__urgency-opt-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+
+  strong {
+    font-family: fonts.$font-interface;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: colors.$OS-DARK;
+    line-height: 1.25;
+  }
+
+  small {
+    font-family: fonts.$font-secondary;
+    font-size: 0.74rem;
+    color: $text-muted;
+  }
+}
+
+.rmodal__urgency-opt-flame {
+  color: colors.$AB-URGENT;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  animation: flame-flicker 1.6s infinite;
+}
+
+@keyframes flame-flicker {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.92); }
+}
+
+// ── Submit (urgent variant) ───────────────────────────────────────────────────
+.rmodal__submit--urgent {
+  background: linear-gradient(90deg, colors.$AB-URGENT 0%, colors.$AB-URGENT-DARK 100%);
+  box-shadow: 0 8px 28px rgba(colors.$AB-URGENT, 0.45);
+  animation: urgent-pulse 2s ease-in-out infinite;
+
+  &:hover:not(:disabled) {
+    box-shadow: 0 14px 40px rgba(colors.$AB-URGENT, 0.6);
+  }
+}
+
+@keyframes urgent-pulse {
+  0%, 100% { box-shadow: 0 8px 28px rgba(colors.$AB-URGENT, 0.45); }
+  50%      { box-shadow: 0 8px 44px rgba(colors.$AB-URGENT, 0.7); }
 }
 
 // ── Transiciones ──────────────────────────────────────────────────────────────

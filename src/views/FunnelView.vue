@@ -66,25 +66,96 @@ const methodology = [
   },
 ]
 
-// Countdown urgency (24h rolling)
-const hours = ref('23')
-const minutes = ref('47')
-const seconds = ref('12')
+// Countdown urgency — bloque fijo de 6h anclado al reloj local (00, 06, 12, 18).
+// Mismo valor para todos los visitantes en un instante dado → sensación de continuidad real.
+const BLOCK_HOURS = 6
+const hours = ref('00')
+const minutes = ref('00')
+const seconds = ref('00')
 let interval: ReturnType<typeof setInterval>
+
+const computeRemaining = () => {
+  const now = new Date()
+  const blockStartHour = Math.floor(now.getHours() / BLOCK_HOURS) * BLOCK_HOURS
+  const blockStart = new Date(now)
+  blockStart.setHours(blockStartHour, 0, 0, 0)
+  const blockEndMs = blockStart.getTime() + BLOCK_HOURS * 3600 * 1000
+  return Math.max(0, Math.floor((blockEndMs - now.getTime()) / 1000))
+}
+
+const tick = () => {
+  const total = computeRemaining()
+  hours.value   = String(Math.floor(total / 3600)).padStart(2, '0')
+  minutes.value = String(Math.floor((total % 3600) / 60)).padStart(2, '0')
+  seconds.value = String(total % 60).padStart(2, '0')
+}
 
 onMounted(() => {
   captureFbParams()
-  let total = 23 * 3600 + 47 * 60 + 12
-  interval = setInterval(() => {
-    total--
-    if (total <= 0) total = 23 * 3600 + 59 * 60 + 59
-    hours.value = String(Math.floor(total / 3600)).padStart(2, '0')
-    minutes.value = String(Math.floor((total % 3600) / 60)).padStart(2, '0')
-    seconds.value = String(total % 60).padStart(2, '0')
-  }, 1000)
+  tick()
+  interval = setInterval(tick, 1000)
+  startProofRotation()
 })
 
-onUnmounted(() => clearInterval(interval))
+onUnmounted(() => {
+  clearInterval(interval)
+  stopProofRotation()
+})
+
+// ── Social proof toast (FOMO) ──────────────────────────────────────────────
+type Proof = { who: string; where: string; minutesAgo: number }
+
+const PROOFS: Proof[] = [
+  { who: 'Constructora Valverde',     where: 'Quito',          minutesAgo: 3 },
+  { who: 'María José T.',             where: 'Cumbayá',        minutesAgo: 7 },
+  { who: 'Andrés Salazar',            where: 'Guayaquil',      minutesAgo: 12 },
+  { who: 'Inmobiliaria Andes',        where: 'Quito',          minutesAgo: 18 },
+  { who: 'Carolina M.',               where: 'Tumbaco',        minutesAgo: 22 },
+  { who: 'Estudio Arq. Vélez',        where: 'Samborondón',    minutesAgo: 27 },
+  { who: 'Familia Pareja',            where: 'Los Chillos',    minutesAgo: 34 },
+  { who: 'Hotel Boutique Sambo',      where: 'Manta',          minutesAgo: 41 },
+  { who: 'Roberto S.',                where: 'Cuenca',         minutesAgo: 48 },
+  { who: 'Patricia Andrade',          where: 'Quito',          minutesAgo: 55 },
+]
+
+const proofVisible = ref(false)
+const proofIndex = ref(0)
+const currentProof = ref<Proof | null>(null)
+let proofShowTimer: ReturnType<typeof setTimeout> | null = null
+let proofHideTimer: ReturnType<typeof setTimeout> | null = null
+let proofDismissed = false
+
+const SHOW_AFTER_MS = 3000      // primera aparición
+const VISIBLE_FOR_MS = 5000     // tiempo visible
+const GAP_BETWEEN_MS = 2000     // pausa entre toasts (ciclo total ≈ 7s)
+
+const showNextProof = () => {
+  if (proofDismissed) return
+  currentProof.value = PROOFS[proofIndex.value % PROOFS.length]
+  proofIndex.value++
+  proofVisible.value = true
+  proofHideTimer = setTimeout(() => {
+    proofVisible.value = false
+    proofShowTimer = setTimeout(showNextProof, GAP_BETWEEN_MS)
+  }, VISIBLE_FOR_MS)
+}
+
+const startProofRotation = () => {
+  proofShowTimer = setTimeout(showNextProof, SHOW_AFTER_MS)
+}
+
+const stopProofRotation = () => {
+  if (proofShowTimer) clearTimeout(proofShowTimer)
+  if (proofHideTimer) clearTimeout(proofHideTimer)
+  proofShowTimer = null
+  proofHideTimer = null
+}
+
+const dismissProof = () => {
+  proofDismissed = true
+  proofVisible.value = false
+  stopProofRotation()
+}
 </script>
 
 <template>
@@ -95,18 +166,60 @@ onUnmounted(() => clearInterval(interval))
       <h2 class="funnel__logo-text">ALE BARRETO</h2>
     </header>
 
-    <!-- URGENCY BANNER -->
+    <!-- URGENCY BANNER (sticky) -->
     <div class="funnel__urgency" role="banner">
-      <span class="funnel__urgency-dot" aria-hidden="true" />
-      <span>Cupos limitados — expiran en:</span>
-      <div class="funnel__timer" aria-live="polite" aria-label="Tiempo restante">
-        <span class="funnel__timer-block"><strong>{{ hours }}</strong><small>h</small></span>
-        <span class="funnel__timer-sep" aria-hidden="true">:</span>
-        <span class="funnel__timer-block"><strong>{{ minutes }}</strong><small>m</small></span>
-        <span class="funnel__timer-sep" aria-hidden="true">:</span>
-        <span class="funnel__timer-block"><strong>{{ seconds }}</strong><small>s</small></span>
+      <div class="funnel__urgency-info">
+        <span class="funnel__urgency-dot" aria-hidden="true" />
+        <i class="fa-solid fa-bolt funnel__urgency-icon" aria-hidden="true"></i>
+        <span class="funnel__urgency-text">CUPOS PARA <strong>CONTRATO INMEDIATO</strong> — Cierran en:</span>
+        <div class="funnel__timer" aria-live="polite" aria-label="Tiempo restante">
+          <span class="funnel__timer-block"><strong>{{ hours }}</strong><small>h</small></span>
+          <span class="funnel__timer-sep" aria-hidden="true">:</span>
+          <span class="funnel__timer-block"><strong>{{ minutes }}</strong><small>m</small></span>
+          <span class="funnel__timer-sep" aria-hidden="true">:</span>
+          <span class="funnel__timer-block"><strong>{{ seconds }}</strong><small>s</small></span>
+        </div>
       </div>
+      <button
+        type="button"
+        class="funnel__urgency-cta"
+        aria-label="Reservar mi cupo inmediato"
+        @click="openModal()"
+      >
+        RESERVAR MI CUPO
+        <span aria-hidden="true">→</span>
+      </button>
     </div>
+
+    <!-- SOCIAL PROOF TOAST (bottom-left, FOMO) -->
+    <Transition name="proof-fade">
+      <div v-if="proofVisible && currentProof" class="funnel__proof" role="status" aria-live="polite">
+        <div class="funnel__proof-icon" aria-hidden="true">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div class="funnel__proof-body">
+          <p class="funnel__proof-title">
+            <strong>{{ currentProof.who }}</strong>
+            <span>{{ currentProof.where }}</span>
+          </p>
+          <p class="funnel__proof-text">
+            Acaba de contratar <strong>servicios premium de maderas</strong>
+          </p>
+          <p class="funnel__proof-meta">
+            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+            Hace {{ currentProof.minutesAgo }} min
+          </p>
+        </div>
+        <button
+          type="button"
+          class="funnel__proof-close"
+          aria-label="Cerrar notificación"
+          @click="dismissProof"
+        >
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+    </Transition>
 
     <!-- HERO -->
     <section class="funnel__hero" aria-labelledby="funnel-headline">
@@ -130,6 +243,12 @@ onUnmounted(() => clearInterval(interval))
           </li>
         </ul>
 
+        <!-- Urgency callout (refuerzo en hero) -->
+        <div class="funnel__urgency-callout" role="note">
+          <i class="fa-solid fa-fire" aria-hidden="true"></i>
+          <span>Para personas decididas que <strong>quieren ver el cambio en su espacio ahora</strong> — no dentro de 2 meses.</span>
+        </div>
+
         <!-- VSL Gated Area -->
         <div class="funnel__vsl-wrap">
           <div class="funnel__vsl" @click="openModal()" role="button" aria-label="Ver video" tabindex="0">
@@ -150,7 +269,7 @@ onUnmounted(() => clearInterval(interval))
         <div class="funnel__cta-wrap">
           <button class="funnel__cta-btn" @click="openModal()">
             <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-            AGENDAR ASESORÍA GRATUITA
+            RESERVAR MI CUPO INMEDIATO
           </button>
           <p class="funnel__cta-sub">
             <i class="fa-solid fa-lock" aria-hidden="true"></i>
@@ -291,7 +410,7 @@ onUnmounted(() => clearInterval(interval))
         </p>
         <button class="funnel__cta-btn" @click="openModal()">
           <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-          AGENDAR CONSULTA TÉCNICA GRATIS
+          RESERVAR MI CUPO INMEDIATO
         </button>
         <p class="funnel__cta-sub">
           <i class="fa-solid fa-lock" aria-hidden="true"></i>
@@ -344,9 +463,6 @@ onUnmounted(() => clearInterval(interval))
   padding: 0.9rem 1.5rem;
   display: flex;
   justify-content: center;
-  position: sticky;
-  top: 0;
-  z-index: 100;
   box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
 }
 
@@ -358,9 +474,12 @@ onUnmounted(() => clearInterval(interval))
 
 // ── Urgency banner ───────────────────────────────────────────────────────────
 .funnel__urgency {
-  background: colors.$OS-NAVY;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: linear-gradient(90deg, colors.$AB-URGENT 0%, colors.$AB-URGENT-DARK 100%);
   color: #ffffff;
-  padding: 0.55rem 1.5rem;
+  padding: 0.65rem 0.85rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -368,39 +487,300 @@ onUnmounted(() => clearInterval(interval))
   flex-wrap: wrap;
   font-family: fonts.$font-interface;
   font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  border-bottom: 2px solid colors.$AB-URGENT-LIGHT;
+  box-shadow: 0 2px 12px rgba(colors.$AB-URGENT, 0.35);
+  text-transform: uppercase;
+
+  @media (min-width: 768px) {
+    padding: 0.85rem 1.5rem;
+    font-size: 0.95rem;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+}
+
+.funnel__urgency-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    flex-wrap: nowrap;
+  }
+}
+
+.funnel__urgency-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #ffffff;
+  color: colors.$AB-URGENT-DARK;
+  border: 2px solid colors.$AB-URGENT-LIGHT;
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font-family: fonts.$font-accent;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  animation: cta-bounce 2.4s ease-in-out infinite;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+
+  span { font-size: 0.95rem; transition: transform 0.18s ease; }
+
+  &:hover {
+    background: colors.$AB-URGENT-BG;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    span { transform: translateX(3px); }
+  }
+
+  &:active { transform: translateY(0); }
+
+  @media (min-width: 768px) {
+    padding: 0.55rem 1.2rem;
+    font-size: 0.85rem;
+  }
+}
+
+@keyframes cta-bounce {
+  0%, 100% { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25); transform: scale(1); }
+  50%      { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); transform: scale(1.04); }
+}
+
+// ── Social proof toast (FOMO bottom-left) ────────────────────────────────────
+.funnel__proof {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 55;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: #ffffff;
+  border: 1px solid rgba(colors.$AB-FOREST, 0.08);
+  border-left: 4px solid colors.$AB-SAGE;
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem 0.75rem 0.85rem;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
+  max-width: 320px;
+  font-family: fonts.$font-secondary;
+
+  @media (min-width: 768px) {
+    bottom: 1.5rem;
+    left: 1.5rem;
+    max-width: 360px;
+    padding: 0.9rem 1rem 0.9rem 0.95rem;
+  }
+}
+
+.funnel__proof-icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(colors.$AB-SAGE, 0.14);
+  color: colors.$AB-SAGE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  margin-top: 2px;
+}
+
+.funnel__proof-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.funnel__proof-title {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  font-family: fonts.$font-interface;
+  font-size: 0.86rem;
+  line-height: 1.3;
+  color: colors.$AB-FOREST;
+
+  strong { font-weight: 800; }
+  span { font-size: 0.74rem; color: rgba(colors.$AB-FOREST, 0.55); font-weight: 500; }
+}
+
+.funnel__proof-text {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: rgba(colors.$AB-FOREST, 0.78);
+
+  strong { color: colors.$AB-EARTH; font-weight: 700; }
+}
+
+.funnel__proof-meta {
+  margin: 4px 0 0;
+  font-size: 0.7rem;
+  color: rgba(colors.$AB-FOREST, 0.45);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  i { font-size: 0.66rem; }
+}
+
+.funnel__proof-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: rgba(colors.$AB-FOREST, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover { background: rgba(colors.$AB-FOREST, 0.08); color: colors.$AB-FOREST; }
+}
+
+.proof-fade-enter-active {
+  transition: opacity 0.32s ease, transform 0.42s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.proof-fade-leave-active {
+  transition: opacity 0.22s ease, transform 0.25s ease;
+}
+.proof-fade-enter-from {
+  opacity: 0;
+  transform: translateY(14px) translateX(-8px);
+}
+.proof-fade-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.funnel__urgency-icon {
+  color: colors.$AB-URGENT-LIGHT;
+  font-size: 1.1rem;
+  filter: drop-shadow(0 0 6px rgba(colors.$AB-URGENT-LIGHT, 0.6));
+  animation: bolt-flash 1.8s infinite;
+}
+
+@keyframes bolt-flash {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.92); }
+}
+
+.funnel__urgency-text {
+  strong { font-weight: 900; color: #FFE4E4; letter-spacing: 0.04em; }
 }
 
 .funnel__urgency-dot {
-  width: 7px;
-  height: 7px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: #4ADE80;
+  background: colors.$AB-URGENT-LIGHT;
   flex-shrink: 0;
   animation: dot-pulse 1.5s infinite;
+  box-shadow: 0 0 0 0 rgba(colors.$AB-URGENT-LIGHT, 0.6);
 }
 
 @keyframes dot-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.75); }
+  0% { box-shadow: 0 0 0 0 rgba(252, 165, 165, 0.7); transform: scale(1); }
+  70% { box-shadow: 0 0 0 8px rgba(252, 165, 165, 0); transform: scale(1.1); }
+  100% { box-shadow: 0 0 0 0 rgba(252, 165, 165, 0); transform: scale(1); }
 }
 
 .funnel__timer {
   display: flex;
   align-items: center;
-  gap: 0.15rem;
+  gap: 0.2rem;
+  background: rgba(0, 0, 0, 0.18);
+  padding: 0.25rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .funnel__timer-block {
   display: flex;
   align-items: baseline;
-  gap: 1px;
-  strong { font-size: 0.95rem; font-weight: 800; }
-  small { font-size: 0.68rem; opacity: 0.75; }
+  gap: 2px;
+  strong {
+    font-size: 1.6rem;
+    font-weight: 900;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: #ffffff;
+
+    @media (min-width: 768px) {
+      font-size: 2rem;
+    }
+  }
+  small {
+    font-size: 0.72rem;
+    opacity: 0.85;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
 }
 
-.funnel__timer-sep { font-weight: 800; opacity: 0.5; padding: 0 1px; }
+.funnel__timer-sep {
+  font-weight: 900;
+  font-size: 1.4rem;
+  opacity: 0.7;
+  padding: 0 2px;
+  line-height: 1;
+
+  @media (min-width: 768px) {
+    font-size: 1.7rem;
+  }
+}
+
+// ── Urgency callout (hero) ───────────────────────────────────────────────────
+.funnel__urgency-callout {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: colors.$AB-URGENT-BG;
+  border-left: 4px solid colors.$AB-URGENT;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin: 1.25rem 0 1.5rem;
+  font-family: fonts.$font-interface;
+  font-size: 0.92rem;
+  color: colors.$AB-FOREST;
+  font-weight: 600;
+
+  i {
+    color: colors.$AB-URGENT;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+  }
+
+  strong {
+    color: colors.$AB-URGENT-DARK;
+    font-weight: 800;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 1rem;
+    padding: 1rem 1.25rem;
+  }
+}
 
 // ── Hero ─────────────────────────────────────────────────────────────────────
 .funnel__hero {
