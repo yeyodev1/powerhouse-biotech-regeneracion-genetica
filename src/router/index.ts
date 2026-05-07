@@ -155,18 +155,53 @@ router.afterEach((to) => {
 })
 
 // ── Router Guards ──────────────────────────────────────────────────────────────
-router.beforeEach((to, from, next) => {
-  const isBooked = !!localStorage.getItem('os_booked_at')
-  const isDisqualified = !!localStorage.getItem('os_disq_at')
+const BOOKED_TTL_MS = 3 * 24 * 60 * 60 * 1000  // 3 días
+const DISQ_TTL_MS   = 48 * 60 * 60 * 1000      // 48 horas
 
-  // Si ya agendó, siempre a la confirmación (excepto legales)
-  if (isBooked && !['booked', 'privacy-policy', 'legal-notice'].includes(to.name as string)) {
+const readTimestamp = (key: string): number | null => {
+  const raw = localStorage.getItem(key)
+  if (!raw) return null
+  const n = Number(raw)
+  return Number.isFinite(n) && n > 0 ? n : null
+}
+
+const isFresh = (key: string, ttl: number): boolean => {
+  const ts = readTimestamp(key)
+  if (ts === null) return false
+  if (Date.now() - ts <= ttl) return true
+  // Expirado → limpiar para que no quede colgado
+  localStorage.removeItem(key)
+  return false
+}
+
+const PUBLIC_ROUTES = ['privacy-policy', 'legal-notice']
+
+router.beforeEach((to, from, next) => {
+  const routeName = to.name as string
+  if (PUBLIC_ROUTES.includes(routeName)) return next()
+
+  const bookedFresh = isFresh('os_booked_at', BOOKED_TTL_MS)
+  const disqFresh   = isFresh('os_disq_at',   DISQ_TTL_MS)
+
+  // /cita-confirmada solo es accesible si tiene booking fresco
+  if (routeName === 'booked') {
+    if (!bookedFresh) return next({ name: 'funnel' })
+    return next()
+  }
+
+  // Si tiene booking fresco → redirigir todo a /cita-confirmada
+  if (bookedFresh) {
     return next({ name: 'booked' })
   }
 
-  // Si está descalificado, no puede ir a agendar ni a confirmación
-  if (isDisqualified && ['booking', 'booked'].includes(to.name as string)) {
+  // Si está descalificado dentro de 48h → no permitir booking ni booked
+  if (disqFresh && ['booking', 'booked'].includes(routeName)) {
     return next({ name: 'no-space' })
+  }
+
+  // /sin-espacio solo si está descalificado fresco (evita acceso directo)
+  if (routeName === 'no-space' && !disqFresh) {
+    return next({ name: 'funnel' })
   }
 
   next()

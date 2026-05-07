@@ -12,7 +12,7 @@ const IS_DEV = window.location.hostname === 'localhost'
 const openModal = () => {
   if (!IS_DEV) {
     const disqAt = localStorage.getItem('os_disq_at')
-    if (disqAt && Date.now() - Number(disqAt) < 24 * 60 * 60 * 1000) {
+    if (disqAt && Date.now() - Number(disqAt) < 48 * 60 * 60 * 1000) {
       router.push('/sin-espacio')
       return
     }

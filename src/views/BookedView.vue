@@ -10,6 +10,14 @@ const contactName = computed(() => {
   } catch { return '' }
 })
 
+// ── ¿Visitante que regresa? (booking > 10 min) ───────────────────────────────
+const RETURNING_THRESHOLD_MS = 10 * 60 * 1000
+const isReturningVisitor = computed(() => {
+  const ts = Number(localStorage.getItem('os_booked_at') ?? 0)
+  if (!ts) return false
+  return Date.now() - ts > RETURNING_THRESHOLD_MS
+})
+
 // ── Fire fbq CompleteRegistration once ───────────────────────────────────────
 onMounted(() => {
   const alreadyFired = sessionStorage.getItem('os_complete_fired')
@@ -55,18 +63,42 @@ const nextSteps = [
         <div class="booked__hero-icon" aria-hidden="true">
           <i class="fa-solid fa-circle-check"></i>
         </div>
-        <h1 class="booked__hero-title">
-          <template v-if="contactName">
-            ¡Listo, {{ contactName }}!
-          </template>
-          <template v-else>
-            ¡Tu consulta está confirmada!
-          </template>
-        </h1>
-        <p class="booked__hero-subtitle">
-          Tu asesoría de diseño con Ale Barreto ha sido agendada correctamente.
-          En breve recibirás todos los detalles.
-        </p>
+
+        <!-- Visitante que regresa: ya tiene cita -->
+        <template v-if="isReturningVisitor">
+          <p class="booked__hero-eyebrow">
+            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+            Ya tienes una cita agendada
+          </p>
+          <h1 class="booked__hero-title">
+            <template v-if="contactName">
+              {{ contactName }}, ya tenemos tu cita reservada
+            </template>
+            <template v-else>
+              Ya tenemos tu cita reservada
+            </template>
+          </h1>
+          <p class="booked__hero-subtitle">
+            Tu asesoría de diseño con Ale Barreto está confirmada. Revisa tu correo o
+            WhatsApp para todos los detalles. Si necesitas reagendar, escríbenos por WhatsApp.
+          </p>
+        </template>
+
+        <!-- Recién agendado -->
+        <template v-else>
+          <h1 class="booked__hero-title">
+            <template v-if="contactName">
+              ¡Listo, {{ contactName }}!
+            </template>
+            <template v-else>
+              ¡Tu consulta está confirmada!
+            </template>
+          </h1>
+          <p class="booked__hero-subtitle">
+            Tu asesoría de diseño con Ale Barreto ha sido agendada correctamente.
+            En breve recibirás todos los detalles.
+          </p>
+        </template>
       </section>
 
       <!-- What to expect -->
@@ -171,6 +203,25 @@ const nextSteps = [
   color: colors.$OS-BLUE;
   margin-bottom: 1rem;
   line-height: 1;
+}
+
+.booked__hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(colors.$AB-SAGE, 0.14);
+  color: colors.$AB-SAGE;
+  border: 1px solid rgba(colors.$AB-SAGE, 0.3);
+  border-radius: 999px;
+  padding: 0.4rem 0.95rem;
+  margin: 0 0 0.85rem;
+  font-family: fonts.$font-interface;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  i { font-size: 0.78rem; }
 }
 
 .booked__hero-title {

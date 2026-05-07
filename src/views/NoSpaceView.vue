@@ -1,13 +1,23 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+
+const COOLDOWN_MS = 48 * 60 * 60 * 1000
 
 const hoursLeft = ref(0)
+
+const contactName = computed(() => {
+  try {
+    const stored = localStorage.getItem('os_contact')
+    if (!stored) return ''
+    return JSON.parse(stored).nombre ?? ''
+  } catch { return '' }
+})
 
 onMounted(() => {
   const osDisqAt = localStorage.getItem('os_disq_at')
   if (osDisqAt) {
     const elapsed = Date.now() - Number(osDisqAt)
-    const remaining = 24 * 60 * 60 * 1000 - elapsed
+    const remaining = COOLDOWN_MS - elapsed
     if (remaining > 0) {
       hoursLeft.value = Math.ceil(remaining / (60 * 60 * 1000))
     }
@@ -28,8 +38,12 @@ onMounted(() => {
       <!-- Cooldown notice -->
       <div v-if="hoursLeft > 0" class="nospace__cooldown" role="alert">
         <i class="fa-solid fa-clock" aria-hidden="true"></i>
-        Podrás solicitar una nueva consulta en
-        <strong>{{ hoursLeft }} hora{{ hoursLeft !== 1 ? 's' : '' }}</strong>
+        <span>
+          <template v-if="contactName">{{ contactName }}, podrás</template>
+          <template v-else>Podrás</template>
+          volver y solicitar una nueva consulta en
+          <strong>{{ hoursLeft }} hora{{ hoursLeft !== 1 ? 's' : '' }}</strong>
+        </span>
       </div>
 
       <!-- Main message -->
