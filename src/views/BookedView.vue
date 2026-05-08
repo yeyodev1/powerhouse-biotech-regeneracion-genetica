@@ -33,17 +33,17 @@ const nextSteps = [
   {
     icon: 'fa-solid fa-envelope',
     title: 'Revisa tu email',
-    body: 'Te enviamos la confirmación con todos los detalles de tu asesoría de diseño.',
+    body: 'Te enviamos la confirmación de tu Consulta Informativa con todos los detalles.',
   },
   {
     icon: 'fa-brands fa-whatsapp',
     title: 'Te contactamos por WhatsApp',
-    body: 'Ale Barreto te escribirá para confirmar la cita y conocer un poco más sobre tu idea.',
+    body: 'Un miembro del equipo médico te escribirá para confirmar la cita y solicitar tus laboratorios recientes (si los tienes).',
   },
   {
-    icon: 'fa-solid fa-tree',
-    title: 'Prepara tu inspiración',
-    body: 'Ten a mano referencias o ideas de lo que te gustaría lograr en tu espacio.',
+    icon: 'fa-solid fa-vials',
+    title: 'Prepara tu historial clínico',
+    body: 'Ten a mano antecedentes médicos relevantes y exámenes recientes (<6 meses si es posible). Eso acelera la Evaluación.',
   },
 ]
 </script>
@@ -53,7 +53,7 @@ const nextSteps = [
 
     <!-- TOP BAR -->
     <header class="booked__topbar">
-      <h2 class="booked__logo-text">ALE BARRETO</h2>
+      <h2 class="booked__logo-text">POWERHOUSE BIOTECH</h2>
     </header>
 
     <main class="booked__main">
@@ -79,8 +79,8 @@ const nextSteps = [
             </template>
           </h1>
           <p class="booked__hero-subtitle">
-            Tu asesoría de diseño con Ale Barreto está confirmada. Revisa tu correo o
-            WhatsApp para todos los detalles. Si necesitas reagendar, escríbenos por WhatsApp.
+            Tu Consulta Informativa de Evaluación de Viabilidad Regenerativa™ está confirmada.
+            Revisa tu correo o WhatsApp para todos los detalles. Si necesitas reagendar, escríbenos por WhatsApp.
           </p>
         </template>
 
@@ -95,8 +95,8 @@ const nextSteps = [
             </template>
           </h1>
           <p class="booked__hero-subtitle">
-            Tu asesoría de diseño con Ale Barreto ha sido agendada correctamente.
-            En breve recibirás todos los detalles.
+            Tu Consulta Informativa de Evaluación de Viabilidad Regenerativa™ ha sido agendada
+            correctamente. En breve recibirás todos los detalles para preparar la sesión.
           </p>
         </template>
       </section>
@@ -116,7 +116,7 @@ const nextSteps = [
         </div>
       </section>
 
-      <!-- Team card — Ale Barreto -->
+      <!-- Team card — PowerHouse Biotech -->
       <section class="booked__team" aria-labelledby="team-heading">
         <p id="team-heading" class="booked__team-label">Tu especialista</p>
         <div class="booked__team-card">
@@ -124,10 +124,10 @@ const nextSteps = [
             <i class="fa-solid fa-user-tie"></i>
           </div>
           <div class="booked__team-info">
-            <strong class="booked__team-name">Ale Barreto</strong>
-            <span class="booked__team-role">Experta en Diseño y Construcción en Madera</span>
+            <strong class="booked__team-name">PowerHouse Biotech</strong>
+            <span class="booked__team-role">Equipo médico evaluador — Medicina Regenerativa</span>
             <p class="booked__team-note">
-              "La madera no es solo un material — es el alma de un espacio que cuenta una historia."
+              "La medicina regenerativa no es para todos. Saber a tiempo qué se puede mejorar y qué no, vale más que cualquier promesa."
             </p>
           </div>
         </div>
@@ -136,7 +136,7 @@ const nextSteps = [
       <!-- Disclaimer -->
       <p class="booked__disclaimer">
         <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-        Los resultados mencionados en el video corresponden a casos reales. Cada proyecto de diseño y construcción es único y los resultados dependen de las especificaciones y materiales seleccionados.
+        Los porcentajes y casos mencionados en el video son resultados clínicos agregados. Cada caso es único y los resultados dependen de la condición, edad, antecedentes y respuesta individual del paciente. PowerHouse Biotech no garantiza resultados clínicos ni reemplaza al médico tratante. Toda terapia regenerativa debe realizarse bajo supervisión médica especializada y con consentimiento informado.
       </p>
 
     </main>
@@ -146,7 +146,7 @@ const nextSteps = [
         <RouterLink to="/politicas-privacidad">Política de Privacidad</RouterLink>
         <RouterLink to="/aviso-legal">Aviso Legal</RouterLink>
       </nav>
-      <p class="booked__footer-copy">© {{ new Date().getFullYear() }} ALE BARRETO. Todos los derechos reservados.</p>
+      <p class="booked__footer-copy">© {{ new Date().getFullYear() }} POWERHOUSE BIOTECH. Todos los derechos reservados.</p>
     </footer>
 
   </div>

@@ -12,17 +12,17 @@ import ContactWizard from './ContactWizard.vue'
 
       <!-- ── Columna izquierda: copy ──────────────────────────────────── -->
       <div class="contact__copy">
-        <p class="contact__label">Hablemos</p>
+        <p class="contact__label">Hablemos de tu cuerpo</p>
 
         <h2 class="contact__title">
-          Tu negocio merece<br>
-          <span class="contact__title-grad">resultados reales</span>
+          Tu salud merece<br>
+          <span class="contact__title-grad">criterio clínico</span>
         </h2>
 
         <p class="contact__desc">
-          Cuéntanos sobre tu empresa. En menos de 24 horas
-          uno de nuestros estrategas te contactará con un
-          diagnóstico inicial sin costo.
+          Cuéntanos qué te trae aquí. En menos de 24 horas un médico evaluador
+          revisará tu caso y te confirmará si calificas para una Consulta Informativa
+          de Evaluación de Viabilidad Regenerativa™.
         </p>
 
         <!-- Trust bullets -->
@@ -34,7 +34,7 @@ import ContactWizard from './ContactWizard.vue'
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
             </span>
-            Diagnóstico inicial gratuito
+            Evaluación inicial sin costo
           </li>
           <li class="contact__trust-item">
             <span class="contact__trust-icon" aria-hidden="true">
@@ -43,7 +43,7 @@ import ContactWizard from './ContactWizard.vue'
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
             </span>
-            Sin compromisos ni contratos forzados
+            Sin diagnósticos a ciegas ni promesas de cura
           </li>
           <li class="contact__trust-item">
             <span class="contact__trust-icon" aria-hidden="true">
@@ -61,7 +61,7 @@ import ContactWizard from './ContactWizard.vue'
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
             </span>
-            +150 negocios transformados en Ecuador
+            +100,000 casos clínicos analizados
           </li>
         </ul>
 
@@ -69,8 +69,8 @@ import ContactWizard from './ContactWizard.vue'
         <div class="contact__stat">
           <span class="contact__stat-num">20%</span>
           <span class="contact__stat-text">
-            promedio de aumento en facturación<br>
-            en los primeros 90 días
+            de las aplicaciones son aceptadas.<br>
+            Priorizamos criterio clínico sobre volumen.
           </span>
         </div>
       </div>

@@ -1,33 +1,57 @@
-// Ale Barreto — Expert in Wood
-$BAKANO-PINK:   #D4A373;   // Wood Pastel (Primary)
-$BAKANO-DARK:   #283618;   // Dark Forest/Earth (Text)
-$BAKANO-LIGHT:  #FEFAE0;   // Cream/Soft Pastel (Backgrounds)
-$BAKANO-PURPLE: #BC6C25;   // Earthy Brown (Secondary)
-$BAKANO-GREEN:  #606C38;   // Sage Green (Accent)
+// PowerHouse Biotech — paleta clínica azul + blanco (health style)
+// Único elemento rojo permitido: el banner sticky de urgencia (aliases $AB-URGENT-*)
 
-// Aliases semánticos
-$AB-WOOD:    #D4A373;
-$AB-EARTH:   #BC6C25;
-$AB-FOREST:  #283618;
-$AB-SAGE:    #606C38;
-$AB-CREAM:   #FEFAE0;
-$AB-WHITE:   #ffffff;
+// Brand core — azules clínicos
+$PHB-NAVY:        #0A2540;   // Azul oscuro / texto principal
+$PHB-INK:         #0D1B3A;   // Azul deep (secciones oscuras)
+$PHB-BLUE:        #0072CE;   // Azul médico (primary accent)
+$PHB-BLUE-LIGHT:  #2E9BFF;   // Azul claro (secundario)
+$PHB-AQUA:        #00B4D8;   // Cyan health (accent claro)
+$PHB-BLUE-SOFT:   #5BB8FF;   // Azul suave (gradientes)
+$PHB-MIST:        #F4F8FB;   // Fondo claro
+$PHB-CLOUD:       #E6EEF5;   // Superficie / cards
+$PHB-WHITE:       #ffffff;
 
-// Urgency / inmediatez (no es del brand pastel — alerta accionable)
-$AB-URGENT:        #B91C1C;
-$AB-URGENT-DARK:   #991B1B;
-$AB-URGENT-LIGHT:  #FCA5A5;
-$AB-URGENT-BG:     #FEF2F2;
+// Solo para el sticky urgency banner — único elemento rojo del sitio
+$PHB-PULSE:       #E63946;
+$PHB-PULSE-DARK:  #B91C46;
+$PHB-PULSE-LIGHT: #FFC2CE;
+$PHB-PULSE-BG:    #FFF1F4;
 
-// Color primario
-$BAKANO-PRIMARY: $BAKANO-PINK;
+// Aliases legacy (Bakano) — repintados a azul para que gradientes existentes salgan azules
+$BAKANO-PINK:    $PHB-BLUE;       // primary accent (gradientes, stats, CTAs)
+$BAKANO-DARK:    $PHB-NAVY;
+$BAKANO-LIGHT:   $PHB-MIST;
+$BAKANO-PURPLE:  $PHB-BLUE-LIGHT; // segundo color de gradiente
+$BAKANO-GREEN:   $PHB-AQUA;
+$BAKANO-PRIMARY: $PHB-BLUE;
 
-// Colores base
-$white: #ffffff;
+// Aliases Ale Barreto (legacy — preservados)
+$AB-WOOD:   $PHB-BLUE;
+$AB-EARTH:  $PHB-BLUE-LIGHT;
+$AB-FOREST: $PHB-NAVY;
+$AB-SAGE:   $PHB-AQUA;
+$AB-CREAM:  $PHB-MIST;
+$AB-WHITE:  $PHB-WHITE;
+
+// Urgency / sticky — permanece rojo (único)
+$AB-URGENT:        $PHB-PULSE;
+$AB-URGENT-DARK:   $PHB-PULSE-DARK;
+$AB-URGENT-LIGHT:  $PHB-PULSE-LIGHT;
+$AB-URGENT-BG:     $PHB-PULSE-BG;
+
+// Aliases Ocean Safety (legacy)
+$OS-RED:   $PHB-PULSE;     // usado por el sticky urgency
+$OS-NAVY:  $PHB-NAVY;
+$OS-BLUE:  $PHB-BLUE;
+$OS-DARK:  $PHB-NAVY;
+
+// Base
+$white: $PHB-WHITE;
 $text-light: #f5f5f5;
-$overlay-wood: rgba($BAKANO-PINK, 0.1);
+$overlay-wood: rgba($PHB-BLUE, 0.1);
 
-// Colores adicionales para UI (Mantenemos la escala de grises para utilidad)
+// Grayscale (utility)
 $gray-100: #f8f9fa;
 $gray-200: #e9ecef;
 $gray-300: #dee2e6;
@@ -37,9 +61,3 @@ $gray-600: #6c757d;
 $gray-700: #495057;
 $gray-800: #343a40;
 $gray-900: #212529;
-
-// Legacy Aliases (to prevent build errors)
-$OS-RED:   $BAKANO-PINK;
-$OS-NAVY:  $AB-FOREST;
-$OS-BLUE:  $AB-SAGE;
-$OS-DARK:  $AB-FOREST;

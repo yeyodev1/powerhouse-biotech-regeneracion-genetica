@@ -99,20 +99,20 @@ onUnmounted(() => {
       
       <!-- Header Section -->
       <div class="strategies__header">
-        <p class="strategies__subtitle">METODOLOGÍA 1M</p>
+        <p class="strategies__subtitle">METODOLOGÍA DECI</p>
         <h2 class="strategies__title">
-          Ingeniería de Crecimiento al<br>
-          Estilo <span>Silicon Valley</span>
+          Cómo decidimos si tu cuerpo<br>
+          realmente puede <span>regenerarse</span>
         </h2>
         <p class="strategies__header-desc">
-          No operamos con fe ni esperanza. Aplicamos el marco de trabajo <strong>Lean Startup</strong> para encontrar
-          tu oferta ganadora rápida y económicamente, y luego escalar con precisión matemática hacia las 7 cifras anuales.
+          No prometemos resultados. Aplicamos un protocolo clínico de <strong>3 fases</strong> que combina
+          mapeo celular, biomarcadores y análisis sistémico para responder una sola pregunta: ¿tu cuerpo puede mejorar… o no?
         </p>
-        
+
         <div class="strategies__header-cta">
           <button class="btn-header-contact" @click="scrollToContact">
-            <span>HABLAR CON UN ESTRATEGA</span>
-            <i class="fa-solid fa-rocket"></i>
+            <span>INICIAR MI EVALUACIÓN</span>
+            <i class="fa-solid fa-heart-pulse"></i>
           </button>
         </div>
       </div>
@@ -120,45 +120,45 @@ onUnmounted(() => {
       <!-- Grid de Metodología (3 Pasos) -->
       <div class="strategies__grid">
         
-        <!-- Fase 1 -->
+        <!-- Fase 1 — DETECTAR -->
         <div class="step-card">
           <div class="step-card__number">01</div>
-          <h3 class="step-card__title">Diagnóstico<br>Data-Driven</h3>
+          <h3 class="step-card__title">Detectar</h3>
           <p class="step-card__desc">
-            Eliminamos las suposiciones y el "yo creo que funcionaría". Auditamos tus finanzas, histórico de ventas y fuga de capital para encontrar dónde estás perdiendo dinero ahora mismo.
+            Entendemos qué está pasando dentro de tu cuerpo. Cruzamos tus estudios actuales, síntomas ocultos y antecedentes para encontrar las señales que la medicina reactiva pasó por alto.
           </p>
           <ul class="step-card__features">
-            <li><i class="fa-solid fa-check"></i> Auditoría de Facturación</li>
-            <li><i class="fa-solid fa-check"></i> Mapeo de Fugas de Capital</li>
-            <li><i class="fa-solid fa-check"></i> Proyección Real de Rentabilidad</li>
+            <li><i class="fa-solid fa-check"></i> Evaluación Integral</li>
+            <li><i class="fa-solid fa-check"></i> Detección de Síntomas Ocultos</li>
+            <li><i class="fa-solid fa-check"></i> Lectura Honesta de tus Estudios</li>
           </ul>
         </div>
 
-        <!-- Fase 2 -->
+        <!-- Fase 2 — EVALUAR -->
         <div class="step-card">
           <div class="step-card__number">02</div>
-          <h3 class="step-card__title">Lean Startup<br>Framework</h3>
+          <h3 class="step-card__title">Evaluar</h3>
           <p class="step-card__desc">
-            Construir, Medir, Aprender. Lanzamos experimentos ágiles en Meta Ads (MVP) para validar ofertas con tus clientes reales sin quemar presupuesto. Encontramos el Product-Market Fit.
+            Analizamos tu estado real, no solo los síntomas. Cruzamos biomarcadores, mapeo celular y respuesta sistémica para entender por qué no estás mejorando a pesar de seguir las indicaciones del médico.
           </p>
           <ul class="step-card__features">
-            <li><i class="fa-solid fa-check"></i> Pruebas A/B Omnicanal</li>
-            <li><i class="fa-solid fa-check"></i> Iteración Rápida de Mensajes</li>
-            <li><i class="fa-solid fa-check"></i> Optimización de CPA en Tiempo Real</li>
+            <li><i class="fa-solid fa-check"></i> Mapeo Celular</li>
+            <li><i class="fa-solid fa-check"></i> Estado Sistémico</li>
+            <li><i class="fa-solid fa-check"></i> Lectura Cruzada de Biomarcadores</li>
           </ul>
         </div>
 
-        <!-- Fase 3 -->
+        <!-- Fase 3 — CLARIFICAR & IDENTIFICAR -->
         <div class="step-card">
           <div class="step-card__number">03</div>
-          <h3 class="step-card__title">Escalamiento<br>Agresivo</h3>
+          <h3 class="step-card__title">Clarificar<br>e Identificar</h3>
           <p class="step-card__desc">
-            Una vez que validamos el embudo y confirmamos el ROAS (Retorno de Inversión), inyectamos capital agresivamente. Construimos sistemas de adquisición predecibles hacia el $1M.
+            Definimos qué se puede mejorar y qué no. Te entregamos una ruta crítica paso a paso: qué hacer primero para preparar a tu cuerpo a recibir terapias avanzadas, o si vale la pena iniciar el tratamiento.
           </p>
           <ul class="step-card__features">
-            <li><i class="fa-solid fa-check"></i> Sistemas Automatizados</li>
-            <li><i class="fa-solid fa-check"></i> Retargeting Avanzado</li>
-            <li><i class="fa-solid fa-check"></i> Crecimiento Exponencial Seguro</li>
+            <li><i class="fa-solid fa-check"></i> Expectativas Reales</li>
+            <li><i class="fa-solid fa-check"></i> Alcance Médico Honesto</li>
+            <li><i class="fa-solid fa-check"></i> Ruta de Regeneración Personalizada</li>
           </ul>
         </div>
 
@@ -168,11 +168,11 @@ onUnmounted(() => {
       <div class="strategies__footer">
         <div class="cta-banner">
           <div class="cta-banner__content">
-            <h3 class="cta-banner__title">¿Listo para escalar al siguiente nivel?</h3>
-            <p class="cta-banner__desc">Implementa el marco de trabajo Lean Startup en tu empresa hoy mismo.</p>
+            <h3 class="cta-banner__title">¿Listo para saber si tu cuerpo está listo?</h3>
+            <p class="cta-banner__desc">Solo aceptamos el 20% de las aplicaciones. Conversemos para saber si la tuya califica.</p>
           </div>
           <button class="btn-primary-massive" @click="scrollToContact">
-            <span>IMPLEMENTAR SISTEMA</span>
+            <span>INICIAR EVALUACIÓN</span>
             <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>

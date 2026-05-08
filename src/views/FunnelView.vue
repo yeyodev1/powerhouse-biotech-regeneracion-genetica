@@ -3,6 +3,8 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import RegistrationModal from '@/components/RegistrationModal.vue'
 import { captureFbParams } from '@/utils/fbclid'
+// TODO: replace with PHB medical director photo (`phb-specialist.png`).
+// Keeping legacy ale-barreto.png as placeholder until asset is provided.
 import alePhoto from '@/assets/team/ale-barreto.png'
 
 const router = useRouter()
@@ -22,47 +24,47 @@ const openModal = () => {
 
 const stats = [
   {
-    icon: 'fa-solid fa-tree',
+    icon: 'fa-solid fa-dna',
+    number: '+100K',
+    text: 'Casos clínicos analizados antes de tu evaluación',
+  },
+  {
+    icon: 'fa-solid fa-microscope',
     number: '15+',
-    text: 'Años trabajando con maderas nobles y certificadas',
+    text: 'Años aplicando criterio clínico en Medicina Regenerativa',
   },
   {
-    icon: 'fa-solid fa-house-chimney',
-    number: '500+',
-    text: 'Proyectos residenciales y comerciales entregados',
-  },
-  {
-    icon: 'fa-solid fa-award',
-    number: '100%',
-    text: 'Compromiso con la calidad artesanal y diseño premium',
+    icon: 'fa-solid fa-shield-heart',
+    number: '20%',
+    text: 'De las aplicaciones son aceptadas — priorizamos criterio sobre volumen',
   },
 ]
 
 const pillars = [
-  'Sin materiales de baja calidad que se deterioran rápido',
-  'Sin diseños genéricos que no aprovechan tu espacio',
-  'Sin retrasos en la entrega de tu proyecto',
-  'Con maderas seleccionadas y procesos de secado óptimos',
+  'Sin diagnósticos a ciegas que retrasan tu mejora',
+  'Sin promesas de cura que no podemos cumplir',
+  'Sin terapias regenerativas aplicadas en cuerpos no listos',
+  'Con criterio clínico que prioriza tu seguridad y honestidad',
 ]
 
 const methodology = [
   {
     num: '01',
-    icon: 'fa-solid fa-pencil-ruler',
-    title: 'Diseño Conceptual y 3D',
-    body: 'Visualizamos tu proyecto antes de cortar la primera pieza. Planificación al detalle para resultados perfectos.',
+    icon: 'fa-solid fa-stethoscope',
+    title: 'Detectar',
+    body: 'Entendemos qué pasa en tu cuerpo. Cruzamos estudios actuales, síntomas ocultos y antecedentes para encontrar señales que la medicina reactiva pasó por alto.',
   },
   {
     num: '02',
-    icon: 'fa-solid fa-hammer',
-    title: 'Fabricación Artesanal',
-    body: 'Cada pieza es tratada por manos expertas, utilizando técnicas tradicionales y tecnología de punta.',
+    icon: 'fa-solid fa-vials',
+    title: 'Evaluar',
+    body: 'Analizamos tu estado real, no solo los síntomas. Mapeo celular y lectura cruzada de biomarcadores para entender por qué no estás mejorando.',
   },
   {
     num: '03',
-    icon: 'fa-solid fa-truck-ramp-box',
-    title: 'Instalación y Acabado',
-    body: 'Nos encargamos de todo el proceso hasta que el último detalle esté en su lugar, con limpieza y precisión.',
+    icon: 'fa-solid fa-route',
+    title: 'Clarificar e Identificar',
+    body: 'Definimos qué se puede mejorar y qué no. Ruta crítica paso a paso para preparar a tu cuerpo a recibir terapias avanzadas — o detener un tratamiento mal enfocado.',
   },
 ]
 
@@ -163,7 +165,7 @@ const dismissProof = () => {
 
     <!-- TOP BAR -->
     <header class="funnel__topbar">
-      <h2 class="funnel__logo-text">ALE BARRETO</h2>
+      <h2 class="funnel__logo-text">POWERHOUSE BIOTECH</h2>
     </header>
 
     <!-- URGENCY BANNER (sticky) -->
@@ -171,7 +173,7 @@ const dismissProof = () => {
       <div class="funnel__urgency-info">
         <span class="funnel__urgency-dot" aria-hidden="true" />
         <i class="fa-solid fa-bolt funnel__urgency-icon" aria-hidden="true"></i>
-        <span class="funnel__urgency-text">CUPOS PARA <strong>CONTRATO INMEDIATO</strong> — Cierran en:</span>
+        <span class="funnel__urgency-text">APLICACIONES ABIERTAS — solo <strong>20% son aceptadas</strong>. Cierran en:</span>
         <div class="funnel__timer" aria-live="polite" aria-label="Tiempo restante">
           <span class="funnel__timer-block"><strong>{{ hours }}</strong><small>h</small></span>
           <span class="funnel__timer-sep" aria-hidden="true">:</span>
@@ -183,7 +185,7 @@ const dismissProof = () => {
       <button
         type="button"
         class="funnel__urgency-cta"
-        aria-label="Reservar mi cupo inmediato"
+        aria-label="Aplicar para Evaluación de Viabilidad Regenerativa"
         @click="openModal()"
       >
         RESERVAR MI CUPO
@@ -203,7 +205,7 @@ const dismissProof = () => {
             <span>{{ currentProof.where }}</span>
           </p>
           <p class="funnel__proof-text">
-            Acaba de contratar <strong>servicios premium de maderas</strong>
+            Acaba de aplicar para <strong>Evaluación de Viabilidad Regenerativa</strong>
           </p>
           <p class="funnel__proof-meta">
             <i class="fa-solid fa-clock" aria-hidden="true"></i>
@@ -226,14 +228,13 @@ const dismissProof = () => {
       <div class="funnel__container">
 
         <p class="funnel__eyebrow">
-          <i class="fa-solid fa-tree" aria-hidden="true"></i>
-          Expertos en Madera y Diseño de Interiores
+          <i class="fa-solid fa-dna" aria-hidden="true"></i>
+          Health Decision Platform · Medicina Regenerativa
         </p>
 
         <h1 id="funnel-headline" class="funnel__headline">
-          Transforma tu hogar con la
-          <span class="funnel__headline-accent">calidez y elegancia de la madera</span>
-          de alta gama
+          Puedes recibir el mejor tratamiento del mundo
+          <span class="funnel__headline-accent">y tu cuerpo seguir igual de enfermo</span>
         </h1>
 
         <ul class="funnel__pillars" role="list">
@@ -246,7 +247,7 @@ const dismissProof = () => {
         <!-- Urgency callout (refuerzo en hero) -->
         <div class="funnel__urgency-callout" role="note">
           <i class="fa-solid fa-fire" aria-hidden="true"></i>
-          <span>Para personas decididas que <strong>quieren ver el cambio en su espacio ahora</strong> — no dentro de 2 meses.</span>
+          <span>Para pacientes decididos a saber si su cuerpo realmente puede regenerarse — <strong>no a probar terapias a ciegas</strong>.</span>
         </div>
 
         <!-- VSL Gated Area -->
@@ -260,7 +261,7 @@ const dismissProof = () => {
               <div class="funnel__vsl-play">
                 <i class="fa-solid fa-play" aria-hidden="true"></i>
               </div>
-              <p class="funnel__vsl-caption">Mira el video exclusivo y descubre cómo transformamos tus espacios con madera de alta gama</p>
+              <p class="funnel__vsl-caption">Mira el video exclusivo y descubre por qué no todos los cuerpos están listos para regenerarse</p>
             </div>
           </div>
         </div>
@@ -269,11 +270,11 @@ const dismissProof = () => {
         <div class="funnel__cta-wrap">
           <button class="funnel__cta-btn" @click="openModal()">
             <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-            RESERVAR MI CUPO INMEDIATO
+            APLICAR PARA EVALUACIÓN
           </button>
           <p class="funnel__cta-sub">
             <i class="fa-solid fa-lock" aria-hidden="true"></i>
-            100% gratuito &nbsp;·&nbsp; Sin compromiso &nbsp;·&nbsp; Cupos limitados
+            Sin costo &nbsp;·&nbsp; Solo 20% aceptados &nbsp;·&nbsp; Confidencial
           </p>
         </div>
 
@@ -283,7 +284,7 @@ const dismissProof = () => {
     <!-- STATS -->
     <section class="funnel__stats" aria-label="Resultados comprobados">
       <div class="funnel__container">
-        <p class="funnel__section-label funnel__section-label--light">Resultados reales — clientes reales</p>
+        <p class="funnel__section-label funnel__section-label--light">Resultados clínicos reales — pacientes reales</p>
         <div class="funnel__stats-grid">
           <div v-for="stat in stats" :key="stat.number" class="funnel__stat">
             <div class="funnel__stat-icon" aria-hidden="true">
@@ -301,28 +302,28 @@ const dismissProof = () => {
       <div class="funnel__container">
         <p class="funnel__section-label">¿Te identificas con esto?</p>
         <h2 id="problem-heading" class="funnel__section-title">
-          El error que cometen la mayoría de operadores
+          El error que cometen la mayoría de pacientes
         </h2>
         <div class="funnel__problem-grid">
           <div class="funnel__problem-item">
             <i class="fa-solid fa-triangle-exclamation funnel__problem-icon" aria-hidden="true"></i>
             <div>
-              <strong>Usan maderas sin tratar</strong>
-              <p>El uso de madera "verde" o sin el secado adecuado provoca torceduras y grietas a los pocos meses de instalación.</p>
+              <strong>Aceptan estudios sin claridad</strong>
+              <p>Reciben resultados de laboratorio, pero nadie les explica qué significan esos números cuando se leen juntos. Pierden meses confundidos.</p>
             </div>
           </div>
           <div class="funnel__problem-item">
             <i class="fa-solid fa-triangle-exclamation funnel__problem-icon" aria-hidden="true"></i>
             <div>
-              <strong>Diseños poco funcionales</strong>
-              <p>Muebles que se ven bien pero no aprovechan el espacio o no resisten el uso diario en el hogar u oficina.</p>
+              <strong>Acciones sin dirección</strong>
+              <p>Prueban tratamientos, suplementos o terapias regenerativas sin una estrategia clara — y sin saber si su cuerpo está listo para responder.</p>
             </div>
           </div>
           <div class="funnel__problem-item">
             <i class="fa-solid fa-triangle-exclamation funnel__problem-icon" aria-hidden="true"></i>
             <div>
-              <strong>Acabados de baja calidad</strong>
-              <p>Barnices y selladores que se pelan o pierden su brillo rápido, obligando a mantenimientos costosos y frecuentes.</p>
+              <strong>El cuerpo no responde</strong>
+              <p>No porque la terapia no funcione, sino porque el cuerpo no estaba preparado para recibirla. Resultado: gasto sin mejora.</p>
             </div>
           </div>
         </div>
@@ -332,9 +333,9 @@ const dismissProof = () => {
     <!-- METODOLOGÍA -->
     <section class="funnel__method" aria-labelledby="method-heading">
       <div class="funnel__container">
-        <p class="funnel__section-label">Nuestra metodología de asesoría</p>
+        <p class="funnel__section-label">Metodología DECI</p>
         <h2 id="method-heading" class="funnel__section-title">
-          Tres pilares que protegen tu operación
+          Cómo decidimos si tu cuerpo puede regenerarse
         </h2>
         <div class="funnel__method-grid">
           <div v-for="m in methodology" :key="m.num" class="funnel__method-card">
@@ -352,47 +353,49 @@ const dismissProof = () => {
     <!-- TESTIMONIAL -->
     <section class="funnel__testimonial" aria-labelledby="testimonial-heading">
       <div class="funnel__container">
-        <p class="funnel__section-label">Lo que dicen nuestros clientes</p>
+        <p class="funnel__section-label">Casos clínicos</p>
         <div class="funnel__testimonial-card">
           <i class="fa-solid fa-quote-left funnel__testimonial-quote" aria-hidden="true"></i>
           <blockquote class="funnel__testimonial-text">
-            "Ale logró captar exactamente lo que queríamos para nuestra oficina. 
-            La calidez de la madera y la precisión de los acabados han transformado por completo el ambiente de trabajo."
+            "Pasé 3 años haciéndome estudios sin que nadie me explicara qué significaban juntos.
+            PowerHouse Biotech me los leyó en una sesión y entendí por qué no estaba mejorando.
+            La honestidad clínica vale más que cualquier promesa."
           </blockquote>
           <footer class="funnel__testimonial-author">
             <div class="funnel__testimonial-avatar" aria-hidden="true">
               <i class="fa-solid fa-user"></i>
             </div>
             <div>
-              <strong>Directora de Diseño</strong>
-              <span>Estudio Arquitectónico Independiente</span>
+              <strong>Paciente · Caso #PHB-0142</strong>
+              <span>Evaluación de Viabilidad Regenerativa™</span>
             </div>
           </footer>
         </div>
       </div>
     </section>
 
-    <!-- AUTHORITY — Ale Barreto -->
+    <!-- AUTHORITY — PHB Director Médico (TODO: replace foto + nombre + bio) -->
     <section class="funnel__authority" aria-labelledby="authority-heading">
       <div class="funnel__container funnel__authority-inner">
         <div class="funnel__authority-photo-wrap">
           <div class="funnel__authority-avatar" aria-hidden="true">
-            <img :src="alePhoto" alt="Ale Barreto" class="funnel__authority-img" />
+            <img :src="alePhoto" alt="Director Médico — PowerHouse Biotech" class="funnel__authority-img" />
           </div>
         </div>
         <div class="funnel__authority-content">
-          <p class="funnel__authority-eyebrow">Tu especialista asignada</p>
-          <h2 id="authority-heading" class="funnel__authority-name">Ale Barreto</h2>
-          <p class="funnel__authority-role">Experta en Diseño y Construcción en Madera</p>
+          <p class="funnel__authority-eyebrow">Tu equipo médico evaluador</p>
+          <h2 id="authority-heading" class="funnel__authority-name">Director Médico — PowerHouse Biotech</h2>
+          <p class="funnel__authority-role">Especialistas en Medicina Regenerativa y Biomarcadores</p>
           <p class="funnel__authority-bio">
-            Con años de experiencia en el mercado ecuatoriano, me especializo en crear
-            espacios que combinan la nobleza de la madera con diseños modernos y funcionales.
-            Mi objetivo es que cada proyecto sea una inversión que dure toda la vida.
+            Más de 15 años aplicando criterio clínico en medicina regenerativa.
+            Hemos analizado +100,000 casos clínicos y aprendido una verdad incómoda: no todos
+            los cuerpos están listos para regenerarse. Nuestra misión es decirte la verdad —
+            no venderte una promesa.
           </p>
           <ul class="funnel__authority-creds" role="list">
-            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Especialista en maderas nobles y tratadas</li>
-            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Diseños exclusivos a medida</li>
-            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Gestión integral: del plano a la instalación</li>
+            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Interpretación cruzada de biomarcadores y mapeo celular</li>
+            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Criterio clínico independiente, sin conflictos comerciales</li>
+            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Solo aceptamos pacientes cuando hay probabilidad real de respuesta</li>
           </ul>
         </div>
       </div>
@@ -402,11 +405,12 @@ const dismissProof = () => {
     <section class="funnel__cta-final" aria-labelledby="cta-final-heading">
       <div class="funnel__container">
         <h2 id="cta-final-heading" class="funnel__cta-final-title">
-          ¿Listo para iniciar tu proyecto?
+          ¿Listo para saber si tu cuerpo puede regenerarse?
         </h2>
         <p class="funnel__cta-final-sub">
-          Agenda una asesoría gratuita de 15 minutos. Conversaremos sobre tu idea,
-          el espacio disponible y te daremos una primera visión técnica y estética.
+          Aplica para una Consulta Informativa de Evaluación de Viabilidad Regenerativa™.
+          Conversaremos sobre tu condición y te diremos honestamente si tu caso califica
+          para una evaluación clínica completa.
         </p>
         <button class="funnel__cta-btn" @click="openModal()">
           <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
@@ -422,13 +426,13 @@ const dismissProof = () => {
     <!-- FOOTER -->
     <footer class="funnel__footer">
       <div class="funnel__container funnel__footer-inner">
-        <h2 class="funnel__footer-logo-text">ALE BARRETO</h2>
+        <h2 class="funnel__footer-logo-text">POWERHOUSE BIOTECH</h2>
         <nav class="funnel__footer-links" aria-label="Legal">
           <RouterLink to="/politicas-privacidad">Política de Privacidad</RouterLink>
           <RouterLink to="/aviso-legal">Aviso Legal</RouterLink>
         </nav>
         <p class="funnel__footer-copy">
-          © {{ new Date().getFullYear() }} ALE BARRETO. Todos los derechos reservados.
+          © {{ new Date().getFullYear() }} POWERHOUSE BIOTECH. Todos los derechos reservados.
         </p>
       </div>
     </footer>

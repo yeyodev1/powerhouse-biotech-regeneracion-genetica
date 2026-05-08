@@ -30,7 +30,7 @@ onMounted(() => {
 
     <!-- TOP BAR -->
     <header class="nospace__topbar">
-      <h2 class="nospace__logo-text">ALE BARRETO</h2>
+      <h2 class="nospace__logo-text">POWERHOUSE BIOTECH</h2>
     </header>
 
     <main class="nospace__main">
@@ -51,10 +51,11 @@ onMounted(() => {
         <div class="nospace__icon-wrap" aria-hidden="true">
           <i class="fa-solid fa-calendar-xmark nospace__icon"></i>
         </div>
-        <h1 class="nospace__title">Sin cupos disponibles en este momento</h1>
+        <h1 class="nospace__title">Por ahora, tu caso no califica para la Evaluación</h1>
         <p class="nospace__subtitle">
-          Trabajamos con un número limitado de proyectos para garantizar una asesoría de calidad.
-          En este momento nuestros cupos de asesoría de diseño están completos.
+          Solo aceptamos el 20% de las aplicaciones. En este momento tu caso no cumple los
+          criterios clínicos que priorizamos para la Evaluación de Viabilidad Regenerativa™.
+          No es un rechazo permanente — es honestidad clínica para ahorrarte tiempo y dinero.
         </p>
       </div>
 
@@ -68,7 +69,7 @@ onMounted(() => {
             </div>
             <div>
               <strong>Revisa tu email</strong>
-              <p>Te notificaremos cuando se libere un espacio en la agenda de Ale Barreto.</p>
+              <p>Te notificaremos cuando se libere un espacio en la agenda de PowerHouse Biotech.</p>
             </div>
           </li>
           <li>
@@ -76,8 +77,8 @@ onMounted(() => {
               <i class="fa-brands fa-whatsapp"></i>
             </div>
             <div>
-              <strong>Proyecto urgente</strong>
-              <p>Si tu proyecto necesita atención inmediata, contáctanos por WhatsApp y evaluaremos tu caso.</p>
+              <strong>Caso urgente</strong>
+              <p>Si tu salud requiere atención inmediata, escríbenos por WhatsApp para revisar manualmente tu caso. No reemplazamos al médico tratante — orientamos decisiones clínicas.</p>
             </div>
           </li>
         </ul>
@@ -86,13 +87,13 @@ onMounted(() => {
       <!-- Teaser -->
       <div class="nospace__teaser">
         <div class="nospace__teaser-badge">
-          <i class="fa-solid fa-tree" aria-hidden="true"></i>
+          <i class="fa-solid fa-book-medical" aria-hidden="true"></i>
           Próximamente
         </div>
-        <h2 class="nospace__teaser-title">Guía de Diseño y Selección de Madera</h2>
+        <h2 class="nospace__teaser-title">Guía: Cómo prepararte para una terapia regenerativa</h2>
         <p class="nospace__teaser-body">
-          Estamos preparando una guía completa para ayudarte a seleccionar el tipo de madera ideal
-          según tu tipo de espacio y estilo — sin necesidad de llamar a un especialista.
+          Estamos preparando una guía clínica con los pasos básicos para preparar a tu cuerpo
+          antes de iniciar cualquier terapia regenerativa — sin necesidad de llamar a un especialista.
         </p>
       </div>
 
@@ -110,7 +111,7 @@ onMounted(() => {
         <RouterLink to="/politicas-privacidad">Política de Privacidad</RouterLink>
         <RouterLink to="/aviso-legal">Aviso Legal</RouterLink>
       </nav>
-      <p class="nospace__footer-copy">© {{ new Date().getFullYear() }} ALE BARRETO. Todos los derechos reservados.</p>
+      <p class="nospace__footer-copy">© {{ new Date().getFullYear() }} POWERHOUSE BIOTECH. Todos los derechos reservados.</p>
     </footer>
 
   </div>

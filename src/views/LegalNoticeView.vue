@@ -17,25 +17,25 @@ onMounted(() => {
 
       <section class="legal-notice__section">
         <h2 class="legal-notice__section-title">1. AVISO LEGAL Y TÉRMINOS DE USO</h2>
-        <p>Ale Barreto Wood Design es denominado en este documento como el PROVEEDOR y usted el CLIENTE quién recibe nuestros productos o servicios (gratuitos o de pago)</p>
+        <p>PowerHouse Biotech es denominado en este documento como el PROVEEDOR y usted el CLIENTE quién recibe nuestros productos o servicios (gratuitos o de pago)</p>
         <p>Puedo garantizarte que te encuentras en un espacio 100 % seguro, para ello debes saber:</p>
         
         <h3 class="legal-notice__subsection-title">1.1. DATOS IDENTIFICATIVOS DEL RESPONSABLE</h3>
         <p>Tal y como recoge la normativa vigente, le informo que:</p>
         <ul>
-          <li>Mi denominación social es: Ale Barreto Wood Design</li>
+          <li>Mi denominación social es: PowerHouse Biotech</li>
           <li>Mi domicilio social se encuentra en Dirección: Samborondón, Guayaquil, Ecuador</li>
-          <li>Email: info@alebarreto.com</li>
-          <li>Mi Servicios profesionales es: Diseño y construcción en madera</li>
+          <li>Email: legal@powerhousebiotech.com</li>
+          <li>Mi Servicios profesionales es: Health Decision Platform en Medicina Regenerativa</li>
         </ul>
 
         <h3 class="legal-notice__subsection-title">1.2. FINALIDAD DE LA PÁGINA WEB</h3>
         <p>Los servicios prestados por el responsable de la página web son los siguientes:</p>
         <ol>
-          <li>La asesoría técnica y diseño de proyectos en madera.</li>
+          <li>Evaluación de Viabilidad Regenerativa™ y orientación clínica regenerativa.</li>
           <li>La venta de materiales y acabados de alta gama.</li>
           <li>Gestionar la lista de interesados y usuarios adscritos a la web.</li>
-          <li>Suministro de contenidos técnicos sobre madera.</li>
+          <li>Contenido educativo sobre medicina regenerativa, biomarcadores y prevención clínica. La información publicada NO sustituye al médico tratante ni constituye diagnóstico clínico individual.</li>
           <li>Dirigir su red de colaboradores así como la gestión de pagos de los mismos</li>
         </ol>
 
@@ -45,7 +45,7 @@ onMounted(() => {
         <h3 class="legal-notice__subsection-title">1.4. USO DEL SITIO WEB Y CAPTURA DE INFORMACIÓN</h3>
         
         <h4 class="legal-notice__subsubsection-title">1.4.1 USO DEL SITIO WEB</h4>
-        <p>La página web proporciona el acceso a artículos, informaciones, servicios y datos (en adelante, "los contenidos") propiedad de Ale Barreto Wood Design. El USUARIO asume la responsabilidad del uso de la web.</p>
+        <p>La página web proporciona el acceso a artículos, informaciones, servicios y datos (en adelante, "los contenidos") propiedad de PowerHouse Biotech. El USUARIO asume la responsabilidad del uso de la web.</p>
         
         <p>El USUARIO se compromete a hacer un uso adecuado de los contenidos que ofrece a través de su web y con carácter enunciativo pero no limitativo, a no emplearlos para:</p>
         <ul>
@@ -55,7 +55,7 @@ onMounted(() => {
           <li>(d) intentar acceder y, en su caso, utilizar las cuentas de correo electrónico de otros usuarios y modificar o manipular sus mensajes.</li>
         </ul>
 
-        <p>Ale Barreto Wood Design se reserva el derecho de retirar todos aquellos comentarios y aportaciones que vulneren el respeto a la dignidad de la persona, que sean discriminatorios, xenófobos, racistas, pornográficos, que atenten contra la juventud o la infancia, el orden o la seguridad pública o que, a su juicio, no resultaran adecuados para su publicación.</p>
+        <p>PowerHouse Biotech se reserva el derecho de retirar todos aquellos comentarios y aportaciones que vulneren el respeto a la dignidad de la persona, que sean discriminatorios, xenófobos, racistas, pornográficos, que atenten contra la juventud o la infancia, el orden o la seguridad pública o que, a su juicio, no resultaran adecuados para su publicación.</p>
 
         <h4 class="legal-notice__subsubsection-title">1.4.2 CAPTURA DE INFORMACIÓN</h4>
         <ul>
@@ -67,66 +67,66 @@ onMounted(() => {
 
       <section class="legal-notice__section">
         <h2 class="legal-notice__section-title">2. PROPIEDAD INTELECTUAL E INDUSTRIAL</h2>
-        <p>Ale Barreto Wood Design por sí o como cesionario, es titular de todos los derechos de propiedad intelectual e industrial de su página web, así como de los elementos contenidos en la misma (a título enunciativo, imágenes, sonido, audio, vídeo, software o textos; marcas o logotipos, combinaciones de colores, estructura y diseño, selección de materiales usados, programas de ordenador necesarios para su funcionamiento, acceso y uso, etc.), titularidad de Ale Barreto Wood Design o bien de sus licenciantes. Todos los derechos reservados.</p>
+        <p>PowerHouse Biotech por sí o como cesionario, es titular de todos los derechos de propiedad intelectual e industrial de su página web, así como de los elementos contenidos en la misma (a título enunciativo, imágenes, sonido, audio, vídeo, software o textos; marcas o logotipos, combinaciones de colores, estructura y diseño, selección de materiales usados, programas de ordenador necesarios para su funcionamiento, acceso y uso, etc.), titularidad de PowerHouse Biotech o bien de sus licenciantes. Todos los derechos reservados.</p>
         
-        <p>Cualquier uso no autorizado previamente por Ale Barreto Wood Design será considerado un incumplimiento grave de los derechos de propiedad intelectual o industrial del autor.</p>
+        <p>Cualquier uso no autorizado previamente por PowerHouse Biotech será considerado un incumplimiento grave de los derechos de propiedad intelectual o industrial del autor.</p>
         
         <p>Queda terminantemente prohibido compartir la licencia para uso con más personas, cada licencia es personal e intransferible reservándonos cuantas acciones civiles y penales nos asistan en aras de salvaguardar nuestros derechos, todo ello bajo apercibimiento de incurrir en un delito contra la propiedad intelectual.</p>
       </section>
 
       <section class="legal-notice__section">
         <h2 class="legal-notice__section-title">3. EXCLUSIÓN DE GARANTÍAS Y RESPONSABILIDAD</h2>
-        <p>Ale Barreto Wood Design no se hace responsable, en ningún caso, de los daños y perjuicios de cualquier naturaleza que pudieran ocasionar, a título enunciativo: por errores u omisiones en los contenidos, por falta de disponibilidad del sitio web, – el cual realizará paradas periódicas por mantenimientos técnicos – así como por la transmisión de virus o programas maliciosos o lesivos en los contenidos, a pesar de haber adoptado todas las medidas tecnológicas necesarias para evitarlo.</p>
+        <p>PowerHouse Biotech no se hace responsable, en ningún caso, de los daños y perjuicios de cualquier naturaleza que pudieran ocasionar, a título enunciativo: por errores u omisiones en los contenidos, por falta de disponibilidad del sitio web, – el cual realizará paradas periódicas por mantenimientos técnicos – así como por la transmisión de virus o programas maliciosos o lesivos en los contenidos, a pesar de haber adoptado todas las medidas tecnológicas necesarias para evitarlo.</p>
         
         <p>Usted comprende y acepta que el valor que obtendrá del Programa será en proporción al nivel de esfuerzo que realice; su nivel de comprensión; su experiencia, habilidades, nivel de deseo y disposición para tomar acciones con respecto a la información proporcionada; y factores externos como eventos mundiales, condiciones del mercado, empleo, relaciones y otras incógnitas.</p>
       </section>
 
       <section class="legal-notice__section">
         <h2 class="legal-notice__section-title">4. MODIFICACIONES</h2>
-        <p>Ale Barreto Wood Design se reserva el derecho de efectuar sin previo aviso las modificaciones que considere oportunas en su web, pudiendo cambiar, suprimir o añadir tanto los contenidos y servicios que se presten a través de la misma como la forma en la que éstos aparezcan presentados o localizados en su web.</p>
+        <p>PowerHouse Biotech se reserva el derecho de efectuar sin previo aviso las modificaciones que considere oportunas en su web, pudiendo cambiar, suprimir o añadir tanto los contenidos y servicios que se presten a través de la misma como la forma en la que éstos aparezcan presentados o localizados en su web.</p>
       </section>
 
       <section class="legal-notice__section">
         <h2 class="legal-notice__section-title">5. POLÍTICA DE ENLACES</h2>
-        <p>Las personas o entidades que pretendan realizar o realicen un hiperenlace desde una página web de otro portal de Internet a la web de Ale Barreto Wood Design deberá someterse las siguientes condiciones:</p>
+        <p>Las personas o entidades que pretendan realizar o realicen un hiperenlace desde una página web de otro portal de Internet a la web de PowerHouse Biotech deberá someterse las siguientes condiciones:</p>
         <ol>
-          <li>No se permite la reproducción total o parcial de ninguno de los servicios ni contenidos del sitio web sin la previa autorización expresa de Ale Barreto Wood Design</li>
-          <li>No se establecerán deep-links ni enlaces IMG o de imagen, ni frames con la web de Ale Barreto Wood Design sin su previa autorización expresa.</li>
-          <li>No se establecerá ninguna manifestación falsa, inexacta o incorrecta sobre la web de Ale Barreto Wood Design, ni sobre los servicios o contenidos de la misma.</li>
+          <li>No se permite la reproducción total o parcial de ninguno de los servicios ni contenidos del sitio web sin la previa autorización expresa de PowerHouse Biotech</li>
+          <li>No se establecerán deep-links ni enlaces IMG o de imagen, ni frames con la web de PowerHouse Biotech sin su previa autorización expresa.</li>
+          <li>No se establecerá ninguna manifestación falsa, inexacta o incorrecta sobre la web de PowerHouse Biotech, ni sobre los servicios o contenidos de la misma.</li>
         </ol>
       </section>
 
       <section class="legal-notice__section">
         <h2 class="legal-notice__section-title">6. DERECHO DE EXCLUSIÓN</h2>
-        <p>Ale Barreto Wood Design se reserva el derecho a denegar o retirar el acceso al portal y/o los servicios ofrecidos sin necesidad de preaviso, a instancia propia o de un tercero, a aquellos usuarios que incumplan las presentes Condiciones Generales de Uso.</p>
+        <p>PowerHouse Biotech se reserva el derecho a denegar o retirar el acceso al portal y/o los servicios ofrecidos sin necesidad de preaviso, a instancia propia o de un tercero, a aquellos usuarios que incumplan las presentes Condiciones Generales de Uso.</p>
       </section>
 
       <section class="legal-notice__section">
         <h2 class="legal-notice__section-title">7. CONDICIONES DE VENTA</h2>
-        <p>Las presentes condiciones generales tienen por objeto regular expresamente las condiciones aplicables a los procesos de contratación llevados a cabo por los usuarios "Cliente" de los servicios de asesoría y construcción ofrecido por parte de Ale Barreto Wood Design a través de su sitio web.</p>
+        <p>Las presentes condiciones generales tienen por objeto regular expresamente las condiciones aplicables a los procesos de contratación llevados a cabo por los usuarios "Cliente" de los servicios de asesoría y construcción ofrecido por parte de PowerHouse Biotech a través de su sitio web.</p>
         
         <p>Para proceder al pago, el cliente tiene a su disposición los siguientes medios:</p>
         <p>Visa/Mastercard/American Express; el usuario deberá proporcionar el nombre del titular de la tarjeta, el número, la fecha de caducidad y el CVV.</p>
         
-        <p>Toda la información será tramitada a través de pasarelas de pagos externa a Ale Barreto Wood Design como Stripe o similares.</p>
+        <p>Toda la información será tramitada a través de pasarelas de pagos externa a PowerHouse Biotech como Stripe o similares.</p>
       </section>
 
       <section class="legal-notice__section">
         <h2 class="legal-notice__section-title">8. LEY APLICABLE Y JURISDICCIÓN</h2>
-        <p>La relación entre Ale Barreto Wood Design y el CLIENTE se regirá por la normativa de Ecuador y cualquier controversia se someterá a los Juzgados y tribunales de la ciudad de Guayaquil, salvo que la Ley aplicable disponga otra cosa.</p>
+        <p>La relación entre PowerHouse Biotech y el CLIENTE se regirá por la normativa de Ecuador y cualquier controversia se someterá a los Juzgados y tribunales de la ciudad de Guayaquil, salvo que la Ley aplicable disponga otra cosa.</p>
       </section>
 
       <section class="legal-notice__section">
         <h2 class="legal-notice__section-title">9. CAUSAS DE DISOLUCIÓN DEL CONTRATO</h2>
         <ol>
-          <li>PUEDE CANCELAR ACUERDOS Y CONTRATOS FIRMADOS CON Ale Barreto Wood Design EN CUALQUIER MOMENTO ANTES DE LA MEDIANOCHE DEL TERCER DÍA DESPUÉS DE LA FECHA QUE HAGA EL PRIMER PAGO.</li>
+          <li>PUEDE CANCELAR ACUERDOS Y CONTRATOS FIRMADOS CON PowerHouse Biotech EN CUALQUIER MOMENTO ANTES DE LA MEDIANOCHE DEL TERCER DÍA DESPUÉS DE LA FECHA QUE HAGA EL PRIMER PAGO.</li>
           <li>En el caso de una reclamación o disputa, primero hablará con nosotros de buena fe y ambas partes se comprometen a intentar alcanzar un acuerdo de forma dialogada y satisfactoria para ambas partes antes de acudir a realizar una reclamación formal.</li>
         </ol>
       </section>
 
       <section class="legal-notice__section">
         <h2 class="legal-notice__section-title">10. RECLAMACIONES Y DUDAS</h2>
-        <p>Ale Barreto Wood Design informa que existen hojas de reclamación a disposición de usuarios y clientes pudiendo remitir un correo a info@alebarreto.com indicando su nombre y apellidos, el servicio o producto adquirido y exponiendo los motivos de su reclamación.</p>
+        <p>PowerHouse Biotech informa que existen hojas de reclamación a disposición de usuarios y clientes pudiendo remitir un correo a legal@powerhousebiotech.com indicando su nombre y apellidos, el servicio o producto adquirido y exponiendo los motivos de su reclamación.</p>
       </section>
 
       <section class="legal-notice__section">

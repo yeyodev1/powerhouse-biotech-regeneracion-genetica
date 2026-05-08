@@ -5,9 +5,10 @@ import { useContactModal } from '@/composables/useContactModal'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import TheScrollOverlay from '@/components/TheScrollOverlay.vue' // Added this import
+// TODO: replace with PHB-owned Cloudinary assets (lab/microscopy/clinic visuals)
 const heroVideo = 'https://res.cloudinary.com/dpimsaaa4/video/upload/v1772741967/IMG_8601_y5tgbu.mov'
 const bgFoto1   = 'https://res.cloudinary.com/dpimsaaa4/image/upload/v1772741965/IMG_7973_fm7dfc.jpg'
-const bgFoto2   = 'https://res.com/dpimsaaa4/image/upload/v1772741964/IMG_8099_h9zifs.jpg'
+const bgFoto2   = 'https://res.cloudinary.com/dpimsaaa4/image/upload/v1772741964/IMG_8099_h9zifs.jpg'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -27,35 +28,35 @@ const showScrollDown   = ref(true)   // flecha inicial "scroll"
 const showHorizontal   = ref(false)  // barra + hint horizontal
 const hProgress        = ref(0)      // 0–1 progreso del track horizontal
 
-// Estadísticas que rotan
+// Estadísticas que rotan — datos clínicos PHB
 const stats = [
-  { number: '15+', label: 'Años de Experiencia' },
-  { number: '500+', label: 'Proyectos Entregados' },
-  { number: '100%', label: 'Madera Certificada' },
-  { number: '24/7', label: 'Asesoría Técnica' }
+  { number: '+100K', label: 'Casos Clínicos Analizados' },
+  { number: '15+', label: 'Años en Medicina Regenerativa' },
+  { number: '20%', label: 'Aplicaciones Aceptadas' },
+  { number: '90%', label: 'Reducción de Inflamación Promedio' }
 ]
 
-// Beneficios clave
+// Pilares de la Evaluación de Viabilidad Regenerativa
 const benefits = [
   {
-    icon: 'fa-solid fa-tree',
-    title: 'Madera de Calidad',
-    description: 'Seleccionamos las mejores piezas para garantizar durabilidad y estética superior.'
+    icon: 'fa-solid fa-dna',
+    title: 'Mapeo Celular',
+    description: 'Evaluamos si tu cuerpo todavía puede repararse — o si una terapia regenerativa llegaría tarde.'
   },
   {
-    icon: 'fa-solid fa-couch',
-    title: 'Diseño a Medida',
-    description: 'Creamos espacios únicos que reflejan tu estilo, desde casas hasta oficinas.'
+    icon: 'fa-solid fa-vials',
+    title: 'Interpretación de Biomarcadores',
+    description: 'Te explicamos a detalle qué dicen tus análisis de laboratorio cuando se leen juntos, no por separado.'
   },
   {
-    icon: 'fa-solid fa-hammer',
-    title: 'Mano de Obra Experta',
-    description: 'Artesanos especializados con años de trayectoria en el manejo de la madera.'
+    icon: 'fa-solid fa-microscope',
+    title: 'Estado Sistémico',
+    description: 'Identificamos por qué no estás mejorando a pesar de seguir indicaciones médicas y suplementos.'
   },
   {
-    icon: 'fa-solid fa-shield-halved',
-    title: 'Garantía Total',
-    description: 'Respaldamos cada proyecto con una garantía de calidad inigualable.'
+    icon: 'fa-solid fa-route',
+    title: 'Ruta de Regeneración',
+    description: 'Diseñamos tu ruta crítica — qué hacer primero para que tu cuerpo pueda recibir terapias avanzadas.'
   }
 ]
 
@@ -194,17 +195,17 @@ const { open: openContactModal } = useContactModal()
         <div class="track-panel panel-intro">
           <div class="panel-intro__content">
             <h1 class="hero-huge__subtitle">
-              Transformamos tus espacios con la calidez y<br/>
-              <strong>Elegancia de la Madera de Alta Gama</strong>
+              Puedes recibir el mejor tratamiento del mundo<br/>
+              <strong>Y tu cuerpo estar igual de enfermo</strong>
             </h1>
             <p class="hero-huge__desc">
-              Diseño y construcción experta para hogares y oficinas.<br/>
-              Calidad artesanal con visión contemporánea.
+              Evaluamos tu capacidad de autoreparación antes de iniciar cualquier<br/>
+              terapia regenerativa. Solo aceptamos el 20% de las aplicaciones.
             </p>
 
             <div class="hero-huge__cta">
               <button class="btn btn--primary" @click="openContactModal">
-                <span>INICIAR MI PROYECTO</span>
+                <span>EVALÚA TU VIABILIDAD</span>
               </button>
             </div>
           </div>

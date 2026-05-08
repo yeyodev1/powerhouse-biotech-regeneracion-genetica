@@ -5,9 +5,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 import TestimonialCard from './TestimonialCard.vue'
 
+// TODO: replace with PHB patient-consent imagery (image rights cleared)
 import imgMauro from '../assets/testimonios/mauro.webp'
 import imgJohanna from '../assets/testimonios/johanna.png'
 import imgMariaIsabel from '../assets/testimonios/mariaisabel.webp'
+// TODO: replace with PHB-owned ambient lab/clinic clip (currently AB legacy asset)
 const bgVideo = 'https://res.cloudinary.com/dpimsaaa4/video/upload/v1772741965/IMG_9668_tmxlid.mp4'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -24,27 +26,29 @@ const setCardRef = (el: unknown, i: number) => {
 }
 
 // ── Datos ───────────────────────────────────────────────────────────────────
+// TODO: replace with real PHB patients (signed consent + video file). Copy below is placeholder
+// pending consent — keep tone clinical, never promise cure or guarantee result.
 const testimonials = [
   {
     id: 1,
-    name: 'Mauro Salgán',
-    quote: 'Su estrategia rompió nuestro umbral de producción',
+    name: 'Paciente · Caso #PHB-0142',
+    quote: 'Pasé 3 años haciéndome estudios sin que nadie me explicara qué significaban juntos. PHB me los leyó en una sesión y entendí por qué no estaba mejorando.',
     image: imgMauro,
-    videoUrl: 'https://www.instagram.com/p/DExquGpxwP_/',
+    videoUrl: '#',
   },
   {
     id: 2,
-    name: 'Johanna Quezada',
-    quote: 'Teníamos una desorganización total en nuestros cuatros restaurantes, al momento que llegó Bakano, todo cambió',
+    name: 'Paciente · Caso #PHB-0287',
+    quote: 'Querían iniciarme una terapia regenerativa que mi cuerpo no estaba listo para recibir. PHB me detuvo a tiempo y diseñó la ruta para prepararme primero.',
     image: imgJohanna,
-    videoUrl: 'https://www.instagram.com/p/DMtdBuMup4k',
+    videoUrl: '#',
   },
   {
     id: 3,
-    name: 'María Isabel Soriano',
-    quote: 'Me hicieron dar cuenta de esquemas de mi negocio que nunca había considerado',
+    name: 'Paciente · Caso #PHB-0419',
+    quote: 'Por primera vez alguien me dijo con honestidad qué se puede mejorar y qué no. Ese criterio clínico vale más que cualquier promesa.',
     image: imgMariaIsabel,
-    videoUrl: 'https://drive.google.com/file/d/19QGvEoV9IbVBzMhprv61ER20XfjQMExk/view?usp=sharing',
+    videoUrl: '#',
   },
 ]
 
@@ -172,9 +176,9 @@ const openVideo = (url: string) => window.open(url, '_blank')
              Empieza centrado en pantalla (y: 40vh vía GSAP)
              y sube al top durante el primer 40 % del scroll.    -->
         <header class="testimonials__header" ref="headerRef">
-          <p class="testimonials__label">Testimonios</p>
+          <p class="testimonials__label">Casos Clínicos</p>
           <h2 class="testimonials__title">
-            Lo que dicen <br>nuestros clientes
+            Pacientes que recibieron<br>la respuesta honesta
           </h2>
         </header>
 

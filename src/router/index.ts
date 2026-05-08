@@ -32,14 +32,14 @@ const router = createRouter({
       name: 'funnel',
       component: FunnelView,
       meta: {
-        title: 'Ale Barreto | Expertos en Madera — Diseño y Construcción de Alta Gama',
+        title: 'PowerHouse Biotech | Evaluación de Viabilidad Regenerativa™',
         description:
-          'Expertos en diseño y construcción en madera. Transformamos espacios con acabados premium y estructuras sostenibles. Agenda tu asesoría gratuita.',
-        canonical: 'https://alebarreto.com/',
-        ogTitle: 'Ale Barreto | Expertos en Madera',
+          'Health Decision Platform en Medicina Regenerativa. Evaluamos tu capacidad de autoreparación antes de iniciar cualquier terapia regenerativa. Solo aceptamos el 20% de las aplicaciones.',
+        canonical: 'https://www.powerhousebiotech.com/',
+        ogTitle: 'PowerHouse Biotech | ¿Puede tu cuerpo mejorar?',
         ogDescription:
-          'Diseño y construcción en madera de alta gama. Calidad artesanal para tus proyectos residenciales y comerciales.',
-        ogUrl: 'https://alebarreto.com/',
+          'Evaluación de Viabilidad Regenerativa™. Criterio clínico antes que promesa de cura. +100,000 casos clínicos analizados.',
+        ogUrl: 'https://www.powerhousebiotech.com/',
       } satisfies RouteMeta,
     },
     {
@@ -47,12 +47,12 @@ const router = createRouter({
       name: 'video',
       component: VideoView,
       meta: {
-        title: 'Mira el video | Ale Barreto — Paso 1 de 2',
-        description: 'Descubre cómo transformamos espacios con madera de alta gama en nuestro video exclusivo.',
-        canonical: 'https://alebarreto.com/ver-video',
-        ogTitle: 'Mira el video | Ale Barreto',
-        ogDescription: 'Ve el video y agenda tu Cita Estratégica gratuita con Ale Barreto.',
-        ogUrl: 'https://alebarreto.com/ver-video',
+        title: 'Mira el video | PowerHouse Biotech — Paso 1 de 2',
+        description: 'Descubre por qué solo aceptamos el 20% de las aplicaciones para la Evaluación de Viabilidad Regenerativa™.',
+        canonical: 'https://www.powerhousebiotech.com/ver-video',
+        ogTitle: 'Mira el video | PowerHouse Biotech',
+        ogDescription: 'Ve el video y aplica para tu Consulta Informativa de Evaluación de Viabilidad Regenerativa™.',
+        ogUrl: 'https://www.powerhousebiotech.com/ver-video',
       } satisfies RouteMeta,
     },
     {
@@ -60,12 +60,12 @@ const router = createRouter({
       name: 'booking',
       component: BookingView,
       meta: {
-        title: 'Agenda tu Cita | Ale Barreto — Paso 2 de 2',
-        description: 'Selecciona el día y hora para tu Cita Estratégica gratuita con Ale Barreto.',
-        canonical: 'https://alebarreto.com/agendar',
-        ogTitle: 'Agenda tu Cita | Ale Barreto',
-        ogDescription: 'Elige tu horario y reserva tu Cita Estratégica gratuita.',
-        ogUrl: 'https://alebarreto.com/agendar',
+        title: 'Agenda tu Consulta | PowerHouse Biotech — Paso 2 de 2',
+        description: 'Selecciona el día y hora para tu Consulta Informativa de Evaluación de Viabilidad Regenerativa™ con el equipo médico de PowerHouse Biotech.',
+        canonical: 'https://www.powerhousebiotech.com/agendar',
+        ogTitle: 'Agenda tu Consulta | PowerHouse Biotech',
+        ogDescription: 'Elige tu horario y reserva tu Consulta Informativa con el equipo médico evaluador.',
+        ogUrl: 'https://www.powerhousebiotech.com/agendar',
       } satisfies RouteMeta,
     },
     {
@@ -73,12 +73,12 @@ const router = createRouter({
       name: 'booked',
       component: BookedView,
       meta: {
-        title: 'Cita Confirmada | Ale Barreto',
-        description: 'Tu cita estratégica con Ale Barreto está confirmada. Revisa tu correo y prepárate.',
-        canonical: 'https://alebarreto.com/cita-confirmada',
-        ogTitle: 'Cita Confirmada | Ale Barreto',
-        ogDescription: 'Tu cita está reservada. Te contactaremos pronto.',
-        ogUrl: 'https://alebarreto.com/cita-confirmada',
+        title: 'Consulta Confirmada | PowerHouse Biotech',
+        description: 'Tu Consulta Informativa de Evaluación de Viabilidad Regenerativa™ está confirmada. Revisa tu correo y prepárate.',
+        canonical: 'https://www.powerhousebiotech.com/cita-confirmada',
+        ogTitle: 'Consulta Confirmada | PowerHouse Biotech',
+        ogDescription: 'Tu Consulta está reservada. El equipo médico te contactará pronto.',
+        ogUrl: 'https://www.powerhousebiotech.com/cita-confirmada',
       } satisfies RouteMeta,
     },
     {
@@ -86,12 +86,12 @@ const router = createRouter({
       name: 'no-space',
       component: NoSpaceView,
       meta: {
-        title: 'Sin Espacio Disponible | Ale Barreto',
-        description: 'En este momento los cupos de asesoría de Ale Barreto están completos. Te notificaremos cuando se libere un espacio.',
-        canonical: 'https://alebarreto.com/sin-espacio',
-        ogTitle: 'Sin Espacio Disponible | Ale Barreto',
-        ogDescription: 'Los cupos de asesoría están completos. Te avisaremos cuando haya disponibilidad.',
-        ogUrl: 'https://alebarreto.com/sin-espacio',
+        title: 'Aplicación no calificada | PowerHouse Biotech',
+        description: 'Solo aceptamos el 20% de las aplicaciones. En este momento tu caso no cumple los criterios clínicos. Es honestidad clínica, no rechazo permanente.',
+        canonical: 'https://www.powerhousebiotech.com/sin-espacio',
+        ogTitle: 'Aplicación no calificada | PowerHouse Biotech',
+        ogDescription: 'Solo aceptamos el 20% de las aplicaciones. Honestidad clínica antes que rechazo permanente.',
+        ogUrl: 'https://www.powerhousebiotech.com/sin-espacio',
       } satisfies RouteMeta,
     },
     {
@@ -99,12 +99,12 @@ const router = createRouter({
       name: 'privacy-policy',
       component: PrivacyPolicyView,
       meta: {
-        title: 'Política de Privacidad | Ale Barreto',
-        description: 'Política de privacidad de Ale Barreto. Información sobre el tratamiento de datos personales.',
-        canonical: 'https://alebarreto.com/politicas-privacidad',
-        ogTitle: 'Política de Privacidad | Ale Barreto',
-        ogDescription: 'Política de privacidad de Ale Barreto.',
-        ogUrl: 'https://alebarreto.com/politicas-privacidad',
+        title: 'Política de Privacidad | PowerHouse Biotech',
+        description: 'Política de privacidad de PowerHouse Biotech. Información sobre el tratamiento de datos personales.',
+        canonical: 'https://www.powerhousebiotech.com/politicas-privacidad',
+        ogTitle: 'Política de Privacidad | PowerHouse Biotech',
+        ogDescription: 'Política de privacidad de PowerHouse Biotech.',
+        ogUrl: 'https://www.powerhousebiotech.com/politicas-privacidad',
       } satisfies RouteMeta,
     },
     {
@@ -112,12 +112,12 @@ const router = createRouter({
       name: 'legal-notice',
       component: LegalNoticeView,
       meta: {
-        title: 'Aviso Legal | Ale Barreto',
-        description: 'Aviso legal de Ale Barreto. Términos y condiciones de uso del sitio web.',
-        canonical: 'https://alebarreto.com/aviso-legal',
-        ogTitle: 'Aviso Legal | Ale Barreto',
-        ogDescription: 'Aviso legal de Ale Barreto.',
-        ogUrl: 'https://alebarreto.com/aviso-legal',
+        title: 'Aviso Legal | PowerHouse Biotech',
+        description: 'Aviso legal de PowerHouse Biotech. Términos y condiciones de uso del sitio web.',
+        canonical: 'https://www.powerhousebiotech.com/aviso-legal',
+        ogTitle: 'Aviso Legal | PowerHouse Biotech',
+        ogDescription: 'Aviso legal de PowerHouse Biotech.',
+        ogUrl: 'https://www.powerhousebiotech.com/aviso-legal',
       } satisfies RouteMeta,
     },
   ],
@@ -144,7 +144,7 @@ const setCanonical = (href: string) => {
 
 router.afterEach((to) => {
   const meta = to.meta
-  document.title = meta.title ?? 'Ale Barreto'
+  document.title = meta.title ?? 'PowerHouse Biotech'
   setMeta('description', meta.description ?? '')
   setOgMeta('og:title', meta.ogTitle ?? meta.title ?? '')
   setOgMeta('og:description', meta.ogDescription ?? meta.description ?? '')

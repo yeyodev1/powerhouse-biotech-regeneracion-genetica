@@ -63,9 +63,9 @@ const form = ref({
 })
 
 const URGENCY_LABEL: Record<Exclude<Urgency, ''>, string> = {
-  'immediate': 'Necesita iniciar de inmediato (este mes)',
-  'next-month': 'En 1–3 meses',
-  'just-looking': 'Solo explorando, sin urgencia',
+  'immediate': 'Crítica — busca evaluación clínica este mes',
+  'next-month': 'Alta — busca respuesta en 1–3 meses',
+  'just-looking': 'Explorando — sin urgencia clínica',
 }
 
 const urgencyOpts: { value: Exclude<Urgency, ''>; label: string; sub: string; hot?: boolean }[] = [
@@ -84,8 +84,8 @@ function calcTags(urgency: Urgency): string[] {
 
 function buildNote(f: typeof form.value, country: string): string {
   return [
-    'Lead desde funnel VSL (registro inicial).',
-    `Proyecto: ${f.empresa}`,
+    'Lead desde funnel VSL — PowerHouse Biotech (registro inicial).',
+    `Motivo de consulta: ${f.empresa}`,
     `Urgencia: ${f.urgency ? URGENCY_LABEL[f.urgency] : '—'}`,
     `País: ${country}`,
   ].join('\n')
@@ -119,7 +119,7 @@ const validators: Record<string, (v: string) => string | null> = {
   apellido: v => v.trim().length < 2 ? 'Ingresa tu apellido' : null,
   email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? null : 'Email inválido',
   phone: () => phoneValid.value ? null : 'Número inválido para el país seleccionado',
-  empresa: v => v.trim().length < 2 ? 'Ingresa el nombre de tu proyecto' : null,
+  empresa: v => v.trim().length < 2 ? 'Cuéntanos tu motivo de consulta' : null,
   urgency: v => !v ? 'Selecciona cuándo necesitas iniciar' : null,
 }
 
@@ -275,9 +275,9 @@ watch(dropdownOpen, open => {
 
           <!-- ── FORMULARIO ─────────────────────────────────── -->
           <!-- ── FORMULARIO ─────────────────────────────────── -->
-            <p class="rmodal__eyebrow">Asesoría gratuita</p>
-            <h2 id="rmodal-title" class="rmodal__title">Agenda tu sesión<br><span class="rmodal__title-accent">sin costo</span></h2>
-            <p class="rmodal__subtitle">Cupos limitados — completa tus datos y te daremos acceso al video.</p>
+            <p class="rmodal__eyebrow">Aplicación clínica</p>
+            <h2 id="rmodal-title" class="rmodal__title">Aplica para tu Evaluación<br><span class="rmodal__title-accent">sin costo</span></h2>
+            <p class="rmodal__subtitle">Solo aceptamos el 20% de las aplicaciones. Completa tus datos para que el equipo médico revise tu caso.</p>
 
             <form class="rmodal__form" @submit.prevent="handleSubmit" novalidate>
 
@@ -407,12 +407,12 @@ watch(dropdownOpen, open => {
 
               <!-- Empresa -->
               <div class="rmodal__field" :class="{ 'has-error': touched.empresa && errors.empresa }">
-                <label for="r-empresa">Nombre de tu proyecto</label>
+                <label for="r-empresa">Motivo de tu consulta</label>
                 <input
                   id="r-empresa"
                   v-model="form.empresa"
                   type="text"
-                  placeholder="Ej: Remodelación Sala"
+                  placeholder="Ej: Dolor articular crónico, fatiga sin causa, segunda opinión…"
                   autocomplete="organization"
                   @blur="onBlur('empresa')"
                 />

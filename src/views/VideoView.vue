@@ -101,7 +101,7 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
 
     <!-- Top bar -->
     <header class="vv-topbar">
-      <h2 class="vv-topbar__logo-text">ALE BARRETO</h2>
+      <h2 class="vv-topbar__logo-text">POWERHOUSE BIOTECH</h2>
     </header>
 
     <!-- Main content -->
@@ -119,15 +119,15 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
       <!-- Headline -->
       <section class="vv-headline">
         <p class="vv-eyebrow">
-          <i class="fa-solid fa-tree" aria-hidden="true"></i>
+          <i class="fa-solid fa-dna" aria-hidden="true"></i>
           Antes de agendar
         </p>
         <h1 class="vv-h1">
-          Descubre por qué los proyectos de lujo
-          <span class="vv-accent">eligen a Ale Barreto</span>
+          Descubre por qué solo aceptamos
+          <span class="vv-accent">el 20% de las aplicaciones</span>
         </h1>
         <p class="vv-subtitle">
-          Ve el video completo. Ale Barreto te explica cómo transformamos espacios con la nobleza de la madera.
+          Ve el video completo. El equipo médico te explica por qué no todos los cuerpos están listos para regenerarse — y qué hacer al respecto.
         </p>
       </section>
 
@@ -159,12 +159,12 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
           @click="calendarOpen = true"
         >
           <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-          AGENDAR MI ASESORÍA DE DISEÑO
+          APLICAR PARA EVALUACIÓN
         </button>
 
         <p class="vv-cta-sub">
           <i class="fa-solid fa-lock" aria-hidden="true"></i>
-          100% gratuito &nbsp;·&nbsp; Sin compromiso &nbsp;·&nbsp; Cupos limitados
+          Sin costo &nbsp;·&nbsp; Solo 20% aceptados &nbsp;·&nbsp; Confidencial
         </p>
       </div>
 
@@ -173,20 +173,20 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
         <div class="vv-authority__inner">
           <div class="vv-authority__photo-wrap">
             <div class="vv-authority__avatar" aria-hidden="true">
-              <img :src="alePhoto" alt="Ale Barreto" class="vv-authority__img" />
+              <img :src="alePhoto" alt="PowerHouse Biotech" class="vv-authority__img" />
             </div>
           </div>
           <div class="vv-authority__content">
-            <p class="vv-authority__eyebrow">Tu especialista asignada</p>
-            <h2 id="authority-heading" class="vv-authority__name">Ale Barreto</h2>
-            <p class="vv-authority__role">Experta en Diseño y Construcción en Madera</p>
+            <p class="vv-authority__eyebrow">Tu equipo médico evaluador</p>
+            <h2 id="authority-heading" class="vv-authority__name">PowerHouse Biotech</h2>
+            <p class="vv-authority__role">Especialistas en Medicina Regenerativa y Biomarcadores</p>
             <p class="vv-authority__bio">
               Con años de experiencia en el mercado ecuatoriano, me especializo en crear
-              espacios que combinan la nobleza de la madera con diseños modernos y funcionales.
+              Más de 15 años aplicando criterio clínico sobre +100,000 casos. Decimos la verdad — no vendemos promesas.
               Mi objetivo es que cada proyecto sea una inversión que dure toda la vida.
             </p>
             <ul class="vv-authority__creds" role="list">
-              <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Especialista en maderas nobles y tratadas</li>
+              <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Interpretación cruzada de biomarcadores y mapeo celular</li>
               <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Diseños exclusivos a medida</li>
               <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Gestión integral: del plano a la instalación</li>
             </ul>
@@ -202,7 +202,7 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
         <RouterLink to="/politicas-privacidad">Política de Privacidad</RouterLink>
         <RouterLink to="/aviso-legal">Aviso Legal</RouterLink>
       </nav>
-      <p class="vv-footer__copy">© {{ new Date().getFullYear() }} ALE BARRETO. Todos los derechos reservados.</p>
+      <p class="vv-footer__copy">© {{ new Date().getFullYear() }} POWERHOUSE BIOTECH. Todos los derechos reservados.</p>
     </footer>
 
   </div>
@@ -216,11 +216,11 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
       <div v-if="captureOpen" class="capture-overlay" role="dialog" aria-modal="true" aria-labelledby="capture-title">
         <div class="capture-modal">
           <div class="capture-modal__header">
-            <h2 class="capture-modal__logo-text">ALE BARRETO</h2>
+            <h2 class="capture-modal__logo-text">POWERHOUSE BIOTECH</h2>
             <h2 id="capture-title" class="capture-modal__title">
               Antes de ver el video, <span>confirma tus datos</span>
             </h2>
-            <p class="capture-modal__sub">Para personalizar tu asesoría de diseño</p>
+            <p class="capture-modal__sub">Para que el equipo médico revise tu caso antes del video</p>
           </div>
           <form class="capture-modal__form" @submit.prevent="submitCapture" novalidate>
             <div class="capture-row">
@@ -236,8 +236,8 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
               </div>
             </div>
             <div class="capture-field" :class="{ error: captureTouched.empresa && captureErrors.empresa }">
-              <label>Tu proyecto</label>
-              <input v-model="captureForm.empresa" type="text" placeholder="Ej: Remodelación Sala" @blur="captureTouched.empresa = true" />
+              <label>Motivo de tu consulta</label>
+              <input v-model="captureForm.empresa" type="text" placeholder="Ej: Dolor crónico, fatiga, segunda opinión…" @blur="captureTouched.empresa = true" />
               <span v-if="captureTouched.empresa && captureErrors.empresa" class="capture-field__error">{{ captureErrors.empresa }}</span>
             </div>
             <div class="capture-field" :class="{ error: captureTouched.email && captureErrors.email }">

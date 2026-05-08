@@ -34,7 +34,10 @@ const isValid = () =>
   form.value.consent
 
 const qualifies = () => {
+  // PHB: expectativa "cura total" descalifica (preserva criterio clínico honesto)
   if (form.value.presupuesto === 'menos1200') return false
+  // PHB: condición "Otra" → triage manual, no califica para auto-booking
+  if (form.value.sector === 'otro') return false
   return true
 }
 
@@ -47,52 +50,53 @@ const handleSubmit = async () => {
   const califica = qualifies()
   const scheduleEventId = generateEventId('schedule')
 
+  // Note: variable names (sector/embarcaciones/hp/presupuesto) preserved from AB template; mapped to PHB labels
   const sectorLabel: Record<string, string> = {
-    residencial: 'Proyecto residencial (Casa/Depto)',
-    comercial:   'Proyecto comercial (Local/Oficina)',
-    nautico:     'Proyecto náutico (Interiores yates)',
-    otro:        'Otro proyecto',
+    residencial: 'Osteoarticular (dolor / artrosis / lesión)',
+    comercial:   'Metabólica (diabetes / obesidad / fatiga)',
+    nautico:     'Autoinmune o inflamatoria crónica',
+    otro:        'Neurológica / cognitiva u otra',
   }
   const embarcacionesLabel: Record<string, string> = {
-    'cuarto': 'Habitación o espacio único',
-    'casa':   'Casa o departamento completo',
-    'local':  'Local comercial u oficina',
-    'yate':   'Embarcación o yate',
+    'cuarto': 'Menos de 35 años',
+    'casa':   '35 a 50 años',
+    'local':  '51 a 65 años',
+    'yate':   'Más de 65 años',
   }
   const hpLabel: Record<string, string> = {
-    rustico:   'Rústico / Natural',
-    moderno:   'Moderno / Lujoso',
-    industrial: 'Industrial / Vintage',
+    rustico:   'Sin tratamientos previos',
+    moderno:   'Algunos tratamientos sin éxito',
+    industrial: 'Múltiples tratamientos sin resultado',
   }
   const presupuestoLabel: Record<string, string> = {
-    menos1200: 'Menos de $1,200 USD',
-    mas1200:   'Al menos $1,200 USD',
-    mas2000:   'Más de $2,000 USD',
+    menos1200: 'Curarme totalmente / revertir condición (DESCALIFICA)',
+    mas1200:   'Mejorar calidad de vida y energía',
+    mas2000:   'Reducir dolor o inflamación crónica',
   }
 
   const etiquetas = [
-    'funnel-alebarreto',
+    'funnel-phb',
     'step-2-cualificacion',
-    califica ? 'califica-ab' : 'no-califica-ab',
-    `tipo-${form.value.sector}`,
-    `espacio-${form.value.embarcaciones}`,
-    `estilo-${form.value.hp}`,
-    `budget-${form.value.presupuesto}`,
+    califica ? 'califica-phb' : 'no-califica-phb',
+    `condicion-${form.value.sector}`,
+    `edad-${form.value.embarcaciones}`,
+    `tratamientos-previos-${form.value.hp}`,
+    `expectativa-${form.value.presupuesto}`,
   ]
 
   const notas = `
 ━━━━━━━━━━━━━━━━━━━━━━━━
-🪵 ALE BARRETO — Cualificación
+🧬 POWERHOUSE BIOTECH — Calificación clínica
 ━━━━━━━━━━━━━━━━━━━━━━━━
 👤 ${contact.nombre} ${contact.apellido}
 📧 ${contact.email}
 📱 ${contact.telefono}
 ━━━━━━━━━━━━━━━━━━━━━━━━
-🏠 Tipo: ${sectorLabel[form.value.sector] ?? form.value.sector}
-📐 Espacio: ${embarcacionesLabel[form.value.embarcaciones] ?? form.value.embarcaciones}
-🎨 Estilo: ${hpLabel[form.value.hp] ?? form.value.hp}
-💰 Presupuesto: ${presupuestoLabel[form.value.presupuesto] ?? form.value.presupuesto}
-💡 Idea/Reto: ${form.value.reto}
+🩺 Condición: ${sectorLabel[form.value.sector] ?? form.value.sector}
+🎂 Edad: ${embarcacionesLabel[form.value.embarcaciones] ?? form.value.embarcaciones}
+💊 Tratamientos previos: ${hpLabel[form.value.hp] ?? form.value.hp}
+🎯 Expectativa: ${presupuestoLabel[form.value.presupuesto] ?? form.value.presupuesto}
+📋 Caso clínico: ${form.value.reto}
 ━━━━━━━━━━━━━━━━━━━━━━━━
 ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
   `.trim()
@@ -116,7 +120,7 @@ ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
 
   trackStage('cualificacion_completada', payload)
 
-  // TODO: Actualizar webhook URL para Ale Barreto
+  // TODO: Actualizar webhook URL para PowerHouse Biotech
   await fetch(import.meta.env.VITE_WEBHOOK_CALIFICACION, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -167,13 +171,13 @@ watch(() => props.open, (v) => {
 
           <div class="cal-header">
             <div class="cal-header-icon" aria-hidden="true">
-              <i class="fa-solid fa-tree"></i>
+              <i class="fa-solid fa-dna"></i>
             </div>
             <h2 id="cal-title" class="cal-title">
               Antes de agendar, cuéntanos sobre
-              <span class="cal-accent">tu proyecto</span>
+              <span class="cal-accent">tu salud</span>
             </h2>
-            <p class="cal-subtitle">5 preguntas rápidas para entender tu visión — 60 segundos.</p>
+            <p class="cal-subtitle">5 preguntas rápidas para evaluar si tu caso califica — 60 segundos.</p>
           </div>
 
           <form class="cal-form" @submit.prevent="handleSubmit" novalidate>
@@ -182,14 +186,14 @@ watch(() => props.open, (v) => {
             <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.sector }">
               <legend class="cal-legend">
                 <span class="cal-q-num">01</span>
-                ¿Qué tipo de proyecto estás buscando?
+                ¿Qué condición es tu prioridad clínica?
               </legend>
               <div class="cal-options">
                 <label v-for="opt in [
-                  { value: 'residencial', label: 'Residencial (Casa o Departamento)' },
-                  { value: 'comercial', label: 'Comercial (Oficina o Local)' },
-                  { value: 'nautico', label: 'Náutico (Interiores de Embarcación)' },
-                  { value: 'otro', label: 'Otro proyecto' },
+                  { value: 'residencial', label: 'Osteoarticular (dolor / artrosis / lesión)' },
+                  { value: 'comercial', label: 'Metabólica (diabetes / obesidad / fatiga)' },
+                  { value: 'nautico', label: 'Autoinmune o inflamatoria crónica' },
+                  { value: 'otro', label: 'Neurológica / cognitiva u otra' },
                 ]" :key="opt.value" class="cal-option" :class="{ selected: form.sector === opt.value }">
                   <input type="radio" :value="opt.value" v-model="form.sector" hidden />
                   <span class="cal-option__radio" aria-hidden="true" />
@@ -203,14 +207,14 @@ watch(() => props.open, (v) => {
             <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.embarcaciones }">
               <legend class="cal-legend">
                 <span class="cal-q-num">02</span>
-                ¿Para qué espacio principal es el trabajo?
+                ¿En qué rango de edad estás?
               </legend>
               <div class="cal-options">
                 <label v-for="opt in [
-                  { value: 'cuarto', label: 'Habitación o espacio único' },
-                  { value: 'casa',   label: 'Casa o departamento completo' },
-                  { value: 'local',  label: 'Local comercial u oficina' },
-                  { value: 'yate',   label: 'Yate o bote' },
+                  { value: 'cuarto', label: 'Menos de 35 años' },
+                  { value: 'casa',   label: 'Entre 35 y 50 años' },
+                  { value: 'local',  label: 'Entre 51 y 65 años' },
+                  { value: 'yate',   label: 'Más de 65 años' },
                 ]" :key="opt.value" class="cal-option" :class="{ selected: form.embarcaciones === opt.value }">
                   <input type="radio" :value="opt.value" v-model="form.embarcaciones" hidden />
                   <span class="cal-option__radio" aria-hidden="true" />
@@ -224,13 +228,13 @@ watch(() => props.open, (v) => {
             <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.hp }">
               <legend class="cal-legend">
                 <span class="cal-q-num">03</span>
-                ¿Qué estilo de diseño prefiere?
+                ¿Has intentado tratamientos previos sin obtener resultados?
               </legend>
               <div class="cal-options">
                 <label v-for="opt in [
-                  { value: 'rustico',   label: 'Rústico / Natural' },
-                  { value: 'moderno',   label: 'Moderno / Lujoso' },
-                  { value: 'industrial', label: 'Industrial / Vintage' },
+                  { value: 'rustico',   label: 'Ninguno todavía' },
+                  { value: 'moderno',   label: 'Algunos sin éxito' },
+                  { value: 'industrial', label: 'Muchos sin resultado' },
                 ]" :key="opt.value" class="cal-option" :class="{ selected: form.hp === opt.value }">
                   <input type="radio" :value="opt.value" v-model="form.hp" hidden />
                   <span class="cal-option__radio" aria-hidden="true" />
@@ -244,13 +248,13 @@ watch(() => props.open, (v) => {
             <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.presupuesto }">
               <legend class="cal-legend">
                 <span class="cal-q-num">04</span>
-                ¿Dispone de un presupuesto mayor a $1,200?
+                ¿Cuál es tu expectativa principal?
               </legend>
               <div class="cal-options">
                 <label v-for="opt in [
-                  { value: 'mas2000',   label: 'Sí, cuento con más de $2,000 USD' },
-                  { value: 'mas1200',   label: 'Sí, cuento con al menos $1,200 USD' },
-                  { value: 'menos1200', label: 'No, por ahora menos de $1,200 USD' },
+                  { value: 'mas2000',   label: 'Reducir dolor o inflamación crónica' },
+                  { value: 'mas1200',   label: 'Mejorar calidad de vida y energía' },
+                  { value: 'menos1200', label: 'Curarme totalmente / revertir mi condición' },
                 ]" :key="opt.value" class="cal-option" :class="{ selected: form.presupuesto === opt.value }">
                   <input type="radio" :value="opt.value" v-model="form.presupuesto" hidden />
                   <span class="cal-option__radio" aria-hidden="true" />
@@ -264,12 +268,12 @@ watch(() => props.open, (v) => {
             <fieldset class="cal-fieldset" :class="{ 'has-error': touched && wordCount(form.reto) < 10 }">
               <legend class="cal-legend">
                 <span class="cal-q-num">05</span>
-                ¿Qué idea tienes en mente para tu espacio?
+                Cuéntanos brevemente tu caso clínico
               </legend>
               <textarea
                 v-model="form.reto"
                 class="cal-textarea"
-                placeholder="Ej: Me gustaría revestir una pared principal de mi sala con madera noble y añadir una estantería empotrada que combine con..."
+                placeholder="Ej: Hace 3 años padezco artrosis en rodilla derecha, ya hice infiltraciones sin resultado. He notado fatiga creciente y…"
                 rows="4"
                 aria-describedby="q4-hint"
               ></textarea>
@@ -286,7 +290,7 @@ watch(() => props.open, (v) => {
               <input type="checkbox" v-model="form.consent" />
               <span class="cal-consent__box" aria-hidden="true" />
               <span class="cal-consent__text">
-                Acepto que Ale Barreto me contacte para brindarme una asesoría de diseño personalizada.
+                Acepto que PowerHouse Biotech procese mis datos y me contacte para evaluar si mi caso califica para una Consulta Informativa de Evaluación de Viabilidad Regenerativa™.
               </span>
             </label>
             <span v-if="touched && !form.consent" class="cal-error">Debes aceptar para continuar</span>

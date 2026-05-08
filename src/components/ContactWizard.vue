@@ -90,12 +90,12 @@ const URGENCY_LABEL: Record<string, string> = {
 
 function buildNotes(): string {
   return [
-    `Proyecto: ${s2.value.projectType}`,
-    `Presupuesto +$1200: ${s2.value.budget === 'yes' ? 'Sí' : 'No'}`,
-    `Objetivo: ${s2.value.objective}`,
-    `Urgencia: ${URGENCY_LABEL[s2.value.urgency] ?? s2.value.urgency}`,
-    s2.value.message.trim() ? `Mensaje del lead: ${s2.value.message.trim()}` : null,
-    `Fuente: Formulario Ale Barreto`,
+    `Condición principal: ${s2.value.projectType}`,
+    `Estudios recientes disponibles: ${s2.value.budget === 'yes' ? 'Sí' : 'No'}`,
+    `Expectativa del paciente: ${s2.value.objective}`,
+    `Urgencia clínica: ${URGENCY_LABEL[s2.value.urgency] ?? s2.value.urgency}`,
+    s2.value.message.trim() ? `Antecedentes / detalle del paciente: ${s2.value.message.trim()}` : null,
+    `Fuente: Formulario PowerHouse Biotech — Evaluación de Viabilidad Regenerativa™`,
   ].filter(Boolean).join('\n')
 }
 
@@ -174,9 +174,9 @@ async function submitS2() {
           companyName: s1.value.company.trim(),
           source: 'ale-barreto-web',
           // Datos de cualificación (Step 2)
-          '1. ¿Qué tipo de proyecto buscas?': s2.value.projectType,
-          '2. ¿Dispones de más de $1200 para este proyecto?': s2.value.budget === 'yes' ? 'Sí' : 'No',
-          '3. ¿Cuál es tu objetivo principal?': s2.value.objective,
+          '1. ¿Qué condición es la que más te preocupa hoy?': s2.value.projectType,
+          '2. ¿Tienes estudios o exámenes recientes?': s2.value.budget === 'yes' ? 'Sí' : 'No',
+          '3. ¿Qué esperas conseguir con una terapia regenerativa?': s2.value.objective,
           urgency: s2.value.urgency,
           message: s2.value.message.trim(),
           tags,
@@ -201,27 +201,29 @@ function goBack() {
 
 // ── Opciones step 2 ───────────────────────────────────────────────────────────
 const projectOpts = [
-  { value: 'Residencial (Casa / Departamento)', label: 'Residencial (Casa / Departamento)' },
-  { value: 'Oficina / Corporativo', label: 'Oficina / Corporativo' },
-  { value: 'Local Comercial / Restaurante', label: 'Local Comercial / Restaurante' },
-  { value: 'Otro', label: 'Otro' },
+  { value: 'Osteoarticular (dolor / lesión / artrosis)', label: 'Osteoarticular (dolor / lesión / artrosis)' },
+  { value: 'Metabólica (diabetes / obesidad / fatiga crónica)', label: 'Metabólica (diabetes / obesidad / fatiga crónica)' },
+  { value: 'Autoinmune o inflamatoria crónica', label: 'Autoinmune o inflamatoria crónica' },
+  { value: 'Neurológica / cognitiva (memoria, neuropatía)', label: 'Neurológica / cognitiva (memoria, neuropatía)' },
+  { value: 'Otra', label: 'Otra (no estoy seguro/a)' },
 ]
 
 const budgetOpts = [
-  { value: 'yes', label: 'Sí, dispongo de más de $1200' },
-  { value: 'no', label: 'No, mi presupuesto es menor' },
+  { value: 'yes', label: 'Sí, tengo laboratorios recientes (<6 meses)' },
+  { value: 'no', label: 'No, o son anteriores a 6 meses' },
 ]
 
 const objectiveOpts = [
-  { value: 'Remodelación completa de espacios.', label: 'Remodelación completa de espacios.' },
-  { value: 'Diseño y fabricación de muebles a medida.', label: 'Diseño y fabricación de muebles a medida.' },
-  { value: 'Construcción de estructuras en madera (pérgolas, decks, etc.).', label: 'Construcción de estructuras en madera (pérgolas, decks, etc.).' },
+  { value: 'Reducir dolor / inflamación crónica.', label: 'Reducir dolor o inflamación crónica.' },
+  { value: 'Mejorar calidad de vida y energía.', label: 'Mejorar calidad de vida, energía y sueño.' },
+  { value: 'Prevenir el avance de mi condición.', label: 'Prevenir el avance de mi condición.' },
+  { value: 'Curarme totalmente.', label: 'Curarme totalmente / revertir mi condición.' },
 ]
 
 const urgencyOpts = [
-  { value: 'immediate', label: 'Necesito ayuda inmediata', sub: 'Contacto en menos de 24 h' },
-  { value: 'next-month', label: 'Lo necesito en el próximo mes', sub: 'Estoy evaluando opciones' },
-  { value: 'just-looking', label: 'Solo estoy explorando por ahora', sub: 'Sin urgencia particular' },
+  { value: 'immediate', label: 'Crítica — necesito respuesta ya', sub: 'Dolor severo o avance rápido' },
+  { value: 'next-month', label: 'Alta — busco respuesta este mes', sub: 'Estoy evaluando opciones' },
+  { value: 'just-looking', label: 'Explorando — sin urgencia', sub: 'Solo investigando por ahora' },
 ]
 </script>
 
@@ -245,7 +247,7 @@ const urgencyOpts = [
       </div>
       <p class="wiz__step-hint">
         Paso {{ step === 1 ? '1' : '2' }} de 2 —
-        {{ step === 1 ? 'Tu información de contacto' : 'Cuéntanos sobre tu negocio' }}
+        {{ step === 1 ? 'Tu información de contacto' : 'Cuéntanos sobre tu caso clínico' }}
       </p>
     </div>
 
@@ -308,13 +310,13 @@ const urgencyOpts = [
         </div>
 
         <div class="wf-field">
-          <label class="wf-label">Nombre de tu empresa *</label>
+          <label class="wf-label">Ciudad de residencia *</label>
           <input
             v-model="s1.company"
             type="text"
             class="wf-input"
-            placeholder="Mi Empresa S.A."
-            autocomplete="organization"
+            placeholder="Quito, Guayaquil, CDMX…"
+            autocomplete="address-level2"
           />
         </div>
 
@@ -349,7 +351,7 @@ const urgencyOpts = [
         <!-- Q1: Proyecto -->
         <div class="wf-question">
           <p class="wf-q-num">01</p>
-          <p class="wf-q-title">¿Qué tipo de proyecto buscas realizar?</p>
+          <p class="wf-q-title">¿Qué condición es la que más te preocupa hoy?</p>
           <label
             v-for="opt in projectOpts"
             :key="opt.value"
@@ -365,7 +367,7 @@ const urgencyOpts = [
         <!-- Q2: Presupuesto -->
         <div class="wf-question">
           <p class="wf-q-num">02</p>
-          <p class="wf-q-title">¿Dispones de un presupuesto de más de $1200 para este proyecto?</p>
+          <p class="wf-q-title">¿Tienes estudios o exámenes recientes que podamos revisar?</p>
           <label
             v-for="opt in budgetOpts"
             :key="opt.value"
@@ -381,7 +383,7 @@ const urgencyOpts = [
         <!-- Q3: Objetivo -->
         <div class="wf-question">
           <p class="wf-q-num">03</p>
-          <p class="wf-q-title">¿Cuál es tu objetivo principal con este proyecto?</p>
+          <p class="wf-q-title">¿Qué esperas conseguir con una terapia regenerativa?</p>
           <label
             v-for="opt in objectiveOpts"
             :key="opt.value"
@@ -397,7 +399,7 @@ const urgencyOpts = [
         <!-- Q4: Urgencia -->
         <div class="wf-question">
           <p class="wf-q-num">04</p>
-          <p class="wf-q-title">¿Con qué urgencia necesitas este servicio?</p>
+          <p class="wf-q-title">¿Con qué urgencia necesitas una respuesta clínica?</p>
           <label
             v-for="opt in urgencyOpts"
             :key="opt.value"
@@ -419,7 +421,7 @@ const urgencyOpts = [
           <textarea
             v-model="s2.message"
             class="wf-textarea"
-            placeholder="Describe brevemente tu negocio, qué estás buscando o cualquier detalle que nos ayude a entender mejor tu situación…"
+            placeholder="Describe brevemente tu condición, antecedentes médicos relevantes, tratamientos previos o cualquier detalle clínico que ayude a evaluar tu caso…"
             rows="4"
           />
         </div>

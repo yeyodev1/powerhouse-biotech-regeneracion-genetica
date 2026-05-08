@@ -9,11 +9,11 @@ const props = defineProps({
 
 <template>
   <div class="testimonials-header" :class="{ 'is-visible': props.isVisible }">
-    <p class="testimonials-header__label">TESTIMONIOS</p>
+    <p class="testimonials-header__label">CASOS CLÍNICOS</p>
     <h2 class="testimonials-header__title">
-      Algunos Testimonios de Nuestros
+      Pacientes que recibieron
       <br>
-      Clientes
+      la respuesta honesta
     </h2>
   </div>
 </template>

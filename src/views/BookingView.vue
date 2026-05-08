@@ -5,7 +5,8 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const iframeHeight = ref(1100)
 
-// GHL Ale Barreto Calendar URL
+// TODO: replace with PHB GHL booking URL once provided. Currently using AB legacy calendar as placeholder.
+// GHL PowerHouse Biotech Calendar URL
 const BASE_URL = 'https://api.leadconnectorhq.com/widget/booking/nCzBqHMNFYGu4rYBREX3'
 
 const calendarUrl = computed(() => {
@@ -55,7 +56,7 @@ onUnmounted(() => window.removeEventListener('message', onMessage))
 
     <!-- TOP BAR -->
     <header class="booking__topbar">
-      <h2 class="booking__logo-text">ALE BARRETO</h2>
+      <h2 class="booking__logo-text">POWERHOUSE BIOTECH</h2>
     </header>
 
     <main class="booking__main">
@@ -80,15 +81,15 @@ onUnmounted(() => window.removeEventListener('message', onMessage))
       <!-- Heading -->
       <section class="booking__heading">
         <p class="booking__eyebrow">
-          <i class="fa-solid fa-tree" aria-hidden="true"></i>
+          <i class="fa-solid fa-dna" aria-hidden="true"></i>
           Casi listo
         </p>
         <h1 class="booking__title">
           Elige el horario de tu
-          <span class="booking__title-accent">asesoría de diseño</span>
+          <span class="booking__title-accent">Consulta Informativa de Evaluación de Viabilidad Regenerativa™</span>
         </h1>
         <p class="booking__subtitle">
-          Una sesión de 15 minutos con Ale Barreto para conversar sobre tu proyecto y definir los siguientes pasos.
+          Videollamada de 15 minutos con el equipo médico de PowerHouse Biotech. Conversaremos sobre tu condición y te diremos honestamente si tu caso califica para una evaluación clínica completa.
         </p>
       </section>
 
@@ -97,7 +98,7 @@ onUnmounted(() => window.removeEventListener('message', onMessage))
         <iframe
           :src="calendarUrl"
           :style="{ height: iframeHeight + 'px' }"
-          title="Agenda tu asesoría con Ale Barreto"
+          title="Agenda tu Consulta Informativa con PowerHouse Biotech"
           class="calendar__iframe"
           frameborder="0"
           scrolling="no"
@@ -113,7 +114,7 @@ onUnmounted(() => window.removeEventListener('message', onMessage))
         <RouterLink to="/politicas-privacidad">Política de Privacidad</RouterLink>
         <RouterLink to="/aviso-legal">Aviso Legal</RouterLink>
       </nav>
-      <p class="booking__footer-copy">© {{ new Date().getFullYear() }} ALE BARRETO. Todos los derechos reservados.</p>
+      <p class="booking__footer-copy">© {{ new Date().getFullYear() }} POWERHOUSE BIOTECH. Todos los derechos reservados.</p>
     </footer>
 
   </div>

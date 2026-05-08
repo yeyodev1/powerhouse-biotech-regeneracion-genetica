@@ -46,12 +46,13 @@ onMounted(() => {
 
     <h1 class="booked-hero__title animate-up">
       <template v-if="props.contactName">¡Listo, {{ props.contactName }}!</template>
-      <template v-else>¡Tu cita está confirmada!</template>
+      <template v-else>¡Tu Evaluación está agendada!</template>
     </h1>
     
     <p class="booked-hero__subtitle animate-up">
-      En breve recibirás un correo con todos los detalles. Un miembro del equipo de
-      Bakano te contactará para ayudarte a romperla en tu negocio.
+      En breve recibirás un correo con todos los detalles de tu Consulta Informativa.
+      Un miembro del equipo médico de PowerHouse Biotech te contactará para confirmar
+      la cita y solicitar tus laboratorios recientes (si los tienes).
     </p>
   </section>
 </template>
