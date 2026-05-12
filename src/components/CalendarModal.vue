@@ -123,7 +123,7 @@ ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
     ;(window as any).fbq?.('track', 'Lead')
     router.push('/agendar')
   } else {
-    if (!IS_DEV) localStorage.setItem('os_disq_at', String(Date.now()))
+    localStorage.setItem('os_disq_at', String(Date.now()))
     router.push('/sin-espacio')
   }
 }

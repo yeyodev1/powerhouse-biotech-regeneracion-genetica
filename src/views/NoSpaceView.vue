@@ -1,27 +1,59 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const COOLDOWN_MS = 48 * 60 * 60 * 1000
 
-const hoursLeft = ref(0)
+const remainingMs = ref(0)
+let timerInterval: ReturnType<typeof setInterval> | null = null
 
 const contactName = computed(() => {
   try {
     const stored = localStorage.getItem('os_contact')
     if (!stored) return ''
-    return JSON.parse(stored).nombre ?? ''
+    const data = JSON.parse(stored)
+    return `${data.nombre ?? ''}`.trim()
   } catch { return '' }
 })
 
+const contactData = computed(() => {
+  try {
+    const stored = localStorage.getItem('os_contact')
+    if (!stored) return null
+    const data = JSON.parse(stored)
+    return {
+      nombre: data.nombre ?? '',
+      apellido: data.apellido ?? '',
+      email: data.email ?? '',
+      timestamp: data.timestamp ?? null,
+    }
+  } catch { return null }
+})
+
+const hasContact = computed(() => !!contactData.value?.nombre)
+
+const formattedCountdown = computed(() => {
+  const totalSeconds = Math.floor(remainingMs.value / 1000)
+  if (totalSeconds <= 0) return '00:00:00'
+  const h = Math.floor(totalSeconds / 3600)
+  const m = Math.floor((totalSeconds % 3600) / 60)
+  const s = totalSeconds % 60
+  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+})
+
 onMounted(() => {
-  const osDisqAt = localStorage.getItem('os_disq_at')
-  if (osDisqAt) {
-    const elapsed = Date.now() - Number(osDisqAt)
-    const remaining = COOLDOWN_MS - elapsed
-    if (remaining > 0) {
-      hoursLeft.value = Math.ceil(remaining / (60 * 60 * 1000))
+  const updateCountdown = () => {
+    const raw = localStorage.getItem('os_disq_at')
+    if (raw) {
+      const elapsed = Date.now() - Number(raw)
+      remainingMs.value = Math.max(0, COOLDOWN_MS - elapsed)
     }
   }
+  updateCountdown()
+  timerInterval = setInterval(updateCountdown, 1000)
+})
+
+onUnmounted(() => {
+  if (timerInterval) clearInterval(timerInterval)
 })
 </script>
 
@@ -35,14 +67,28 @@ onMounted(() => {
 
     <main class="nospace__main">
 
+      <!-- Already registered banner -->
+      <div v-if="hasContact" class="nospace__registered" role="alert">
+        <i class="fa-solid fa-circle-check nospace__registered-icon" aria-hidden="true"></i>
+        <div class="nospace__registered-body">
+          <strong>Ya te registraste previamente</strong>
+          <span v-if="contactData" class="nospace__registered-detail">
+            {{ contactData.nombre }} {{ contactData.apellido }} · {{ contactData.email }}
+          </span>
+          <span v-if="contactData?.timestamp" class="nospace__registered-date">
+            Registro completado el {{ new Date(contactData.timestamp).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) }}
+          </span>
+        </div>
+      </div>
+
       <!-- Cooldown notice -->
-      <div v-if="hoursLeft > 0" class="nospace__cooldown" role="alert">
+      <div v-if="remainingMs > 0" class="nospace__cooldown" role="alert">
         <i class="fa-solid fa-clock" aria-hidden="true"></i>
         <span>
           <template v-if="contactName">{{ contactName }}, podrás</template>
           <template v-else>Podrás</template>
-          volver y solicitar una nueva consulta en
-          <strong>{{ hoursLeft }} hora{{ hoursLeft !== 1 ? 's' : '' }}</strong>
+          volver a solicitar una nueva evaluación en
+          <strong class="nospace__countdown">{{ formattedCountdown }}</strong>
         </span>
       </div>
 
@@ -154,6 +200,47 @@ onMounted(() => {
   gap: 1.5rem;
 }
 
+.nospace__registered {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba(colors.$OS-BLUE, 0.07);
+  border: 1px solid rgba(colors.$OS-BLUE, 0.25);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+
+  &-icon {
+    font-size: 1.1rem;
+    color: colors.$OS-BLUE;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  &-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+
+    strong {
+      font-family: fonts.$font-interface;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: colors.$OS-DARK;
+    }
+  }
+
+  &-detail {
+    font-size: 0.78rem;
+    color: colors.$OS-NAVY;
+    opacity: 0.75;
+  }
+
+  &-date {
+    font-size: 0.76rem;
+    color: #6A7E95;
+  }
+}
+
 .nospace__cooldown {
   display: flex;
   align-items: center;
@@ -166,6 +253,12 @@ onMounted(() => {
   color: colors.$OS-NAVY;
   i { color: colors.$OS-BLUE; flex-shrink: 0; }
   strong { font-weight: 700; }
+  .nospace__countdown {
+    font-family: fonts.$font-secondary;
+    font-size: 1.05rem;
+    letter-spacing: 0.08em;
+    color: colors.$OS-NAVY;
+  }
 }
 
 .nospace__card {
