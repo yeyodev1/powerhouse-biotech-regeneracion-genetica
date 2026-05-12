@@ -5,9 +5,8 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const iframeHeight = ref(1100)
 
-// TODO: replace with PHB GHL booking URL once provided. Currently using AB legacy calendar as placeholder.
 // GHL PowerHouse Biotech Calendar URL
-const BASE_URL = 'https://api.leadconnectorhq.com/widget/booking/nCzBqHMNFYGu4rYBREX3'
+const BASE_URL = 'https://api.leadconnectorhq.com/widget/booking/Pt4IJuFRDFG2EsbVaZsR'
 
 const calendarUrl = computed(() => {
   try {
