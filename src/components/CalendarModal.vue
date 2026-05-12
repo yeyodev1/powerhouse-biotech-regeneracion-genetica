@@ -99,7 +99,7 @@ ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
     desplazamiento: form.value.desplazamiento,
     consulta: form.value.consulta,
     cualificado: califica,
-    califica: String(califica),
+    califica: califica ? 'si' : 'no',
     landing: 'landing-regeneracion',
     etiquetas: 'landing-regeneracion',
     source: window.location.hostname,
