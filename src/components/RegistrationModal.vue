@@ -206,6 +206,8 @@ const handleSubmit = async () => {
     urgencyLabel: form.value.urgency ? URGENCY_LABEL[form.value.urgency] : '',
     tags: [...calcTags(form.value.urgency), 'landing-regeneracion'],
     landing: 'landing-regeneracion',
+    etiquetas: 'landing-regeneracion',
+    source: window.location.hostname,
     note: buildNote(form.value, selectedCountry.value.name),
     timestamp: new Date().toISOString(),
     event_id: leadEventId,
@@ -217,10 +219,7 @@ const handleSubmit = async () => {
   await fetch(import.meta.env.VITE_WEBHOOK_REGISTRO, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      ...payload,
-      source: 'ale-barreto-web',
-    }),
+    body: JSON.stringify(payload),
   }).catch(() => {})
 
   // Meta Pixel — evento Lead (deduplicado con CAPI via event_id)
