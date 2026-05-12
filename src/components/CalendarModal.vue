@@ -69,6 +69,7 @@ const handleSubmit = async () => {
     `cobertura-${form.value.ingresos}`,
     `inversion-${form.value.inversion}`,
     `desplazamiento-${form.value.desplazamiento}`,
+    'landing-regeneracion',
   ]
 
   const notas = `
@@ -83,6 +84,7 @@ const handleSubmit = async () => {
 💰 Disposición a invertir: ${inversionLabel[form.value.inversion] ?? form.value.inversion}
 🚗 Disposición a desplazarse: ${desplazamientoLabel[form.value.desplazamiento] ?? form.value.desplazamiento}
 📋 Consulta: ${form.value.consulta}
+🏷️ Landing: landing-regeneracion
 ━━━━━━━━━━━━━━━━━━━━━━━━
 ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
   `.trim()
@@ -96,8 +98,11 @@ ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
     inversion: form.value.inversion,
     desplazamiento: form.value.desplazamiento,
     consulta: form.value.consulta,
+    cualificado: califica,
     califica: String(califica),
+    landing: 'landing-regeneracion',
     etiquetas: etiquetas.join(','),
+    tags: etiquetas,
     notas,
     nota: notas,
     event_id: scheduleEventId,

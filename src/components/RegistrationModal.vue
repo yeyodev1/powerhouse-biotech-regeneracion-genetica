@@ -93,12 +93,19 @@ function calcTags(urgency: Urgency): string[] {
 }
 
 function buildNote(f: typeof form.value, country: string): string {
-  return [
-    'Lead desde funnel VSL — PowerHouse Biotech (registro inicial).',
-    `Motivo de consulta: ${MOTIVO_LABEL[f.empresa] ?? f.empresa}`,
-    `Urgencia: ${f.urgency ? URGENCY_LABEL[f.urgency] : '—'}`,
-    `País: ${country}`,
-  ].join('\n')
+  return `
+━━━━━━━━━━━━━━━━━━━━━━━━
+🧬 POWERHOUSE BIOTECH — Registro
+━━━━━━━━━━━━━━━━━━━━━━━━
+👤 ${f.nombre} ${f.apellido}
+📧 ${f.email}
+📱 ${selectedCountry.value.dial} ${formattedPhone.value}
+🌎 País: ${country}
+🧬 Motivo de consulta: ${MOTIVO_LABEL[f.empresa] ?? f.empresa}
+⏱️ Urgencia: ${f.urgency ? URGENCY_LABEL[f.urgency] : '—'}
+🏷️ Landing: landing-regeneracion
+━━━━━━━━━━━━━━━━━━━━━━━━
+  `.trim()
 }
 
 const errors = ref<Record<string, string>>({})
@@ -197,7 +204,8 @@ const handleSubmit = async () => {
     pais: selectedCountry.value.name,
     urgency: form.value.urgency,
     urgencyLabel: form.value.urgency ? URGENCY_LABEL[form.value.urgency] : '',
-    tags: calcTags(form.value.urgency),
+    tags: [...calcTags(form.value.urgency), 'landing-regeneracion'],
+    landing: 'landing-regeneracion',
     note: buildNote(form.value, selectedCountry.value.name),
     timestamp: new Date().toISOString(),
     event_id: leadEventId,
