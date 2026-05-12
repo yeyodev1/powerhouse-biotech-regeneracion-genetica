@@ -3,9 +3,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import RegistrationModal from '@/components/RegistrationModal.vue'
 import { captureFbParams } from '@/utils/fbclid'
-// TODO: replace with PHB medical director photo (`phb-specialist.png`).
-// Keeping legacy ale-barreto.png as placeholder until asset is provided.
-import alePhoto from '@/assets/team/ale-barreto.png'
+import romanPhoto from '@/assets/team/image.png'
 
 const router = useRouter()
 const modalOpen = ref(false)
@@ -25,13 +23,13 @@ const openModal = () => {
 const stats = [
   {
     icon: 'fa-solid fa-dna',
-    number: '+100K',
-    text: 'Casos clínicos analizados antes de tu evaluación',
+    number: '+15K',
+    text: 'Pacientes evaluados con criterio clínico en Medicina Regenerativa',
   },
   {
     icon: 'fa-solid fa-microscope',
-    number: '15+',
-    text: 'Años aplicando criterio clínico en Medicina Regenerativa',
+    number: '20+',
+    text: 'Años de experiencia guiando casos complejos de regeneración celular',
   },
   {
     icon: 'fa-solid fa-shield-heart',
@@ -51,20 +49,20 @@ const methodology = [
   {
     num: '01',
     icon: 'fa-solid fa-stethoscope',
-    title: 'Detectar',
-    body: 'Entendemos qué pasa en tu cuerpo. Cruzamos estudios actuales, síntomas ocultos y antecedentes para encontrar señales que la medicina reactiva pasó por alto.',
+    title: 'Escuchar',
+    body: 'Cada paciente llega con una historia clínica única. Analizamos tus síntomas, tu historial y todo lo que otros especialistas pasaron por alto para encontrar la raíz del problema.',
   },
   {
     num: '02',
     icon: 'fa-solid fa-vials',
     title: 'Evaluar',
-    body: 'Analizamos tu estado real, no solo los síntomas. Mapeo celular y lectura cruzada de biomarcadores para entender por qué no estás mejorando.',
+    body: 'No nos quedamos con lo superficial. Cruzamos biomarcadores, estudios de imagen y laboratorio para determinar si tu cuerpo está en condiciones de responder a una terapia regenerativa.',
   },
   {
     num: '03',
     icon: 'fa-solid fa-route',
-    title: 'Clarificar e Identificar',
-    body: 'Definimos qué se puede mejorar y qué no. Ruta crítica paso a paso para preparar a tu cuerpo a recibir terapias avanzadas — o detener un tratamiento mal enfocado.',
+    title: 'Orientar',
+    body: 'Te decimos la verdad sin rodeos: si tu cuerpo puede regenerarse, te guiamos. Si no, te ahorramos tiempo, dinero y falsas esperanzas. Esa es nuestra promesa.',
   },
 ]
 
@@ -108,16 +106,16 @@ onUnmounted(() => {
 type Proof = { who: string; where: string; minutesAgo: number }
 
 const PROOFS: Proof[] = [
-  { who: 'Constructora Valverde',     where: 'Quito',          minutesAgo: 3 },
-  { who: 'María José T.',             where: 'Cumbayá',        minutesAgo: 7 },
-  { who: 'Andrés Salazar',            where: 'Guayaquil',      minutesAgo: 12 },
-  { who: 'Inmobiliaria Andes',        where: 'Quito',          minutesAgo: 18 },
-  { who: 'Carolina M.',               where: 'Tumbaco',        minutesAgo: 22 },
-  { who: 'Estudio Arq. Vélez',        where: 'Samborondón',    minutesAgo: 27 },
-  { who: 'Familia Pareja',            where: 'Los Chillos',    minutesAgo: 34 },
-  { who: 'Hotel Boutique Sambo',      where: 'Manta',          minutesAgo: 41 },
-  { who: 'Roberto S.',                where: 'Cuenca',         minutesAgo: 48 },
-  { who: 'Patricia Andrade',          where: 'Quito',          minutesAgo: 55 },
+  { who: 'Empresario Polanco',        where: 'CDMX',           minutesAgo: 3 },
+  { who: 'María Fernanda L.',         where: 'Lomas',          minutesAgo: 7 },
+  { who: 'Andrés Salazar',            where: 'Santa Fe',       minutesAgo: 12 },
+  { who: 'Grupo Financiero G.',       where: 'Polanco',        minutesAgo: 18 },
+  { who: 'Carolina M.',               where: 'Interlomas',     minutesAgo: 22 },
+  { who: 'Director Médico R.',        where: 'Anzures',        minutesAgo: 27 },
+  { who: 'Familia De la Vega',        where: 'Bosques',        minutesAgo: 34 },
+  { who: 'CEO Tech Start-up',         where: 'Santa Fe',       minutesAgo: 41 },
+  { who: 'Roberto S.',                where: 'Lomas Altas',    minutesAgo: 48 },
+  { who: 'Patricia Andrade',          where: 'Polanco',        minutesAgo: 55 },
 ]
 
 const proofVisible = ref(false)
@@ -229,12 +227,12 @@ const dismissProof = () => {
 
         <p class="funnel__eyebrow">
           <i class="fa-solid fa-dna" aria-hidden="true"></i>
-          Health Decision Platform · Medicina Regenerativa
+          PowerHouse Biotech · Medicina Regenerativa · Polanco, CDMX
         </p>
 
         <h1 id="funnel-headline" class="funnel__headline">
-          Puedes recibir el mejor tratamiento del mundo
-          <span class="funnel__headline-accent">y tu cuerpo seguir igual de enfermo</span>
+          ¿Llevas meses o años buscando una solución real para tu salud?
+          <span class="funnel__headline-accent">Juan Román Garza tiene la respuesta que necesitas</span>
         </h1>
 
         <ul class="funnel__pillars" role="list">
@@ -254,14 +252,14 @@ const dismissProof = () => {
         <div class="funnel__vsl-wrap">
           <div class="funnel__vsl" @click="openModal()" role="button" aria-label="Ver video" tabindex="0">
             <div class="funnel__vsl-bg">
-              <img src="https://fast.wistia.com/embed/medias/5ql8l131me/swatch" class="funnel__vsl-thumb" alt="Vista previa video" />
+              <img src="https://res.cloudinary.com/dz6qozi9i/image/upload/v1778604773/fotos-roman/IMG_3901.jpg" class="funnel__vsl-thumb" alt="Juan Román Garza — PowerHouse Biotech" />
               <div class="funnel__vsl-blur-overlay"></div>
             </div>
             <div class="funnel__vsl-overlay">
               <div class="funnel__vsl-play">
                 <i class="fa-solid fa-play" aria-hidden="true"></i>
               </div>
-              <p class="funnel__vsl-caption">Mira el video exclusivo y descubre por qué no todos los cuerpos están listos para regenerarse</p>
+              <p class="funnel__vsl-caption">Mira a Juan Román Garza explicar por qué tu cuerpo puede estar bloqueado y cómo destapar su capacidad de regeneración</p>
             </div>
           </div>
         </div>
@@ -308,22 +306,22 @@ const dismissProof = () => {
           <div class="funnel__problem-item">
             <i class="fa-solid fa-triangle-exclamation funnel__problem-icon" aria-hidden="true"></i>
             <div>
-              <strong>Aceptan estudios sin claridad</strong>
-              <p>Reciben resultados de laboratorio, pero nadie les explica qué significan esos números cuando se leen juntos. Pierden meses confundidos.</p>
+              <strong>Van de doctor en doctor sin rumbo</strong>
+              <p>Acumulan consultas, estudios y diagnósticos contradictorios. Nadie conecta los puntos. Llevan años sin una respuesta clara.</p>
             </div>
           </div>
           <div class="funnel__problem-item">
             <i class="fa-solid fa-triangle-exclamation funnel__problem-icon" aria-hidden="true"></i>
             <div>
-              <strong>Acciones sin dirección</strong>
-              <p>Prueban tratamientos, suplementos o terapias regenerativas sin una estrategia clara — y sin saber si su cuerpo está listo para responder.</p>
+              <strong>Prueban terapias sin preparación</strong>
+              <p>Gastan en tratamientos regenerativos, suplementos o medicamentos sin saber si su cuerpo está listo para responder. Resultado: frustración y cuenta bancaria vacía.</p>
             </div>
           </div>
           <div class="funnel__problem-item">
             <i class="fa-solid fa-triangle-exclamation funnel__problem-icon" aria-hidden="true"></i>
             <div>
-              <strong>El cuerpo no responde</strong>
-              <p>No porque la terapia no funcione, sino porque el cuerpo no estaba preparado para recibirla. Resultado: gasto sin mejora.</p>
+              <strong>El cuerpo simplemente no responde</strong>
+              <p>No porque la terapia sea mala, sino porque el cuerpo no estaba preparado para recibirla. Sin una evaluación de viabilidad regenerativa, todo es un tiro al aire.</p>
             </div>
           </div>
         </div>
@@ -333,9 +331,9 @@ const dismissProof = () => {
     <!-- METODOLOGÍA -->
     <section class="funnel__method" aria-labelledby="method-heading">
       <div class="funnel__container">
-        <p class="funnel__section-label">Metodología DECI</p>
+        <p class="funnel__section-label">Metodología de Juan Román Garza</p>
         <h2 id="method-heading" class="funnel__section-title">
-          Cómo decidimos si tu cuerpo puede regenerarse
+          Así evaluamos si tu cuerpo puede regenerarse
         </h2>
         <div class="funnel__method-grid">
           <div v-for="m in methodology" :key="m.num" class="funnel__method-card">
@@ -357,45 +355,46 @@ const dismissProof = () => {
         <div class="funnel__testimonial-card">
           <i class="fa-solid fa-quote-left funnel__testimonial-quote" aria-hidden="true"></i>
           <blockquote class="funnel__testimonial-text">
-            "Pasé 3 años haciéndome estudios sin que nadie me explicara qué significaban juntos.
-            PowerHouse Biotech me los leyó en una sesión y entendí por qué no estaba mejorando.
-            La honestidad clínica vale más que cualquier promesa."
+            "Después de 4 años con dolores articulares, 12 especialistas y miles de pesos gastados,
+            Juan Román Garza fue el primero en decirme: 'Tu cuerpo está inflamado, no roto'.
+            En 3 meses de preparación regenerativa, mi calidad de vida cambió por completo."
           </blockquote>
           <footer class="funnel__testimonial-author">
             <div class="funnel__testimonial-avatar" aria-hidden="true">
               <i class="fa-solid fa-user"></i>
             </div>
             <div>
-              <strong>Paciente · Caso #PHB-0142</strong>
-              <span>Evaluación de Viabilidad Regenerativa™</span>
+              <strong>Paciente · Caso #PHB-0189</strong>
+              <span>Evaluación de Viabilidad Regenerativa™ — Polanco, CDMX</span>
             </div>
           </footer>
         </div>
       </div>
     </section>
 
-    <!-- AUTHORITY — PHB Director Médico (TODO: replace foto + nombre + bio) -->
+    <!-- AUTHORITY — Juan Román Garza -->
     <section class="funnel__authority" aria-labelledby="authority-heading">
       <div class="funnel__container funnel__authority-inner">
         <div class="funnel__authority-photo-wrap">
           <div class="funnel__authority-avatar" aria-hidden="true">
-            <img :src="alePhoto" alt="Director Médico — PowerHouse Biotech" class="funnel__authority-img" />
+            <img :src="romanPhoto" alt="Juan Román Garza — PowerHouse Biotech" class="funnel__authority-img" />
           </div>
         </div>
         <div class="funnel__authority-content">
-          <p class="funnel__authority-eyebrow">Tu equipo médico evaluador</p>
-          <h2 id="authority-heading" class="funnel__authority-name">Director Médico — PowerHouse Biotech</h2>
-          <p class="funnel__authority-role">Especialistas en Medicina Regenerativa y Biomarcadores</p>
+          <p class="funnel__authority-eyebrow">Tu especialista evaluador</p>
+          <h2 id="authority-heading" class="funnel__authority-name">Juan Román Garza</h2>
+          <p class="funnel__authority-role">Especialista en Medicina Regenerativa · PowerHouse Biotech</p>
           <p class="funnel__authority-bio">
-            Más de 15 años aplicando criterio clínico en medicina regenerativa.
-            Hemos analizado +100,000 casos clínicos y aprendido una verdad incómoda: no todos
-            los cuerpos están listos para regenerarse. Nuestra misión es decirte la verdad —
-            no venderte una promesa.
+            Con más de dos décadas dedicadas a la medicina regenerativa, Juan Román Garza
+            ha evaluado a miles de pacientes para determinar si su cuerpo está listo para regenerarse.
+            Su enfoque no es vender terapias — es aplicar criterio clínico honesto para decirte
+            si la regeneración es viable en tu caso. Ha ayudado a cientos de pacientes en Polanco,
+            Lomas, Santa Fe e Interlomas a recuperar su calidad de vida.
           </p>
           <ul class="funnel__authority-creds" role="list">
+            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> +15,000 pacientes evaluados con criterio regenerativo</li>
             <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Interpretación cruzada de biomarcadores y mapeo celular</li>
-            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Criterio clínico independiente, sin conflictos comerciales</li>
-            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Solo aceptamos pacientes cuando hay probabilidad real de respuesta</li>
+            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i> Solo acepta pacientes con probabilidad real de respuesta</li>
           </ul>
         </div>
       </div>
@@ -405,12 +404,12 @@ const dismissProof = () => {
     <section class="funnel__cta-final" aria-labelledby="cta-final-heading">
       <div class="funnel__container">
         <h2 id="cta-final-heading" class="funnel__cta-final-title">
-          ¿Listo para saber si tu cuerpo puede regenerarse?
+          ¿Listo para saber si tu cuerpo aún puede sanar?
         </h2>
         <p class="funnel__cta-final-sub">
-          Aplica para una Consulta Informativa de Evaluación de Viabilidad Regenerativa™.
-          Conversaremos sobre tu condición y te diremos honestamente si tu caso califica
-          para una evaluación clínica completa.
+          Juan Román Garza te espera en Polanco para una Consulta Informativa
+          de Evaluación de Viabilidad Regenerativa™. Sin costo, sin compromiso.
+          Solo criterio clínico honesto.
         </p>
         <button class="funnel__cta-btn" @click="openModal()">
           <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>

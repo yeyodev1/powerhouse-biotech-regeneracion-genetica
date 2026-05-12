@@ -15,29 +15,25 @@ const submitting = ref(false)
 const touched = ref(false)
 
 const form = ref({
-  sector: '',
-  embarcaciones: '',
-  hp: '',
-  presupuesto: '',
-  reto: '',
+  ingresos: '',
+  inversion: '',
+  desplazamiento: '',
+  consulta: '',
   consent: false,
 })
 
 const wordCount = (s: string) => s.trim().split(/\s+/).filter(Boolean).length
 
 const isValid = () =>
-  !!form.value.sector &&
-  !!form.value.embarcaciones &&
-  !!form.value.hp &&
-  !!form.value.presupuesto &&
-  wordCount(form.value.reto) >= 10 &&
+  !!form.value.ingresos &&
+  !!form.value.inversion &&
+  !!form.value.desplazamiento &&
+  wordCount(form.value.consulta) >= 5 &&
   form.value.consent
 
 const qualifies = () => {
-  // PHB: expectativa "cura total" descalifica (preserva criterio clínico honesto)
-  if (form.value.presupuesto === 'menos1200') return false
-  // PHB: condición "Otra" → triage manual, no califica para auto-booking
-  if (form.value.sector === 'otro') return false
+  if (form.value.ingresos === 'basico') return false
+  if (form.value.inversion === 'no') return false
   return true
 }
 
@@ -50,53 +46,43 @@ const handleSubmit = async () => {
   const califica = qualifies()
   const scheduleEventId = generateEventId('schedule')
 
-  // Note: variable names (sector/embarcaciones/hp/presupuesto) preserved from AB template; mapped to PHB labels
-  const sectorLabel: Record<string, string> = {
-    residencial: 'Osteoarticular (dolor / artrosis / lesión)',
-    comercial:   'Metabólica (diabetes / obesidad / fatiga)',
-    nautico:     'Autoinmune o inflamatoria crónica',
-    otro:        'Neurológica / cognitiva u otra',
+  const ingresosLabel: Record<string, string> = {
+    premium: 'Seguro de gastos mayores privado',
+    ejecutivo: 'Plan de salud ejecutivo / medicina premium',
+    tradicional: 'IMSS / ISSSTE / Seguro popular',
+    basico: 'Pago de bolsillo particular',
   }
-  const embarcacionesLabel: Record<string, string> = {
-    'cuarto': 'Menos de 35 años',
-    'casa':   '35 a 50 años',
-    'local':  '51 a 65 años',
-    'yate':   'Más de 65 años',
+  const inversionLabel: Record<string, string> = {
+    si: 'Sí, estaría dispuesto a invertir en mi salud',
+    llamada: 'Necesito una llamada para hablarlo',
+    no: 'Definitivamente no',
   }
-  const hpLabel: Record<string, string> = {
-    rustico:   'Sin tratamientos previos',
-    moderno:   'Algunos tratamientos sin éxito',
-    industrial: 'Múltiples tratamientos sin resultado',
-  }
-  const presupuestoLabel: Record<string, string> = {
-    menos1200: 'Curarme totalmente / revertir condición (DESCALIFICA)',
-    mas1200:   'Mejorar calidad de vida y energía',
-    mas2000:   'Reducir dolor o inflamación crónica',
+  const desplazamientoLabel: Record<string, string> = {
+    si: 'Sí, puedo desplazarme',
+    no: 'No, prefiero cerca de mi zona',
   }
 
   const etiquetas = [
     'funnel-phb',
     'step-2-cualificacion',
     califica ? 'califica-phb' : 'no-califica-phb',
-    `condicion-${form.value.sector}`,
-    `edad-${form.value.embarcaciones}`,
-    `tratamientos-previos-${form.value.hp}`,
-    `expectativa-${form.value.presupuesto}`,
+    `cobertura-${form.value.ingresos}`,
+    `inversion-${form.value.inversion}`,
+    `desplazamiento-${form.value.desplazamiento}`,
   ]
 
   const notas = `
 ━━━━━━━━━━━━━━━━━━━━━━━━
-🧬 POWERHOUSE BIOTECH — Calificación clínica
+🧬 POWERHOUSE BIOTECH — Calificación
 ━━━━━━━━━━━━━━━━━━━━━━━━
 👤 ${contact.nombre} ${contact.apellido}
 📧 ${contact.email}
 📱 ${contact.telefono}
 ━━━━━━━━━━━━━━━━━━━━━━━━
-🩺 Condición: ${sectorLabel[form.value.sector] ?? form.value.sector}
-🎂 Edad: ${embarcacionesLabel[form.value.embarcaciones] ?? form.value.embarcaciones}
-💊 Tratamientos previos: ${hpLabel[form.value.hp] ?? form.value.hp}
-🎯 Expectativa: ${presupuestoLabel[form.value.presupuesto] ?? form.value.presupuesto}
-📋 Caso clínico: ${form.value.reto}
+💳 Cobertura médica: ${ingresosLabel[form.value.ingresos] ?? form.value.ingresos}
+💰 Disposición a invertir: ${inversionLabel[form.value.inversion] ?? form.value.inversion}
+🚗 Disposición a desplazarse: ${desplazamientoLabel[form.value.desplazamiento] ?? form.value.desplazamiento}
+📋 Consulta: ${form.value.consulta}
 ━━━━━━━━━━━━━━━━━━━━━━━━
 ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
   `.trim()
@@ -106,11 +92,10 @@ ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
     apellido: contact.apellido,
     email: contact.email,
     telefono: contact.telefono,
-    sector: form.value.sector,
-    embarcaciones: form.value.embarcaciones,
-    hp: form.value.hp,
-    presupuesto: form.value.presupuesto,
-    reto: form.value.reto,
+    cobertura: form.value.ingresos,
+    inversion: form.value.inversion,
+    desplazamiento: form.value.desplazamiento,
+    consulta: form.value.consulta,
     califica: String(califica),
     etiquetas: etiquetas.join(','),
     notas,
@@ -120,7 +105,6 @@ ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
 
   trackStage('cualificacion_completada', payload)
 
-  // TODO: Actualizar webhook URL para PowerHouse Biotech
   await fetch(import.meta.env.VITE_WEBHOOK_CALIFICACION, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -152,7 +136,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
 watch(() => props.open, (v) => {
   if (v) {
     touched.value = false
-    form.value = { sector: '', embarcaciones: '', hp: '', presupuesto: '', reto: '', consent: false }
+    form.value = { ingresos: '', inversion: '', desplazamiento: '', consulta: '', consent: false }
   }
   document.body.style.overflow = v ? 'hidden' : ''
 })
@@ -174,114 +158,96 @@ watch(() => props.open, (v) => {
               <i class="fa-solid fa-dna"></i>
             </div>
             <h2 id="cal-title" class="cal-title">
-              Antes de agendar, cuéntanos sobre
-              <span class="cal-accent">tu salud</span>
+              Antes de agendar, cuéntanos
+              <span class="cal-accent">sobre ti</span>
             </h2>
-            <p class="cal-subtitle">5 preguntas rápidas para evaluar si tu caso califica — 60 segundos.</p>
+            <p class="cal-subtitle">4 preguntas rápidas para saber si eres candidato — menos de 1 minuto.</p>
           </div>
 
           <form class="cal-form" @submit.prevent="handleSubmit" novalidate>
 
-            <!-- Q1 — Tipo de Proyecto -->
-            <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.sector }">
+            <!-- Q1 — Cobertura médica -->
+            <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.ingresos }">
               <legend class="cal-legend">
                 <span class="cal-q-num">01</span>
-                ¿Qué condición es tu prioridad clínica?
+                ¿Qué tipo de cobertura médica tienes actualmente?
               </legend>
+              <p class="cal-legend-hint">Solo para contextualizar tu perfil — confidencial.</p>
               <div class="cal-options">
                 <label v-for="opt in [
-                  { value: 'residencial', label: 'Osteoarticular (dolor / artrosis / lesión)' },
-                  { value: 'comercial', label: 'Metabólica (diabetes / obesidad / fatiga)' },
-                  { value: 'nautico', label: 'Autoinmune o inflamatoria crónica' },
-                  { value: 'otro', label: 'Neurológica / cognitiva u otra' },
-                ]" :key="opt.value" class="cal-option" :class="{ selected: form.sector === opt.value }">
-                  <input type="radio" :value="opt.value" v-model="form.sector" hidden />
+                  { value: 'premium', label: 'Seguro de gastos mayores privado' },
+                  { value: 'ejecutivo', label: 'Plan de salud ejecutivo / medicina premium' },
+                  { value: 'tradicional', label: 'IMSS / ISSSTE / Seguro popular' },
+                  { value: 'basico', label: 'Pago de bolsillo particular' },
+                ]" :key="opt.value" class="cal-option" :class="{ selected: form.ingresos === opt.value }">
+                  <input type="radio" :value="opt.value" v-model="form.ingresos" hidden />
                   <span class="cal-option__radio" aria-hidden="true" />
                   <span class="cal-option__label">{{ opt.label }}</span>
                 </label>
               </div>
-              <span v-if="touched && !form.sector" class="cal-error">Selecciona una opción</span>
+              <span v-if="touched && !form.ingresos" class="cal-error">Selecciona tu tipo de cobertura</span>
             </fieldset>
 
-            <!-- Q2 — Espacio -->
-            <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.embarcaciones }">
-              <legend class="cal-legend">
+            <!-- Q2 — Disposición -->
+            <fieldset class="cal-fieldset cal-fieldset--highlight" :class="{ 'has-error': touched && !form.inversion }">
+              <div class="cal-legend-wrap">
                 <span class="cal-q-num">02</span>
-                ¿En qué rango de edad estás?
-              </legend>
+                <span class="cal-legend-text">
+                  <strong>¿Te gustaría recuperar tu calidad de vida?</strong>
+                  <span>Cuéntanos qué tan interesado estás en seguir este proceso.</span>
+                </span>
+              </div>
               <div class="cal-options">
                 <label v-for="opt in [
-                  { value: 'cuarto', label: 'Menos de 35 años' },
-                  { value: 'casa',   label: 'Entre 35 y 50 años' },
-                  { value: 'local',  label: 'Entre 51 y 65 años' },
-                  { value: 'yate',   label: 'Más de 65 años' },
-                ]" :key="opt.value" class="cal-option" :class="{ selected: form.embarcaciones === opt.value }">
-                  <input type="radio" :value="opt.value" v-model="form.embarcaciones" hidden />
-                  <span class="cal-option__radio" aria-hidden="true" />
+                  { value: 'si', icon: 'fa-solid fa-circle-check', label: 'Sí, me interesa seguir adelante' },
+                  { value: 'llamada', icon: 'fa-solid fa-phone', label: 'Primero quisiera una llamada para resolver dudas' },
+                  { value: 'no', icon: 'fa-solid fa-clock', label: 'Por ahora no, gracias' },
+                ]" :key="opt.value" class="cal-option" :class="{ selected: form.inversion === opt.value }">
+                  <input type="radio" :value="opt.value" v-model="form.inversion" hidden />
+                  <i :class="opt.icon" class="cal-option__icon" aria-hidden="true"></i>
                   <span class="cal-option__label">{{ opt.label }}</span>
                 </label>
               </div>
-              <span v-if="touched && !form.embarcaciones" class="cal-error">Selecciona una opción</span>
+              <span v-if="touched && !form.inversion" class="cal-error">Selecciona una opción</span>
             </fieldset>
 
-            <!-- Q3 — Estilo -->
-            <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.hp }">
+            <!-- Q3 — Desplazamiento -->
+            <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.desplazamiento }">
               <legend class="cal-legend">
                 <span class="cal-q-num">03</span>
-                ¿Has intentado tratamientos previos sin obtener resultados?
+                ¿Podrías desplazarte a Polanco para tu consulta?
               </legend>
               <div class="cal-options">
                 <label v-for="opt in [
-                  { value: 'rustico',   label: 'Ninguno todavía' },
-                  { value: 'moderno',   label: 'Algunos sin éxito' },
-                  { value: 'industrial', label: 'Muchos sin resultado' },
-                ]" :key="opt.value" class="cal-option" :class="{ selected: form.hp === opt.value }">
-                  <input type="radio" :value="opt.value" v-model="form.hp" hidden />
+                  { value: 'si', label: 'Sí, sin problema' },
+                  { value: 'no', label: 'Prefiero algo más cerca de mi zona' },
+                ]" :key="opt.value" class="cal-option" :class="{ selected: form.desplazamiento === opt.value }">
+                  <input type="radio" :value="opt.value" v-model="form.desplazamiento" hidden />
                   <span class="cal-option__radio" aria-hidden="true" />
                   <span class="cal-option__label">{{ opt.label }}</span>
                 </label>
               </div>
-              <span v-if="touched && !form.hp" class="cal-error">Selecciona una opción</span>
+              <span v-if="touched && !form.desplazamiento" class="cal-error">Selecciona una opción</span>
             </fieldset>
 
-            <!-- Q4 — Presupuesto -->
-            <fieldset class="cal-fieldset" :class="{ 'has-error': touched && !form.presupuesto }">
+            <!-- Q4 — Consulta -->
+            <fieldset class="cal-fieldset" :class="{ 'has-error': touched && wordCount(form.consulta) < 5 }">
               <legend class="cal-legend">
                 <span class="cal-q-num">04</span>
-                ¿Cuál es tu expectativa principal?
-              </legend>
-              <div class="cal-options">
-                <label v-for="opt in [
-                  { value: 'mas2000',   label: 'Reducir dolor o inflamación crónica' },
-                  { value: 'mas1200',   label: 'Mejorar calidad de vida y energía' },
-                  { value: 'menos1200', label: 'Curarme totalmente / revertir mi condición' },
-                ]" :key="opt.value" class="cal-option" :class="{ selected: form.presupuesto === opt.value }">
-                  <input type="radio" :value="opt.value" v-model="form.presupuesto" hidden />
-                  <span class="cal-option__radio" aria-hidden="true" />
-                  <span class="cal-option__label">{{ opt.label }}</span>
-                </label>
-              </div>
-              <span v-if="touched && !form.presupuesto" class="cal-error">Selecciona una opción</span>
-            </fieldset>
-
-            <!-- Q5 — Idea/Reto -->
-            <fieldset class="cal-fieldset" :class="{ 'has-error': touched && wordCount(form.reto) < 10 }">
-              <legend class="cal-legend">
-                <span class="cal-q-num">05</span>
-                Cuéntanos brevemente tu caso clínico
+                ¿Qué te gustaría consultar con Juan Román Garza o su equipo de especialistas?
               </legend>
               <textarea
-                v-model="form.reto"
+                v-model="form.consulta"
                 class="cal-textarea"
-                placeholder="Ej: Hace 3 años padezco artrosis en rodilla derecha, ya hice infiltraciones sin resultado. He notado fatiga creciente y…"
+                placeholder="Ej: Tengo dolor crónico de rodilla desde hace 2 años, he ido con varios especialistas y quiero saber si la medicina regenerativa es opción para mí..."
                 rows="4"
-                aria-describedby="q4-hint"
+                aria-describedby="q3-hint"
               ></textarea>
-              <span id="q4-hint" class="cal-hint">
-                {{ wordCount(form.reto) }}/10 palabras mínimo
+              <span id="q3-hint" class="cal-hint">
+                {{ wordCount(form.consulta) }}/5 palabras mínimo
               </span>
-              <span v-if="touched && wordCount(form.reto) < 10" class="cal-error">
-                Describe tu idea con al menos 10 palabras
+              <span v-if="touched && wordCount(form.consulta) < 5" class="cal-error">
+                Describe tu situación con al menos 5 palabras
               </span>
             </fieldset>
 
@@ -290,7 +256,7 @@ watch(() => props.open, (v) => {
               <input type="checkbox" v-model="form.consent" />
               <span class="cal-consent__box" aria-hidden="true" />
               <span class="cal-consent__text">
-                Acepto que PowerHouse Biotech procese mis datos y me contacte para evaluar si mi caso califica para una Consulta Informativa de Evaluación de Viabilidad Regenerativa™.
+                Acepto que PowerHouse Biotech procese mis datos y me contacte para evaluar si mi caso califica para una Consulta Informativa de Evaluación de Viabilidad Regenerativa™ con Juan Román Garza o uno de sus especialistas.
               </span>
             </label>
             <span v-if="touched && !form.consent" class="cal-error">Debes aceptar para continuar</span>
@@ -416,6 +382,40 @@ watch(() => props.open, (v) => {
   margin: 0;
 
   &.has-error .cal-options { border-color: colors.$OS-RED; border-radius: 10px; }
+
+  &--highlight {
+    background: linear-gradient(135deg, rgba(colors.$OS-NAVY, 0.03) 0%, rgba(colors.$OS-BLUE, 0.03) 100%);
+    border: 1px solid rgba(colors.$OS-NAVY, 0.08);
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+  }
+}
+
+.cal-legend-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.cal-legend-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+
+  strong {
+    font-family: fonts.$font-interface;
+    font-size: 0.93rem;
+    font-weight: 700;
+    color: colors.$OS-DARK;
+    line-height: 1.3;
+  }
+
+  span {
+    font-size: 0.82rem;
+    color: #6A7E95;
+    line-height: 1.4;
+  }
 }
 
 .cal-legend {
@@ -427,6 +427,13 @@ watch(() => props.open, (v) => {
   font-weight: 700;
   color: colors.$OS-DARK;
   margin-bottom: 0.75rem;
+}
+
+.cal-legend-hint {
+  font-size: 0.78rem;
+  color: #8A9BB5;
+  margin: -0.5rem 0 0.75rem;
+  font-style: italic;
 }
 
 .cal-q-num {
@@ -465,6 +472,19 @@ watch(() => props.open, (v) => {
   &.selected {
     border-color: colors.$OS-NAVY;
     background: #EEF4FF;
+  }
+
+  &__icon {
+    font-size: 1.1rem;
+    color: #B0C0D5;
+    flex-shrink: 0;
+    width: 1.4rem;
+    text-align: center;
+    transition: color 0.18s;
+
+    .cal-option.selected & {
+      color: colors.$OS-NAVY;
+    }
   }
 
   &__radio {

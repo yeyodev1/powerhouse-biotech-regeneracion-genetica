@@ -85,11 +85,11 @@ onUnmounted(() => window.removeEventListener('message', onMessage))
           Casi listo
         </p>
         <h1 class="booking__title">
-          Elige el horario de tu
-          <span class="booking__title-accent">Consulta Informativa de Evaluación de Viabilidad Regenerativa™</span>
+          Elige el horario para tu
+          <span class="booking__title-accent">Consulta con Juan Román Garza</span>
         </h1>
         <p class="booking__subtitle">
-          Videollamada de 15 minutos con el equipo médico de PowerHouse Biotech. Conversaremos sobre tu condición y te diremos honestamente si tu caso califica para una evaluación clínica completa.
+          Videollamada de 15 minutos con Juan Román Garza. Conversaremos sobre tu condición y te diremos honestamente si tu caso califica para una Evaluación de Viabilidad Regenerativa™.
         </p>
       </section>
 

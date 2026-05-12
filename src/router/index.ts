@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, type RouteMeta } from 'vue-router'
 import FunnelView from '../views/FunnelView.vue'
-import VideoView from '../views/VideoView.vue'
+import QualifyView from '../views/QualifyView.vue'
 import PrivacyPolicyView from '../views/PrivacyPolicyView.vue'
 import LegalNoticeView from '../views/LegalNoticeView.vue'
 import BookingView from '../views/BookingView.vue'
@@ -32,27 +32,27 @@ const router = createRouter({
       name: 'funnel',
       component: FunnelView,
       meta: {
-        title: 'PowerHouse Biotech | Evaluación de Viabilidad Regenerativa™',
+        title: 'PowerHouse Biotech | Juan Román Garza — Evaluación de Viabilidad Regenerativa™',
         description:
-          'Health Decision Platform en Medicina Regenerativa. Evaluamos tu capacidad de autoreparación antes de iniciar cualquier terapia regenerativa. Solo aceptamos el 20% de las aplicaciones.',
+          'Consulta con Juan Román Garza en Polanco, CDMX. Más de 20 años en Medicina Regenerativa. Evaluamos si tu cuerpo puede regenerarse antes de cualquier terapia. Solo 20% aceptados.',
         canonical: 'https://www.powerhousebiotech.com/',
-        ogTitle: 'PowerHouse Biotech | ¿Puede tu cuerpo mejorar?',
+        ogTitle: 'PowerHouse Biotech | Juan Román Garza — Medicina Regenerativa en Polanco',
         ogDescription:
-          'Evaluación de Viabilidad Regenerativa™. Criterio clínico antes que promesa de cura. +100,000 casos clínicos analizados.',
+          'Evaluación de Viabilidad Regenerativa™ por Juan Román Garza. +15,000 pacientes evaluados. Criterio clínico honesto en Polanco, CDMX.',
         ogUrl: 'https://www.powerhousebiotech.com/',
       } satisfies RouteMeta,
     },
     {
-      path: '/ver-video',
-      name: 'video',
-      component: VideoView,
+      path: '/calificar',
+      name: 'qualify',
+      component: QualifyView,
       meta: {
-        title: 'Mira el video | PowerHouse Biotech — Paso 1 de 2',
-        description: 'Descubre por qué solo aceptamos el 20% de las aplicaciones para la Evaluación de Viabilidad Regenerativa™.',
-        canonical: 'https://www.powerhousebiotech.com/ver-video',
-        ogTitle: 'Mira el video | PowerHouse Biotech',
-        ogDescription: 'Ve el video y aplica para tu Consulta Informativa de Evaluación de Viabilidad Regenerativa™.',
-        ogUrl: 'https://www.powerhousebiotech.com/ver-video',
+        title: 'Califica tu caso | Juan Román Garza — PowerHouse Biotech',
+        description: 'Responde unas preguntas y descubre si tu caso califica para una Evaluación de Viabilidad Regenerativa™ con Juan Román Garza en Polanco, CDMX.',
+        canonical: 'https://www.powerhousebiotech.com/calificar',
+        ogTitle: 'Califica tu caso | Juan Román Garza',
+        ogDescription: 'Descubre si calificas para una consulta con Juan Román Garza en Polanco. Solo 20% aceptados.',
+        ogUrl: 'https://www.powerhousebiotech.com/calificar',
       } satisfies RouteMeta,
     },
     {
@@ -60,11 +60,11 @@ const router = createRouter({
       name: 'booking',
       component: BookingView,
       meta: {
-        title: 'Agenda tu Consulta | PowerHouse Biotech — Paso 2 de 2',
-        description: 'Selecciona el día y hora para tu Consulta Informativa de Evaluación de Viabilidad Regenerativa™ con el equipo médico de PowerHouse Biotech.',
+        title: 'Agenda tu Consulta | Juan Román Garza — Paso 2 de 2',
+        description: 'Selecciona el día y hora para tu consulta informativa con Juan Román Garza en PowerHouse Biotech, Polanco.',
         canonical: 'https://www.powerhousebiotech.com/agendar',
-        ogTitle: 'Agenda tu Consulta | PowerHouse Biotech',
-        ogDescription: 'Elige tu horario y reserva tu Consulta Informativa con el equipo médico evaluador.',
+        ogTitle: 'Agenda tu Consulta | Juan Román Garza',
+        ogDescription: 'Elige tu horario y reserva tu consulta informativa con Juan Román Garza.',
         ogUrl: 'https://www.powerhousebiotech.com/agendar',
       } satisfies RouteMeta,
     },
@@ -74,10 +74,10 @@ const router = createRouter({
       component: BookedView,
       meta: {
         title: 'Consulta Confirmada | PowerHouse Biotech',
-        description: 'Tu Consulta Informativa de Evaluación de Viabilidad Regenerativa™ está confirmada. Revisa tu correo y prepárate.',
+        description: 'Tu consulta con Juan Román Garza está confirmada. Revisa tu correo y prepárate para tu Evaluación de Viabilidad Regenerativa™.',
         canonical: 'https://www.powerhousebiotech.com/cita-confirmada',
-        ogTitle: 'Consulta Confirmada | PowerHouse Biotech',
-        ogDescription: 'Tu Consulta está reservada. El equipo médico te contactará pronto.',
+        ogTitle: 'Consulta Confirmada | Juan Román Garza',
+        ogDescription: 'Tu consulta está reservada. Juan Román Garza te contactará pronto.',
         ogUrl: 'https://www.powerhousebiotech.com/cita-confirmada',
       } satisfies RouteMeta,
     },
@@ -87,10 +87,10 @@ const router = createRouter({
       component: NoSpaceView,
       meta: {
         title: 'Aplicación no calificada | PowerHouse Biotech',
-        description: 'Solo aceptamos el 20% de las aplicaciones. En este momento tu caso no cumple los criterios clínicos. Es honestidad clínica, no rechazo permanente.',
+        description: 'Solo aceptamos el 20% de las aplicaciones. En este momento tu perfil no coincide con los criterios de Juan Román Garza. No es un rechazo permanente.',
         canonical: 'https://www.powerhousebiotech.com/sin-espacio',
-        ogTitle: 'Aplicación no calificada | PowerHouse Biotech',
-        ogDescription: 'Solo aceptamos el 20% de las aplicaciones. Honestidad clínica antes que rechazo permanente.',
+        ogTitle: 'Aplicación no calificada | Juan Román Garza',
+        ogDescription: 'Solo el 20% de las aplicaciones son aceptadas. Criterio honesto de Juan Román Garza.',
         ogUrl: 'https://www.powerhousebiotech.com/sin-espacio',
       } satisfies RouteMeta,
     },

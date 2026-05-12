@@ -38,7 +38,7 @@ const nextSteps = [
   {
     icon: 'fa-brands fa-whatsapp',
     title: 'Te contactamos por WhatsApp',
-    body: 'Un miembro del equipo médico te escribirá para confirmar la cita y solicitar tus laboratorios recientes (si los tienes).',
+    body: 'Juan Román Garza te escribirá para confirmar la cita y solicitar tus laboratorios recientes (si los tienes).',
   },
   {
     icon: 'fa-solid fa-vials',
@@ -116,7 +116,7 @@ const nextSteps = [
         </div>
       </section>
 
-      <!-- Team card — PowerHouse Biotech -->
+      <!-- Team card — Juan Román Garza -->
       <section class="booked__team" aria-labelledby="team-heading">
         <p id="team-heading" class="booked__team-label">Tu especialista</p>
         <div class="booked__team-card">
@@ -124,10 +124,10 @@ const nextSteps = [
             <i class="fa-solid fa-user-tie"></i>
           </div>
           <div class="booked__team-info">
-            <strong class="booked__team-name">PowerHouse Biotech</strong>
-            <span class="booked__team-role">Equipo médico evaluador — Medicina Regenerativa</span>
+            <strong class="booked__team-name">Juan Román Garza</strong>
+            <span class="booked__team-role">Especialista en Medicina Regenerativa · Polanco, CDMX</span>
             <p class="booked__team-note">
-              "La medicina regenerativa no es para todos. Saber a tiempo qué se puede mejorar y qué no, vale más que cualquier promesa."
+              "No todos los cuerpos están listos para regenerarse. Mi trabajo es decirte la verdad con criterio clínico honesto, no venderte una promesa."
             </p>
           </div>
         </div>

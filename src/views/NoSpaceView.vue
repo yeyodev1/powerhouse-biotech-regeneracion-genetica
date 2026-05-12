@@ -51,11 +51,11 @@ onMounted(() => {
         <div class="nospace__icon-wrap" aria-hidden="true">
           <i class="fa-solid fa-calendar-xmark nospace__icon"></i>
         </div>
-        <h1 class="nospace__title">Por ahora, tu caso no califica para la Evaluación</h1>
+        <h1 class="nospace__title">Por ahora, no calificas para la consulta presencial</h1>
         <p class="nospace__subtitle">
-          Solo aceptamos el 20% de las aplicaciones. En este momento tu caso no cumple los
-          criterios clínicos que priorizamos para la Evaluación de Viabilidad Regenerativa™.
-          No es un rechazo permanente — es honestidad clínica para ahorrarte tiempo y dinero.
+          Solo aceptamos el 20% de las aplicaciones. En este momento tu perfil no coincide
+          con los criterios de Juan Román Garza para una Evaluación de Viabilidad Regenerativa™
+          en Polanco. No es un rechazo permanente — es criterio honesto para ahorrarte tiempo y dinero.
         </p>
       </div>
 

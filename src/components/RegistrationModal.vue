@@ -58,7 +58,7 @@ const form = ref({
   apellido: '',
   email: '',
   phone: '',
-  empresa: '',
+  empresa: '' as string,
   urgency: '' as Urgency,
 })
 
@@ -68,10 +68,20 @@ const URGENCY_LABEL: Record<Exclude<Urgency, ''>, string> = {
   'just-looking': 'Explorando — sin urgencia clínica',
 }
 
+const MOTIVO_LABEL: Record<string, string> = {
+  'dolor-articular': 'Dolor articular o muscular crónico',
+  'fatiga': 'Fatiga crónica o falta de energía',
+  'metabolica': 'Problemas metabólicos (peso, diabetes, tiroides)',
+  'autoinmune': 'Enfermedad autoinmune o inflamatoria',
+  'regenerativa': 'Medicina regenerativa / segunda opinión',
+}
+
+const motivoOpts = Object.entries(MOTIVO_LABEL).map(([value, label]) => ({ value, label }))
+
 const urgencyOpts: { value: Exclude<Urgency, ''>; label: string; sub: string; hot?: boolean }[] = [
-  { value: 'immediate',   label: 'Necesito iniciar de inmediato', sub: 'Contrato este mes', hot: true },
-  { value: 'next-month',  label: 'En los próximos 1–3 meses',     sub: 'Planificación cercana' },
-  { value: 'just-looking', label: 'Solo estoy explorando',         sub: 'Sin urgencia particular' },
+  { value: 'immediate',   label: 'Necesito atención este mes', sub: 'Urgencia clínica', hot: true },
+  { value: 'next-month',  label: 'En los próximos 1–3 meses',     sub: 'Planificación' },
+  { value: 'just-looking', label: 'Solo estoy explorando',         sub: 'Sin urgencia' },
 ]
 
 function calcTags(urgency: Urgency): string[] {
@@ -85,7 +95,7 @@ function calcTags(urgency: Urgency): string[] {
 function buildNote(f: typeof form.value, country: string): string {
   return [
     'Lead desde funnel VSL — PowerHouse Biotech (registro inicial).',
-    `Motivo de consulta: ${f.empresa}`,
+    `Motivo de consulta: ${MOTIVO_LABEL[f.empresa] ?? f.empresa}`,
     `Urgencia: ${f.urgency ? URGENCY_LABEL[f.urgency] : '—'}`,
     `País: ${country}`,
   ].join('\n')
@@ -119,7 +129,7 @@ const validators: Record<string, (v: string) => string | null> = {
   apellido: v => v.trim().length < 2 ? 'Ingresa tu apellido' : null,
   email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? null : 'Email inválido',
   phone: () => phoneValid.value ? null : 'Número inválido para el país seleccionado',
-  empresa: v => v.trim().length < 2 ? 'Cuéntanos tu motivo de consulta' : null,
+  empresa: v => !v ? 'Selecciona tu motivo de consulta' : null,
   urgency: v => !v ? 'Selecciona cuándo necesitas iniciar' : null,
 }
 
@@ -229,7 +239,7 @@ const handleSubmit = async () => {
     return
   }
 
-  router.push('/ver-video')
+  router.push('/calificar')
 }
 
 // ── Keyboard trap ─────────────────────────────────────────────────────────────
@@ -275,9 +285,9 @@ watch(dropdownOpen, open => {
 
           <!-- ── FORMULARIO ─────────────────────────────────── -->
           <!-- ── FORMULARIO ─────────────────────────────────── -->
-            <p class="rmodal__eyebrow">Aplicación clínica</p>
-            <h2 id="rmodal-title" class="rmodal__title">Aplica para tu Evaluación<br><span class="rmodal__title-accent">sin costo</span></h2>
-            <p class="rmodal__subtitle">Solo aceptamos el 20% de las aplicaciones. Completa tus datos para que el equipo médico revise tu caso.</p>
+            <p class="rmodal__eyebrow">Consulta con Juan Román Garza</p>
+            <h2 id="rmodal-title" class="rmodal__title">Aplica para tu consulta<br><span class="rmodal__title-accent">informativa sin costo</span></h2>
+            <p class="rmodal__subtitle">Solo aceptamos el 20% de las aplicaciones. Completa tus datos para que Juan Román Garza evalúe tu caso.</p>
 
             <form class="rmodal__form" @submit.prevent="handleSubmit" novalidate>
 
@@ -405,17 +415,27 @@ watch(dropdownOpen, open => {
                 </span>
               </div>
 
-              <!-- Empresa -->
-              <div class="rmodal__field" :class="{ 'has-error': touched.empresa && errors.empresa }">
-                <label for="r-empresa">Motivo de tu consulta</label>
-                <input
-                  id="r-empresa"
-                  v-model="form.empresa"
-                  type="text"
-                  placeholder="Ej: Dolor articular crónico, fatiga sin causa, segunda opinión…"
-                  autocomplete="organization"
-                  @blur="onBlur('empresa')"
-                />
+              <!-- Motivo de consulta — clickable -->
+              <div class="rmodal__field rmodal__field--motivo" :class="{ 'has-error': touched.empresa && errors.empresa }">
+                <label>Motivo de tu consulta</label>
+                <div class="rmodal__motivo-opts" role="radiogroup">
+                  <label
+                    v-for="opt in motivoOpts"
+                    :key="opt.value"
+                    class="rmodal__motivo-opt"
+                    :class="{ 'rmodal__motivo-opt--sel': form.empresa === opt.value }"
+                  >
+                    <input
+                      type="radio"
+                      v-model="form.empresa"
+                      :value="opt.value"
+                      class="sr-only"
+                      @change="onBlur('empresa')"
+                    />
+                    <span class="rmodal__motivo-opt-dot" aria-hidden="true"></span>
+                    <span class="rmodal__motivo-opt-text">{{ opt.label }}</span>
+                  </label>
+                </div>
                 <span v-if="touched.empresa && errors.empresa" class="rmodal__error">{{ errors.empresa }}</span>
               </div>
 
@@ -423,7 +443,7 @@ watch(dropdownOpen, open => {
               <div class="rmodal__field rmodal__field--urgency" :class="{ 'has-error': touched.urgency && errors.urgency }">
                 <label class="rmodal__urgency-label">
                   <i class="fa-solid fa-bolt" aria-hidden="true"></i>
-                  ¿Cuándo necesitas iniciar tu proyecto?
+                  ¿Cuándo necesitas esta consulta?
                 </label>
                 <div class="rmodal__urgency-opts" role="radiogroup">
                   <label
@@ -529,6 +549,7 @@ $accent: colors.$OS-RED;
     0 40px 100px rgba(colors.$OS-NAVY, 0.12);
   max-height: 92vh;
   overflow-y: auto;
+  overflow-x: hidden;
 
   @media (max-width: 560px) {
     padding: 44px 20px 32px;
@@ -1071,6 +1092,72 @@ $accent: colors.$OS-RED;
     color: colors.$AB-URGENT;
     font-size: 0.78rem;
   }
+}
+
+.rmodal__motivo-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rmodal__motivo-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  background: $input-bg;
+  border: 1px solid $border;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, transform 0.15s, box-shadow 0.2s;
+  min-width: 0;
+
+  &:hover {
+    border-color: rgba($accent, 0.4);
+    background: rgba($accent, 0.04);
+  }
+
+  &--sel {
+    border-color: $accent;
+    background: rgba($accent, 0.08);
+    box-shadow: 0 0 0 3px rgba($accent, 0.08);
+
+    .rmodal__motivo-opt-dot {
+      border-color: $accent;
+      background: $accent;
+      box-shadow: inset 0 0 0 3px #ffffff;
+    }
+
+    .rmodal__motivo-opt-text {
+      color: colors.$OS-DARK;
+      font-weight: 600;
+    }
+  }
+
+  &-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #c5d3e3;
+    background: #ffffff;
+    flex-shrink: 0;
+    transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+  }
+
+  &-text {
+    font-size: 0.88rem;
+    color: #3a4f6a;
+    font-weight: 500;
+    line-height: 1.3;
+    flex: 1;
+    min-width: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+.rmodal__field--motivo {
+  gap: 8px;
 }
 
 .rmodal__urgency-opts {
