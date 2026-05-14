@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { parsePhoneNumberFromString, getCountries, getCountryCallingCode, AsYouType } from 'libphonenumber-js'
 import { useRouter } from 'vue-router'
 import { getStoredFbParams } from '@/utils/fbclid'
+import { sendMetaEvent } from '@/utils/meta'
 const router = useRouter()
 
 const props = defineProps<{ open: boolean }>()
@@ -222,11 +223,24 @@ const handleSubmit = async () => {
     body: JSON.stringify(payload),
   }).catch(() => {})
 
-  // Meta Pixel — evento Lead (deduplicado con CAPI via event_id)
+  // Meta Pixel + CAPI — evento Lead (deduplicado vía event_id)
+  const metaUserData = {
+    email: form.value.email.trim(),
+    phone: parsedPhoneE164.value,
+    firstName: form.value.nombre.trim(),
+    lastName: form.value.apellido.trim(),
+    country: selectedCountry.value.name,
+  }
   ;(window as any).fbq?.('track', 'Lead',
     { content_name: 'cita-estrategica' },
     { eventID: leadEventId }
   )
+  sendMetaEvent({
+    eventName: 'Lead',
+    eventId: leadEventId,
+    userData: metaUserData,
+    customData: { content_name: 'cita-estrategica' },
+  })
 
   localStorage.setItem('os_contact', JSON.stringify({
     nombre: form.value.nombre.trim(),
@@ -234,7 +248,15 @@ const handleSubmit = async () => {
     phone: parsedPhoneE164.value,
     timestamp: Date.now(),
   }))
-  ;(window as any).fbq?.('track', 'CompleteRegistration')
+
+  // Meta Pixel + CAPI — CompleteRegistration
+  const regEventId = `reg_${leadEventId}`
+  ;(window as any).fbq?.('track', 'CompleteRegistration', {}, { eventID: regEventId })
+  sendMetaEvent({
+    eventName: 'CompleteRegistration',
+    eventId: regEventId,
+    userData: metaUserData,
+  })
 
   submitting.value = false
   emit('close')

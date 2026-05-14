@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { trackStage, generateEventId } from '@/utils/ghl'
+import { sendMetaEvent } from '@/utils/meta'
 import { useContactStore } from '@/stores/contact'
 
 const props = defineProps<{ open: boolean }>()
@@ -117,16 +118,35 @@ ${califica ? '✅ CALIFICA' : '❌ NO CALIFICA'}
     body: JSON.stringify(payload),
   }).catch(() => {})
 
+  const metaUserData = {
+    email: contact.email,
+    phone: contact.telefono,
+    firstName: contact.nombre,
+    lastName: contact.apellido,
+  }
   ;(window as any).fbq?.('track', 'CompleteRegistration',
     { content_name: 'cualificacion-step2', status: califica ? 'califica' : 'no-califica' },
     { eventID: scheduleEventId }
   )
+  sendMetaEvent({
+    eventName: 'CompleteRegistration',
+    eventId: scheduleEventId,
+    userData: metaUserData,
+    customData: { content_name: 'cualificacion-step2', status: califica ? 'califica' : 'no-califica' },
+  })
 
   submitting.value = false
   emit('close')
 
   if (califica) {
-    ;(window as any).fbq?.('track', 'Lead')
+    const qualifiedLeadId = `qlead_${scheduleEventId}`
+    ;(window as any).fbq?.('track', 'Lead', {}, { eventID: qualifiedLeadId })
+    sendMetaEvent({
+      eventName: 'Lead',
+      eventId: qualifiedLeadId,
+      userData: metaUserData,
+      customData: { content_name: 'cualificado-agendar' },
+    })
     router.push('/agendar')
   } else {
     localStorage.setItem('os_disq_at', String(Date.now()))
