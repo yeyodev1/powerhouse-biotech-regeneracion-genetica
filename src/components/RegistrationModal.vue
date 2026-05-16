@@ -4,6 +4,7 @@ import { parsePhoneNumberFromString, getCountries, getCountryCallingCode, AsYouT
 import { useRouter } from 'vue-router'
 import { getStoredFbParams } from '@/utils/fbclid'
 import { sendMetaEvent } from '@/utils/meta'
+import { detectCountryISO2 } from '@/utils/geoCountry'
 const router = useRouter()
 
 const props = defineProps<{ open: boolean }>()
@@ -136,7 +137,7 @@ const validators: Record<string, (v: string) => string | null> = {
   nombre: v => v.trim().length < 2 ? 'Ingresa tu nombre' : null,
   apellido: v => v.trim().length < 2 ? 'Ingresa tu apellido' : null,
   email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? null : 'Email inválido',
-  phone: () => phoneValid.value ? null : 'Número inválido para el país seleccionado',
+  phone: v => !v || !v.trim() ? 'Ingresa tu teléfono' : (phoneValid.value ? null : 'Número inválido para el país seleccionado'),
   empresa: v => !v ? 'Selecciona tu motivo de consulta' : null,
   urgency: v => !v ? 'Selecciona cuándo necesitas iniciar' : null,
 }
@@ -283,6 +284,11 @@ watch(() => props.open, (val) => {
 onMounted(() => {
   document.addEventListener('mousedown', handleClickOutside)
   document.addEventListener('keydown', onKeydown)
+  // Auto-set country from IP geolocation (fallback: navigator.language → EC)
+  detectCountryISO2().then(iso => {
+    const match = countries.find(c => c.code === iso)
+    if (match) selectedCountry.value = match
+  })
 })
 
 onUnmounted(() => {
@@ -423,6 +429,7 @@ watch(dropdownOpen, open => {
                     placeholder="98 493 4039"
                     autocomplete="tel-national"
                     inputmode="tel"
+                    required
                     @input="onPhoneInput"
                     @blur="onBlur('phone')"
                   />

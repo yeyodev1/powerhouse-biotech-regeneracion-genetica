@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { getStoredFbParams } from '@/utils/fbclid'
+import { detectCountryISO2 } from '@/utils/geoCountry'
 
 // ── Webhooks ─────────────────────────────────────────────────────────────────
 const WH_CONTACT = import.meta.env.VITE_WEBHOOK_REGISTRO
@@ -29,15 +30,15 @@ const COUNTRIES = [
   { dial: '+504', label: '🇭🇳 +504 Honduras' },
 ]
 
-function detectDial(): string {
-  const lang = navigator.language || ''
-  const map: Record<string, string> = {
-    'es-EC': '+593', 'es-CO': '+57', 'es-PE': '+51',
-    'es-MX': '+52', 'es-AR': '+54', 'es-CL': '+56',
-    'es-ES': '+34', 'en-US': '+1', 'es-VE': '+58',
-    'es-PA': '+507',
-  }
-  return map[lang] ?? '+593'
+// Map ISO2 → dial code (solo países en COUNTRIES). Fallback: +593 (EC).
+const ISO_TO_DIAL: Record<string, string> = {
+  EC: '+593', CO: '+57', PE: '+51', MX: '+52', US: '+1', CA: '+1',
+  ES: '+34', AR: '+54', CL: '+56', VE: '+58', PA: '+507', GT: '+502',
+  CR: '+506', UY: '+598', BO: '+591', PY: '+595', SV: '+503', HN: '+504',
+}
+
+function dialFromISO(iso: string): string {
+  return ISO_TO_DIAL[iso?.toUpperCase()] ?? '+593'
 }
 
 // ── Estado ───────────────────────────────────────────────────────────────────
@@ -51,7 +52,7 @@ const s1 = ref({
   firstName: '',
   lastName: '',
   email: '',
-  dial: detectDial(),
+  dial: '+593', // se sobrescribe en onMounted con detectCountryISO2()
   phone: '',
   company: '',
 })
@@ -75,6 +76,14 @@ const s1Valid = computed(() =>
   s1.value.phone.replace(/\D/g, '').length >= 7 &&
   s1.value.company.trim().length >= 2
 )
+
+// Auto-set dial code from IP geolocation on mount
+onMounted(() => {
+  detectCountryISO2().then(iso => {
+    const dial = dialFromISO(iso)
+    if (COUNTRIES.some(c => c.dial === dial)) s1.value.dial = dial
+  })
+})
 
 const s2Valid = computed(() =>
   !!s2.value.projectType && !!s2.value.budget &&
@@ -305,6 +314,9 @@ const urgencyOpts = [
               class="wf-phone__num"
               placeholder="987 654 321"
               autocomplete="tel-national"
+              required
+              minlength="7"
+              inputmode="tel"
             />
           </div>
         </div>
